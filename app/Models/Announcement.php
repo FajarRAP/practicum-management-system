@@ -8,15 +8,8 @@ class Announcement extends Model
 {
     protected $guarded = [];
 
-    public function course()
+    public function schedule()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Schedule::class);
     }
-
-    public function shift()
-    {
-        return $this->belongsTo(Shift::class);
-    }
-
-    
 }

@@ -13,11 +13,7 @@ return new class extends Migration
     {
         Schema::create('announcements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->foreignId('shift_id')
+            $table->foreignId('schedule_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

@@ -26,6 +26,9 @@
                                     {{ __('Activity') }}
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                    {{ __('Day') }}
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     {{ __('Date') }}
                                 </th>
                                 <th scope="col" class="px-6 py-3">
@@ -40,13 +43,16 @@
                             @foreach ($announcements as $announcement)
                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <td class="px-6 py-4">
-                                        {{ $announcement->course->name }}
+                                        {{ $announcement->schedule->course->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $announcement->shift->shift }}
+                                        {{ $announcement->schedule->shift->name }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $announcement->activity }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ Carbon\Carbon::parse($announcement->datetime)->format('l') }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ Carbon\Carbon::parse($announcement->datetime)->format('d M Y') }}
@@ -78,40 +84,29 @@
             </h2>
 
             <div>
-                <x-input-label for="course" value="{{ __('Course') }}" />
-                <x-select-input id="course" name="course" class="mt-1 block w-3/4">
+                <x-input-label for="schedule" value="{{ __('Schedule') }}" />
+                <x-select-input id="schedule" name="schedule" class="mt-1 block w-3/4">
                     <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Select') . ' ' . __('Course') }}</option>
-                        @foreach ($courses as $course)
-                            <option value="{{ $course->id }}">{{ $course->name }}</option>
+                        <option value="" disabled selected>{{ __('Select') . ' ' . __('Schedule') }}</option>
+                        @foreach ($schedules as $schedule)
+                            <option value="{{ $schedule->id }}">
+                                {{ $schedule->course->name . ' - ' . $schedule->shift->name }}</option>
                         @endforeach
                     </x-slot>
                 </x-select-input>
-                <x-input-error :messages="$errors->addAnnouncement->get('course')" />
-            </div>
-            <div>
-                <x-input-label for="shift" value="{{ __('Shift') }}" />
-                <x-select-input id="shift" name="shift" class="mt-1 block w-3/4">
-                    <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Select') . ' ' . __('Shift') }}</option>
-                        @foreach ($shifts as $shift)
-                            <option value="{{ $shift->id }}">{{ $shift->shift }}</option>
-                        @endforeach
-                    </x-slot>
-                </x-select-input>
-                <x-input-error :messages="$errors->addAnnouncement->get('shift')" />
-            </div>
-            <div>
-                <x-input-label for="activity" value="{{ __('Activity') }}" />
-                <x-text-input id="activity" name="activity" type="text" class="mt-1 block w-3/4"
-                    placeholder="{{ __('Activity') }}" />
-                <x-input-error :messages="$errors->addAnnouncement->get('activity')" />
+                <x-input-error :messages="$errors->addAnnouncement->get('schedule')" />
             </div>
             <div>
                 <x-input-label for="datetime" value="{{ __('Date Time') }}" />
                 <x-text-input id="datetime" name="datetime" type="datetime-local" class="mt-1 block w-3/4"
                     placeholder="{{ __('Date Time') }}" />
                 <x-input-error :messages="$errors->addAnnouncement->get('datetime')" />
+            </div>
+            <div>
+                <x-input-label for="activity" value="{{ __('Activity') }}" />
+                <x-text-input id="activity" name="activity" type="text" class="mt-1 block w-3/4"
+                    placeholder="{{ __('Activity') }}" />
+                <x-input-error :messages="$errors->addAnnouncement->get('activity')" />
             </div>
             <div>
                 <x-input-label for="place" value="{{ __('Place') }}" />
