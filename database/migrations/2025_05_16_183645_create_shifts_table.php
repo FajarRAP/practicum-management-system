@@ -17,7 +17,10 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('day');
+            $table->foreignId('day_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('shift');
             $table->time('time');
             $table->timestamps();
