@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect(route('login')));
@@ -16,10 +16,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/dashboard/shift', [ShiftController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('shift.index');
-Route::post('/dashboard/shift', [ShiftController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('shift.store');
+Route::get('/dashboard/schedule', [ScheduleController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('schedule.index');
+Route::post('/dashboard/schedule', [ScheduleController::class, 'store'])
+    ->middleware(['auth', 'verified'])->name('schedule.store');
 
 Route::get('/dashboard/announcement', [AnnouncementController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('announcement.index');
