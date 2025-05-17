@@ -19,12 +19,12 @@
                     <x-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
                         {{ __('Announcement') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('assignment.index')" :active="request()->routeIs('assignment.index')">
+                        {{ __('Assignment') }}
+                    </x-nav-link>
                     @hasrole('student')
                         <x-nav-link :href="route('dashboard')">
                             {{ __('Enrollment') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('dashboard')">
-                            {{ __('Assignment') }}
                         </x-nav-link>
                         <x-nav-link :href="route('dashboard')">
                             {{ __('Grade') }}
@@ -107,12 +107,12 @@
             <x-responsive-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
                 {{ __('Announcement') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('assignment.index')" :active="request()->routeIs('assignment.index')">
+                {{ __('Assignment') }}
+            </x-responsive-nav-link>
             @hasrole('student')
                 <x-responsive-nav-link :href="route('dashboard')">
                     {{ __('Enrollment') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('dashboard')">
-                    {{ __('Assignment') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('dashboard')">
                     {{ __('Grade') }}
