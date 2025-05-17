@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ProfileController;
@@ -39,5 +40,14 @@ Route::get('/dashboard/attendance/{schedule}', [AttendanceController::class, 'sh
     ->middleware(['auth', 'verified'])->name('attendance.show');
 Route::post('/dashboard/attendance/{schedule}', [AttendanceController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('attendance.store');
+
+Route::get('/dashboard/assessment', [AssessmentController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('assessment.index');
+Route::get('/dashboard/assessment/{announcement}', [AssessmentController::class, 'show'])
+    ->middleware(['auth', 'verified'])->name('assessment.show');
+Route::post('/dashboard/assessment/{announcement}', [AssessmentController::class, 'store'])
+    ->middleware(['auth', 'verified'])->name('assessment.store');
+
+
 
 require __DIR__ . '/auth.php';
