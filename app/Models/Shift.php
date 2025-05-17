@@ -17,4 +17,9 @@ class Shift extends Model
     {
         return $this->belongsTo(Day::class);
     }
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class);
+    }
 }
