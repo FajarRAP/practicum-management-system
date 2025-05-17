@@ -49,7 +49,7 @@
                                         {{ $schedule->shift->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        <a href=""
+                                        <a href="{{ route('schedule.show', $schedule) }}"
                                             class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                             {{ __('View') }}
                                         </a>

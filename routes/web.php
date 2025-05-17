@@ -21,6 +21,8 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/dashboard/schedule', [ScheduleController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('schedule.index');
+Route::get('/dashboard/schedule/{schedule}', [ScheduleController::class, 'show'])
+    ->middleware(['auth', 'verified'])->name('schedule.show');
 Route::post('/dashboard/schedule', [ScheduleController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('schedule.store');
 

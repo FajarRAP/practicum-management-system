@@ -23,6 +23,13 @@ class ScheduleController extends Controller
         ]);
     }
 
+    public function show(Request $request, Schedule $schedule)
+    {
+        return view('assistants.schedule-show', [
+            'schedule' => $schedule,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validateWithBag('addSchedule', [
