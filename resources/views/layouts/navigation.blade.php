@@ -16,12 +16,12 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
+                        {{ __('Announcement') }}
+                    </x-nav-link>
                     @hasrole('student')
                         <x-nav-link :href="route('dashboard')">
                             {{ __('Enrollment') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('dashboard')">
-                            {{ __('Announcement') }}
                         </x-nav-link>
                         <x-nav-link :href="route('dashboard')">
                             {{ __('Assignment') }}
@@ -104,12 +104,12 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
+                {{ __('Announcement') }}
+            </x-responsive-nav-link>
             @hasrole('student')
                 <x-responsive-nav-link :href="route('dashboard')">
                     {{ __('Enrollment') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('dashboard')">
-                    {{ __('Announcement') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('dashboard')">
                     {{ __('Assignment') }}
