@@ -31,8 +31,8 @@
                         </x-nav-link>
                     @endhasrole
                     @hasrole('assistant')
-                        <x-nav-link :href="route('shift.index')" :active="request()->routeIs('shift.index')">
-                            {{ __('Shift') }}
+                        <x-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index')">
+                            {{ __('Schedule') }}
                         </x-nav-link>
                         <x-nav-link :href="route('dashboard')">
                             {{ __('Attendance') }}
@@ -119,8 +119,8 @@
                 </x-responsive-nav-link>
             @endhasrole
             @hasrole('assistant')
-                <x-responsive-nav-link :href="route('shift.index')" :active="request()->routeIs('shift.index')">
-                    {{ __('Shift') }}
+                <x-responsive-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index')">
+                    {{ __('Schedule') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('dashboard')">
                     {{ __('Attendance') }}
