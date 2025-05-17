@@ -27,4 +27,9 @@ class Schedule extends Model
     {
         return $this->hasMany(Announcement::class);
     }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
 }
