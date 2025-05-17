@@ -8,9 +8,9 @@ class Course extends Model
 {
     protected $guarded = [];
 
-    public function shifts()
+    public function schedules()
     {
-        return $this->hasMany(Shift::class);
+        return $this->hasMany(Schedule::class);
     }
 
     public function announcements()
