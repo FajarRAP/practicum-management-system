@@ -34,7 +34,7 @@
                         <x-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index')">
                             {{ __('Schedule') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('dashboard')">
+                        <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index') || request()->routeIs('attendance.show')">
                             {{ __('Attendance') }}
                         </x-nav-link>
                         <x-nav-link :href="route('dashboard')">
@@ -122,7 +122,7 @@
                 <x-responsive-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index')">
                     {{ __('Schedule') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('dashboard')">
+                <x-responsive-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index') || request()->routeIs('attendance.show')">
                     {{ __('Attendance') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('dashboard')">
