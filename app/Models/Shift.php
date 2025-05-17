@@ -7,4 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Shift extends Model
 {
     protected $guarded = [];
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function day()
+    {
+        return $this->belongsTo(Day::class);
+    }
 }
