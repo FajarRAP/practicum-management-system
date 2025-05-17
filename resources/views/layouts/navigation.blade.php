@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-slate-100 border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-slate-100 border-b border-gray-200">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -31,7 +31,7 @@
                         </x-nav-link>
                     @endhasrole
                     @hasrole('assistant')
-                        <x-nav-link :href="route('dashboard')">
+                        <x-nav-link :href="route('shift.index')" :active="request()->routeIs('shift.index')">
                             {{ __('Shift') }}
                         </x-nav-link>
                         <x-nav-link :href="route('dashboard')">
@@ -119,7 +119,7 @@
                 </x-responsive-nav-link>
             @endhasrole
             @hasrole('assistant')
-                <x-responsive-nav-link :href="route('dashboard')">
+                <x-responsive-nav-link :href="route('shift.index')" :active="request()->routeIs('shift.index')">
                     {{ __('Shift') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('dashboard')">
