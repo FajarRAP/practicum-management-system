@@ -12,7 +12,7 @@ class AnnouncementController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->query('per_page', 10);
         $schedules = Schedule::all();
         $announcements = Announcement::paginate($perPage)->appends(['per_page' => $perPage]);
 
