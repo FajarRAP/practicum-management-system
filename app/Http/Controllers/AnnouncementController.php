@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
-use App\Models\Course;
 use App\Models\Schedule;
-use App\Models\Shift;
 use Illuminate\Http\Request;
 
 class AnnouncementController extends Controller
@@ -21,7 +19,13 @@ class AnnouncementController extends Controller
             'schedules' => $schedules,
         ];
 
-        return $request->user()->hasRole('student') ? view('students.announcement') : view('assistants.announcement', $assistantDatas);
+        $studentDatas = [
+            'announcements' => $announcements,
+        ];
+
+        return $request->user()->hasRole('student') ?
+            view('students.announcement', $studentDatas) :
+            view('assistants.announcement', $assistantDatas);
     }
 
     public function store(Request $request)
