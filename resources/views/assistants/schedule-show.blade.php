@@ -21,6 +21,16 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($schedule->enrollments as $enrollment)
+                                <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        {{ $enrollment->user->name }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $enrollment->user->email }}
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
