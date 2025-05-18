@@ -4,6 +4,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,10 @@ Route::get('/dashboard/assessment/{announcement}', [AssessmentController::class,
 Route::post('/dashboard/assessment/{announcement}', [AssessmentController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('assessment.store');
 
+Route::get('/dashboard/enrollment', [EnrollmentController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('enrollment.index');
+Route::post('/dashboard/enrollment', [EnrollmentController::class, 'store'])
+    ->middleware(['auth', 'verified'])->name('enrollment.store');
 
 
 require __DIR__ . '/auth.php';

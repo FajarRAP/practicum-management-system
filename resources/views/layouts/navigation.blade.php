@@ -23,7 +23,7 @@
                         {{ __('Assignment') }}
                     </x-nav-link>
                     @hasrole('student')
-                        <x-nav-link :href="route('dashboard')">
+                        <x-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')">
                             {{ __('Enrollment') }}
                         </x-nav-link>
                         <x-nav-link :href="route('dashboard')">
@@ -111,7 +111,7 @@
                 {{ __('Assignment') }}
             </x-responsive-nav-link>
             @hasrole('student')
-                <x-responsive-nav-link :href="route('dashboard')">
+                <x-responsive-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')"> >
                     {{ __('Enrollment') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('dashboard')">
