@@ -27,28 +27,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($schedules as $schedule)
+                            @foreach ($assistants as $assistant)
                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <td class="px-6 py-4">
-                                        {{ $schedule->course->name }}
+                                        {{ $assistant->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $schedule->day->name }}
+                                        {{ $assistant->email }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ \Carbon\Carbon::parse($schedule->time)->format('H:m') }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $schedule->shift->name }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <a href=""
-                                            class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                            {{ __('View') }}
-                                        </a>
+                                        <x-select-input>
+                                            <x-slot name="options">
+                                                <option value="" disabled selected>{{ __('Select') }}</option>
+                                                <option value="">{{ __('Present') }}</option>
+                                                <option value="">{{ __('Sick') }}</option>
+                                                <option value="">{{ __('Excused') }}</option>
+                                                <option value="">{{ __('Absent') }}</option>
+                                            </x-slot>
+                                        </x-select-input>
                                     </td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -74,28 +73,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($schedules as $schedule)
+                            @foreach ($schedule->enrollments as $enrollment)
                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <td class="px-6 py-4">
-                                        {{ $schedule->course->name }}
+                                        {{ $enrollment->user->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $schedule->day->name }}
+                                        {{ $enrollment->user->email }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ \Carbon\Carbon::parse($schedule->time)->format('H:m') }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $schedule->shift->name }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <a href=""
-                                            class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                            {{ __('View') }}
-                                        </a>
+                                        <x-select-input>
+                                            <x-slot name="options">
+                                                <option value="" disabled selected>{{ __('Select') }}</option>
+                                                <option value="">{{ __('Present') }}</option>
+                                                <option value="">{{ __('Sick') }}</option>
+                                                <option value="">{{ __('Excused') }}</option>
+                                                <option value="">{{ __('Absent') }}</option>
+                                            </x-slot>
+                                        </x-select-input>
                                     </td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

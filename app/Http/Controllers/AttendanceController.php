@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Schedule;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
@@ -17,6 +18,9 @@ class AttendanceController extends Controller
     }
     public function show(Request $request, Schedule $schedule)
     {
-        return view('assistants.attendance-list');
+        return view('assistants.attendance-list', [
+            'assistants' => User::role('assistant')->get(),
+            'schedule' => $schedule,
+        ]);
     }
 }
