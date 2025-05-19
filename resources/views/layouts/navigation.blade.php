@@ -19,7 +19,8 @@
                     <x-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
                         {{ __('Announcement') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('assignment.index')" :active="request()->routeIs('assignment.index')">
+                    <x-nav-link :href="route('assignment.index')" :active="request()->routeIs('assignment.index') ||
+                        request()->routeIs('assignment-submission.index')">
                         {{ __('Assignment') }}
                     </x-nav-link>
                     @hasrole('student')
@@ -107,7 +108,7 @@
             <x-responsive-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
                 {{ __('Announcement') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('assignment.index')" :active="request()->routeIs('assignment.index')">
+            <x-responsive-nav-link :href="route('assignment.index')" :active="request()->routeIs('assignment.index') || request()->routeIs('assignment-submission.index')">
                 {{ __('Assignment') }}
             </x-responsive-nav-link>
             @hasrole('student')

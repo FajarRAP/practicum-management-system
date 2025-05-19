@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\AssignmentSubmissionController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\ProfileController;
@@ -56,5 +57,9 @@ Route::get('/dashboard/enrollment', [EnrollmentController::class, 'index'])
 Route::post('/dashboard/enrollment', [EnrollmentController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('enrollment.store');
 
+Route::get('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('assignment-submission.index');
+Route::post('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'store'])
+    ->middleware(['auth', 'verified'])->name('assignment-submission.store');
 
 require __DIR__ . '/auth.php';
