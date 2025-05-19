@@ -7,4 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Assignment extends Model
 {
     protected $guarded = [];
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(AssignmentSubmission::class);
+    }
 }
