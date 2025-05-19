@@ -58,7 +58,7 @@
                                         {{ Carbon\Carbon::parse($announcement->datetime)->format('d M Y') }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ Carbon\Carbon::parse($announcement->datetime)->format('H:m') }}
+                                        {{ Carbon\Carbon::parse($announcement->datetime)->format('H:i') }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $announcement->place }}
@@ -113,6 +113,14 @@
                 <x-text-input id="place" name="place" type="text" class="mt-1 block w-3/4"
                     placeholder="{{ __('Place') }}" />
                 <x-input-error :messages="$errors->addAnnouncement->get('place')" />
+            </div>
+            <div>
+                <label for="is_schedule_announcement" class="inline-flex items-center">
+                    <input id="is_schedule_announcement" type="checkbox"
+                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                        name="is_schedule_announcement" checked>
+                    <span class="ms-2 text-sm text-gray-600">{{ __('Schedule Announcement') }}</span>
+                </label>
             </div>
 
             <div class="flex justify-end">

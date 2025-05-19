@@ -30,7 +30,6 @@ class AnnouncementController extends Controller
 
     public function store(Request $request)
     {
-
         $validated = $request->validateWithBag('addAnnouncement', [
             'schedule' => ['required', 'exists:schedules,id'],
             'datetime' => ['required', 'date'],
@@ -43,6 +42,7 @@ class AnnouncementController extends Controller
             'activity' => $validated['activity'],
             'place' => $validated['place'],
             'datetime' => $validated['datetime'],
+            'is_schedule_announcement' => $request->boolean('is_schedule_announcement'),
         ]);
 
         return back()->with('success', 'Announcement created successfully.');
