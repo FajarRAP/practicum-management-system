@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('schedule_id')
+            $table->foreignId('announcement_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -21,6 +21,8 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->enum('status', ['PRESENT', 'SICK', 'EXCUSED', 'ABSENT']);
+            $table->unique(['announcement_id', 'user_id']);
             $table->timestamps();
         });
     }

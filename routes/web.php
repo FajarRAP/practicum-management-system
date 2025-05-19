@@ -40,9 +40,9 @@ Route::post('/dashboard/assignment', [AssignmentController::class, 'store'])
 
 Route::get('/dashboard/attendance', [AttendanceController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('attendance.index');
-Route::get('/dashboard/attendance/{schedule}', [AttendanceController::class, 'show'])
+Route::get('/dashboard/attendance/{announcement}', [AttendanceController::class, 'show'])
     ->middleware(['auth', 'verified'])->name('attendance.show');
-Route::post('/dashboard/attendance/{schedule}', [AttendanceController::class, 'store'])
+Route::post('/dashboard/attendance/{announcement}', [AttendanceController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('attendance.store');
 
 Route::get('/dashboard/assessment', [AssessmentController::class, 'index'])
