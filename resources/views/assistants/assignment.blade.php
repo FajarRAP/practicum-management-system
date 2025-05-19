@@ -37,7 +37,7 @@
                                         {{ Carbon\Carbon::parse($assignment->datetime)->format('l, d M Y H:m') }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        <a href=""
+                                        <a href="{{ route('assignment-submission.index', $assignment) }}"
                                             class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                             {{ __('View') }}
                                         </a>
@@ -62,6 +62,19 @@
                 {{ __('Add Assignment') }}
             </h2>
 
+            <div>
+                <x-input-label for="schedule" value="{{ __('Schedule') }}" />
+                <x-select-input id="schedule" name="schedule" class="mt-1 block w-3/4">
+                    <x-slot name="options">
+                        <option value="" disabled selected>{{ __('Select') . ' ' . __('Schedule') }}</option>
+                        @foreach ($schedules as $schedule)
+                            <option value="{{ $schedule->id }}">
+                                {{ $schedule->course->name . ' - ' . $schedule->shift->name }}</option>
+                        @endforeach
+                    </x-slot>
+                </x-select-input>
+                <x-input-error :messages="$errors->addAssignment->get('schedule')" />
+            </div>
             <div>
                 <x-input-label for="Title" value="{{ __('Title') }}" />
                 <x-text-input id="title" name="title" type="text" class="mt-1 block w-3/4"
