@@ -8,9 +8,9 @@ class Assignment extends Model
 {
     protected $guarded = [];
 
-    public function schedule()
+    public function announcement()
     {
-        return $this->belongsTo(Schedule::class);
+        return $this->belongsTo(Announcement::class);
     }
 
     public function submissions()

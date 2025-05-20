@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Announcement;
 use App\Models\Assignment;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
@@ -13,15 +14,17 @@ class AssignmentController extends Controller
 
         $perPage = $request->query('per_page', 10);
         $assignments = Assignment::query();
-        $schedules = Schedule::all();
+        $announcements = Announcement::all();
 
         $assistantDatas = [
-            'schedules' => $schedules,
+            'announcements' => $announcements,
             'assignments' => $assignments->paginate($perPage)->appends(['per_page' => $perPage]),
         ];
 
         $studentDatas = [
-            'assignments' => $assignments->join('enrollments', 'assignments.schedule_id', '=', 'enrollments.schedule_id')
+            'assignments' => $assignments
+                ->join('announcements', 'assignments.announcement_id', '=', 'announcements.id')
+                ->join('enrollments', 'announcements.schedule_id', '=', 'enrollments.schedule_id')
                 ->select('assignments.*', 'enrollments.user_id')
                 ->where('enrollments.user_id', $request->user()->id)
                 ->paginate($perPage)->appends(['per_page' => $perPage]),
@@ -35,13 +38,13 @@ class AssignmentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validateWithBag('addAssignment', [
-            'schedule' => 'required|exists:schedules,id',
+            'announcement' => 'required|exists:announcements,id',
             'title' => 'required|string|max:255',
             'due_date' => 'required|date',
         ]);
 
         Assignment::create([
-            'schedule_id' => $validated['schedule'],
+            'announcement_id' => $validated['announcement'],
             'title' => $validated['title'],
             'due_date' => $validated['due_date'],
         ]);

@@ -35,13 +35,17 @@
                                     $isSubmitted = auth()
                                         ->user()
                                         ->submissions->contains('assignment_id', $assignment->id);
+                                    $isAttended = auth()
+                                        ->user()
+                                        ->attendances->contains('announcement_id', $assignment->announcement->id);
+
                                 @endphp
                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <td class="px-6 py-4">
-                                        {{ $assignment->schedule->course->name }}
+                                        {{ $assignment->announcement->schedule->course->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assignment->schedule->shift->name }}
+                                        {{ $assignment->announcement->schedule->shift->name }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $assignment->title }}
@@ -50,7 +54,12 @@
                                         {{ Carbon\Carbon::parse($assignment->due_date)->format('l, d M Y H:i') }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        @if (!$isSubmitted)
+                                        @if (!$isAttended)
+                                            <p
+                                                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                {{ __('Not Attended Yet') }}
+                                            </p>
+                                        @elseif ($isAttended && !$isSubmitted)
                                             <a href=""
                                                 class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                                 x-data

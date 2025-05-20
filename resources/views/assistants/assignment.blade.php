@@ -63,17 +63,18 @@
             </h2>
 
             <div>
-                <x-input-label for="schedule" value="{{ __('Schedule') }}" />
-                <x-select-input id="schedule" name="schedule" class="mt-1 block w-3/4">
+                <x-input-label for="announcement" value="{{ __('Announcement') }}" />
+                <x-select-input id="announcement" name="announcement" class="mt-1 block w-3/4">
                     <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Select') . ' ' . __('Schedule') }}</option>
-                        @foreach ($schedules as $schedule)
-                            <option value="{{ $schedule->id }}">
-                                {{ $schedule->course->name . ' - ' . $schedule->shift->name }}</option>
+                        <option value="" disabled selected>{{ __('Select') . ' ' . __('Announcement') }}</option>
+                        @foreach ($announcements as $announcement)
+                            <option value="{{ $announcement->id }}">
+                                {{ $announcement->schedule->course->name . ' - ' . $announcement->schedule->shift->name }}
+                            </option>
                         @endforeach
                     </x-slot>
                 </x-select-input>
-                <x-input-error :messages="$errors->addAssignment->get('schedule')" />
+                <x-input-error :messages="$errors->addAssignment->get('announcement')" />
             </div>
             <div>
                 <x-input-label for="Title" value="{{ __('Title') }}" />
