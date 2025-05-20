@@ -12,4 +12,19 @@ class Announcement extends Model
     {
         return $this->belongsTo(Schedule::class);
     }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function assessments()
+    {
+        return $this->hasMany(Assessment::class);
+    }
 }

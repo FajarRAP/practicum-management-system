@@ -28,18 +28,8 @@ class Schedule extends Model
         return $this->hasMany(Announcement::class);
     }
 
-    public function attendances()
-    {
-        return $this->hasMany(Attendance::class);
-    }
-
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);
-    }
-
-    public function assignments()
-    {
-        return $this->hasMany(Assignment::class);
     }
 }
