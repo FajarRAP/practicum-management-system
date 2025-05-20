@@ -137,7 +137,7 @@
         </div>
     </div>
 
-    <x-modal name="add-attendance" :show="$errors->addAnnouncement->isNotEmpty()" focusable>
+    <x-modal name="add-attendance" focusable>
         <div class="p-6">
             <h2 class="text-lg font-medium text-gray-900">
                 {{ __('Save This Attendance') }}
