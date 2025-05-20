@@ -8,6 +8,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect(route('login')));
@@ -61,5 +62,8 @@ Route::get('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissio
     ->middleware(['auth', 'verified'])->name('assignment-submission.index');
 Route::post('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('assignment-submission.store');
+
+Route::put('/profile/student', [StudentController::class, 'edit'])
+    ->middleware(['auth', 'verified'])->name('student.edit');
 
 require __DIR__ . '/auth.php';
