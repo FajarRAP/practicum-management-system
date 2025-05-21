@@ -17,7 +17,7 @@ class AssignmentController extends Controller
         $announcements = Announcement::all();
 
         $assistantDatas = [
-            'announcements' => $announcements,
+            'announcements' => $announcements->where('is_schedule_announcement', true),
             'assignments' => $assignments->paginate($perPage)->appends(['per_page' => $perPage]),
         ];
 
@@ -27,7 +27,8 @@ class AssignmentController extends Controller
                 ->join('enrollments', 'announcements.schedule_id', '=', 'enrollments.schedule_id')
                 ->select('assignments.*', 'enrollments.user_id')
                 ->where('enrollments.user_id', $request->user()->id)
-                ->paginate($perPage)->appends(['per_page' => $perPage]),
+                ->paginate($perPage)
+                ->appends(['per_page' => $perPage]),
         ];
 
         return $request->user()->hasRole('student') ?
