@@ -12,15 +12,21 @@ class AnnouncementController extends Controller
     {
         $perPage = $request->query('per_page', 10);
         $schedules = Schedule::all();
-        $announcements = Announcement::paginate($perPage)->appends(['per_page' => $perPage]);
+        $announcements = Announcement::query();
 
         $assistantDatas = [
-            'announcements' => $announcements,
+            'announcements' => $announcements
+                ->paginate($perPage)
+                ->appends(['per_page' => $perPage]),
             'schedules' => $schedules,
         ];
 
         $studentDatas = [
-            'announcements' => $announcements,
+            'announcements' => $announcements
+                ->join('enrollments', 'announcements.schedule_id', '=', 'enrollments.schedule_id')
+                ->where('enrollments.user_id', '=', $request->user()->id)
+                ->paginate($perPage)
+                ->appends(['per_page' => $perPage]),
         ];
 
         return $request->user()->hasRole('student') ?
