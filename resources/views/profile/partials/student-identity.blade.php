@@ -22,7 +22,7 @@
         <div>
             <span class="flex gap-2">
                 <x-input-label for="study_plan" :value="__('Study Plan')" />
-                @if ($user->student->study_plan_path)
+                @if ($user->student?->study_plan_path)
                     <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         href="{{ asset("storage/{$user->student->study_plan_path}") }}">
                         {{ __('View') }}
@@ -37,7 +37,7 @@
             <span class="flex gap-2">
 
                 <x-input-label for="transcript" :value="__('Transcript')" />
-                @if ($user->student->transcript_path)
+                @if ($user->student?->transcript_path)
                     <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         href="{{ asset("storage/{$user->student->transcript_path}") }}">
                         {{ __('View') }}
@@ -51,7 +51,7 @@
         <div>
             <span class="flex gap-2">
                 <x-input-label for="photo" :value="__('Photo')" />
-                @if ($user->student->photo_path)
+                @if ($user->student?->photo_path)
                     <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         href="{{ asset("storage/{$user->student->photo_path}") }}">
                         {{ __('View') }}
