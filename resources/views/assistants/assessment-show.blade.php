@@ -57,15 +57,18 @@
                                         </td>
                                         <td class="px-6 py-4">
                                             <x-text-input type="number"
-                                                name="assessments[{{ $submission->user_id }}][participation]" />
+                                                name="assessments[{{ $submission->user_id }}][participation]"
+                                                :value="$submission->participation_score" />
                                         </td>
                                         <td class="px-6 py-4">
                                             <x-text-input type="number"
-                                                name="assessments[{{ $submission->user_id }}][activeness]" />
+                                                name="assessments[{{ $submission->user_id }}][activeness]"
+                                                :value="$submission->active_score" />
                                         </td>
                                         <td class="px-6 py-4">
                                             <x-text-input type="number"
-                                                name="assessments[{{ $submission->user_id }}][report]" />
+                                                name="assessments[{{ $submission->user_id }}][report]"
+                                                :value="$submission->report_score" />
                                         </td>
                                         <td class="px-6 py-4">
                                             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

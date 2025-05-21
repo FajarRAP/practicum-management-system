@@ -21,17 +21,34 @@ class AssessmentController extends Controller
 
     public function show(Announcement $announcement)
     {
+        $query = $announcement
+            ->join('enrollments', 'enrollments.schedule_id', '=', 'announcements.schedule_id')
+            ->join('users', 'users.id', '=', 'enrollments.user_id')
+            ->join('attendances', 'attendances.user_id', '=', 'enrollments.user_id')
+            ->join('assignments', 'assignments.announcement_id', '=', 'announcements.id')
+            ->join('assignment_submissions', 'assignment_submissions.user_id', '=', 'attendances.user_id');
+
+
+        $query = Assessment::exists() ?
+            $query
+            ->join('assessments', 'assessments.user_id', '=', 'assignment_submissions.user_id')
+            ->select(
+                'users.id as user_id',
+                'users.name',
+                'users.email',
+                'attendances.status',
+                'assignment_submissions.file_path',
+                'assessments.participation_score',
+                'assessments.active_score',
+                'assessments.report_score'
+            ) :
+            $query
+            ->select('users.id as user_id', 'users.name', 'users.email', 'attendances.status', 'assignment_submissions.file_path');
+
 
         return view('assistants.assessment-show', [
             'announcement' => $announcement,
-            'submissions' => $announcement
-                ->join('enrollments', 'enrollments.schedule_id', '=', 'announcements.schedule_id')
-                ->join('users', 'users.id', '=', 'enrollments.user_id')
-                ->join('attendances', 'attendances.user_id', '=', 'enrollments.user_id')
-                ->join('assignments', 'assignments.announcement_id', '=', 'announcements.id')
-                ->join('assignment_submissions', 'assignment_submissions.user_id', '=', 'attendances.user_id')
-                ->select('users.id as user_id', 'users.name', 'users.email', 'attendances.status', 'assignment_submissions.file_path')
-                ->get(),
+            'submissions' => $query->get(),
         ]);
     }
 
@@ -48,9 +65,9 @@ class AssessmentController extends Controller
             $mappedAssessments[] = [
                 'announcement_id' => $announcement->id,
                 'user_id' => $userId,
-                'participation' => $score['participation'],
-                'activeness' => $score['activeness'],
-                'report' => $score['report'],
+                'participation_score' => $score['participation'],
+                'active_score' => $score['activeness'],
+                'report_score' => $score['report'],
             ];
         }
 
