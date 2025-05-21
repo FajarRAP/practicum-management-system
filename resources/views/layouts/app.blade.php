@@ -33,6 +33,13 @@
 
         <!-- Page Content -->
         <main>
+            @session('error')
+                <x-danger-alert :$value />
+            @endsession
+            @session('success')
+                <x-success-alert :$value />
+            @endsession
+
             {{ $slot }}
         </main>
     </div>
