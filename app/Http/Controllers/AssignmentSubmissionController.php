@@ -20,7 +20,7 @@ class AssignmentSubmissionController extends Controller
     public function store(Request $request, Assignment $assignment)
     {
         $request->validateWithBag('submitAssignment', [
-            'file' => 'required|file|mimes:pdf|max:2048',
+            'file' => ['required', 'file', 'mimes:pdf', 'max:2048'],
         ]);
 
         AssignmentSubmission::create([
