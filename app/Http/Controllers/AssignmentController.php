@@ -39,9 +39,9 @@ class AssignmentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validateWithBag('addAssignment', [
-            'announcement' => 'required|exists:announcements,id',
-            'title' => 'required|string|max:255',
-            'due_date' => 'required|date',
+            'announcement' => ['required', 'exists:announcements,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'due_date' => ['required', 'date'],
         ]);
 
         Assignment::create([
