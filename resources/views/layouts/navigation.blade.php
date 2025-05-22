@@ -27,9 +27,6 @@
                         <x-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')">
                             {{ __('Enrollment') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('dashboard')">
-                            {{ __('Grade') }}
-                        </x-nav-link>
                     @endhasrole
                     @hasrole('assistant')
                         <x-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index') || request()->routeIs('schedule.show')">
@@ -38,10 +35,10 @@
                         <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index') || request()->routeIs('attendance.show')">
                             {{ __('Attendance') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') || request()->routeIs('assessment.show')">
-                            {{ __('Assessment') }}
-                        </x-nav-link>
                     @endhasrole
+                    <x-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') || request()->routeIs('assessment.show')">
+                        {{ __('Assessment') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -112,11 +109,8 @@
                 {{ __('Assignment') }}
             </x-responsive-nav-link>
             @hasrole('student')
-                <x-responsive-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')"> >
+                <x-responsive-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')">
                     {{ __('Enrollment') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('dashboard')">
-                    {{ __('Grade') }}
                 </x-responsive-nav-link>
             @endhasrole
             @hasrole('assistant')
@@ -126,10 +120,10 @@
                 <x-responsive-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index') || request()->routeIs('attendance.show')">
                     {{ __('Attendance') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') || request()->routeIs('assessment.show')">
-                    {{ __('Assessment') }}
-                </x-responsive-nav-link>
             @endhasrole
+            <x-responsive-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') || request()->routeIs('assessment.show')">
+                {{ __('Assessment') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
