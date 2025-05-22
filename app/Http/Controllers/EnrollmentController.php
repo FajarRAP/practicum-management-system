@@ -43,6 +43,6 @@ class EnrollmentController extends Controller
             'schedule_id' => $validated['schedule'],
         ]);
 
-        return back()->with('success', 'Enrollment created successfully.');
+        return back()->with('success', 'Successfully enrollment practicum.');
     }
 }
