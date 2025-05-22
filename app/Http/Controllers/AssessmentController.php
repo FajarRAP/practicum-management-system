@@ -11,15 +11,35 @@ class AssessmentController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->query('per_page', 10);
+        $announcements = Announcement::query();
 
-        return view('assistants.assessment', [
-            'announcements' => Announcement::where('is_schedule_announcement', true)
+        $assistantDatas = [
+            'announcements' => $announcements
+                ->where('is_schedule_announcement', true)
+                ->paginate($perPage)
+                ->appends(['per_page' => $perPage])
+        ];
+
+        $studentDatas = [
+            'announcements' => $announcements
+                ->join('enrollments', 'enrollments.schedule_id', '=', 'announcements.schedule_id')
+                ->join('users', 'users.id', '=', 'enrollments.user_id')
+                ->where('users.id', '=', $request->user()->id)
+                ->where('is_schedule_announcement', true)
+                ->join('attendances', 'attendances.user_id', '=', 'users.id')
+                ->join('assessments', 'assessments.user_id', '=', 'users.id')
+                ->join('assignment_submissions', 'assignment_submissions.user_id', '=', 'users.id')
+                ->select('announcements.*', 'attendances.status', 'assignment_submissions.file_path', 'assessments.participation_score', 'assessments.active_score', 'assessments.report_score')
                 ->paginate($perPage)
                 ->appends(['per_page' => $perPage]),
-        ]);
+        ];
+
+        return $request->user()->hasRole('student') ?
+            view('students.assessment', $studentDatas) :
+            view('assistants.assessment', $assistantDatas);
     }
 
-    public function show(Announcement $announcement)
+    public function show(Request $request, Announcement $announcement)
     {
         $query = $announcement
             ->join('enrollments', 'enrollments.schedule_id', '=', 'announcements.schedule_id')
@@ -27,7 +47,6 @@ class AssessmentController extends Controller
             ->join('attendances', 'attendances.user_id', '=', 'enrollments.user_id')
             ->join('assignments', 'assignments.announcement_id', '=', 'announcements.id')
             ->join('assignment_submissions', 'assignment_submissions.user_id', '=', 'attendances.user_id');
-
 
         $query = Assessment::exists() ?
             $query
@@ -55,9 +74,9 @@ class AssessmentController extends Controller
     public function store(Request $request, Announcement $announcement)
     {
         $validated = $request->validate([
-            'assessments.*.participation' => 'nullable|numeric|min:0|max:100',
-            'assessments.*.activeness' => 'nullable|numeric|min:0|max:100',
-            'assessments.*.report' => 'nullable|numeric|min:0|max:100',
+            'assessments.*.participation' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'assessments.*.activeness' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'assessments.*.report' => ['nullable', 'numeric', 'min:0', 'max:100'],
         ]);
 
         $mappedAssessments = [];
