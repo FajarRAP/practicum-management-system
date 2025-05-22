@@ -11,9 +11,11 @@
                 class="flex flex-col gap-4">
                 @csrf
                 @method('POST')
-                <x-primary-button class="self-end" x-data @click.prevent="$dispatch('open-modal', 'add-assessment')">
-                    {{ __('Save') }}
-                </x-primary-button>
+                @hasrole('assistant')
+                    <x-primary-button class="self-end" x-data @click.prevent="$dispatch('open-modal', 'add-assessment')">
+                        {{ __('Save') }}
+                    </x-primary-button>
+                @endhasrole
 
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
                     <div
@@ -53,23 +55,35 @@
                                         <td class="px-6 py-4">
                                             {{ $submission->student_number }}
                                         <td class="px-6 py-4">
-                                            {{ Str::ucfirst(Str::lower($submission->status)) }}
+                                            {{ Str::of($submission->status)->lower()->ucfirst() }}
                                         </td>
-                                        <td class="px-6 py-4">
-                                            <x-text-input type="number"
-                                                name="assessments[{{ $submission->user_id }}][participation]"
-                                                :value="$submission->participation_score" />
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <x-text-input type="number"
-                                                name="assessments[{{ $submission->user_id }}][activeness]"
-                                                :value="$submission->active_score" />
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <x-text-input type="number"
-                                                name="assessments[{{ $submission->user_id }}][report]"
-                                                :value="$submission->report_score" />
-                                        </td>
+                                        @hasrole('assistant')
+                                            <td class="px-6 py-4">
+                                                <x-text-input type="number"
+                                                    name="assessments[{{ $submission->user_id }}][participation]"
+                                                    :value="$submission->participation_score" />
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <x-text-input type="number"
+                                                    name="assessments[{{ $submission->user_id }}][activeness]"
+                                                    :value="$submission->active_score" />
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <x-text-input type="number"
+                                                    name="assessments[{{ $submission->user_id }}][report]"
+                                                    :value="$submission->report_score" />
+                                            </td>
+                                        @else
+                                            <td class="px-6 py-4">
+                                                {{ $submission->participation_score }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $submission->active_score }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $submission->report_score }}
+                                            </td>
+                                        @endhasrole
                                         <td class="px-6 py-4">
                                             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                                 href="{{ asset("storage/$submission->file_path") }}">
@@ -86,21 +100,23 @@
         </div>
     </div>
 
-    <x-modal name="add-assessment" :show="$errors->addAnnouncement->isNotEmpty()" focusable>
-        <div class="p-6">
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Save This Assessment') }}
-            </h2>
+    @hasrole('assistant')
+        <x-modal name="add-assessment" :show="$errors->addAnnouncement->isNotEmpty()" focusable>
+            <div class="p-6">
+                <h2 class="text-lg font-medium text-gray-900">
+                    {{ __('Save This Assessment') }}
+                </h2>
 
-            <div class="flex justify-end">
-                <x-secondary-button @click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
+                <div class="flex justify-end">
+                    <x-secondary-button @click="$dispatch('close')">
+                        {{ __('Cancel') }}
+                    </x-secondary-button>
 
-                <x-primary-button class="ms-3" @click="document.querySelector('#assessment').submit()">
-                    {{ __('Save') }}
-                </x-primary-button>
+                    <x-primary-button class="ms-3" @click="document.querySelector('#assessment').submit()">
+                        {{ __('Save') }}
+                    </x-primary-button>
+                </div>
             </div>
-        </div>
-    </x-modal>
+        </x-modal>
+    @endhasrole
 </x-app-layout>

@@ -7,9 +7,11 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-4">
-            <x-primary-button class="self-end" x-data @click="$dispatch('open-modal', 'add-assignment')">
-                {{ __('Add Assignment') }}
-            </x-primary-button>
+            @hasrole('assistant')
+                <x-primary-button class="self-end" x-data @click="$dispatch('open-modal', 'add-assignment')">
+                    {{ __('Add Assignment') }}
+                </x-primary-button>
+            @endhasrole
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-96 flex flex-col justify-between">
@@ -53,51 +55,53 @@
         </div>
     </div>
 
-    <x-modal name="add-assignment" :show="$errors->addAssignment->isNotEmpty()" focusable>
-        <form method="POST" action="{{ route('assignment.store') }}" class="p-6 flex flex-col gap-4">
-            @csrf
-            @method('POST')
+    @hasrole('assistant')
+        <x-modal name="add-assignment" :show="$errors->addAssignment->isNotEmpty()" focusable>
+            <form method="POST" action="{{ route('assignment.store') }}" class="p-6 flex flex-col gap-4">
+                @csrf
+                @method('POST')
 
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Add Assignment') }}
-            </h2>
-
-            <div>
-                <x-input-label for="announcement" value="{{ __('Announcement') }}" />
-                <x-select-input id="announcement" name="announcement" class="mt-1 block w-3/4">
-                    <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Select') . ' ' . __('Announcement') }}</option>
-                        @foreach ($announcements as $announcement)
-                            <option value="{{ $announcement->id }}">
-                                {{ $announcement->schedule->course->name . ' - ' . $announcement->schedule->shift->name . ' - ' . $announcement->activity }}
-                            </option>
-                        @endforeach
-                    </x-slot>
-                </x-select-input>
-                <x-input-error :messages="$errors->addAssignment->get('announcement')" />
-            </div>
-            <div>
-                <x-input-label for="Title" value="{{ __('Title') }}" />
-                <x-text-input id="title" name="title" type="text" class="mt-1 block w-3/4"
-                    placeholder="{{ __('Title') }}" />
-                <x-input-error :messages="$errors->addAssignment->get('title')" />
-            </div>
-            <div>
-                <x-input-label for="due_date" value="{{ __('Due Date') }}" />
-                <x-text-input id="due_date" name="due_date" type="datetime-local" class="mt-1 block w-3/4"
-                    placeholder="{{ __('Due Date') }}" />
-                <x-input-error :messages="$errors->addAssignment->get('due_date')" />
-            </div>
-
-            <div class="flex justify-end">
-                <x-secondary-button @click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-
-                <x-primary-button class="ms-3">
+                <h2 class="text-lg font-medium text-gray-900">
                     {{ __('Add Assignment') }}
-                </x-primary-button>
-            </div>
-        </form>
-    </x-modal>
+                </h2>
+
+                <div>
+                    <x-input-label for="announcement" value="{{ __('Announcement') }}" />
+                    <x-select-input id="announcement" name="announcement" class="mt-1 block w-3/4">
+                        <x-slot name="options">
+                            <option value="" disabled selected>{{ __('Select') . ' ' . __('Announcement') }}</option>
+                            @foreach ($announcements as $announcement)
+                                <option value="{{ $announcement->id }}">
+                                    {{ $announcement->schedule->course->name . ' - ' . $announcement->schedule->shift->name . ' - ' . $announcement->activity }}
+                                </option>
+                            @endforeach
+                        </x-slot>
+                    </x-select-input>
+                    <x-input-error :messages="$errors->addAssignment->get('announcement')" />
+                </div>
+                <div>
+                    <x-input-label for="Title" value="{{ __('Title') }}" />
+                    <x-text-input id="title" name="title" type="text" class="mt-1 block w-3/4"
+                        placeholder="{{ __('Title') }}" />
+                    <x-input-error :messages="$errors->addAssignment->get('title')" />
+                </div>
+                <div>
+                    <x-input-label for="due_date" value="{{ __('Due Date') }}" />
+                    <x-text-input id="due_date" name="due_date" type="datetime-local" class="mt-1 block w-3/4"
+                        placeholder="{{ __('Due Date') }}" />
+                    <x-input-error :messages="$errors->addAssignment->get('due_date')" />
+                </div>
+
+                <div class="flex justify-end">
+                    <x-secondary-button @click="$dispatch('close')">
+                        {{ __('Cancel') }}
+                    </x-secondary-button>
+
+                    <x-primary-button class="ms-3">
+                        {{ __('Add Assignment') }}
+                    </x-primary-button>
+                </div>
+            </form>
+        </x-modal>
+    @endhasrole
 </x-app-layout>

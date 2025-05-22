@@ -11,9 +11,12 @@
                 class="flex flex-col gap-4">
                 @csrf
                 @method('POST')
-                <x-primary-button class="self-end" x-data @click.prevent="$dispatch('open-modal', 'add-attendance')">
-                    {{ __('Save') }}
-                </x-primary-button>
+                @hasrole('assistant')
+                    <x-primary-button class="self-end" x-data @click.prevent="$dispatch('open-modal', 'add-attendance')">
+                        {{ __('Save') }}
+                    </x-primary-button>
+                @endhasrole
+
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
                     <p class="text-lg font-medium m-4 sm:m-6">
                         {{ __('Assistants Attendance') }}
@@ -50,22 +53,26 @@
                                             {{ $assistant->student->student_number ?? 'Not Filled Yet' }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            <x-select-input name="users[{{ $assistant->id }}]">
-                                                <x-slot name="options">
-                                                    <option value="" disabled
-                                                        {{ !$assistantStatus ? 'selected' : '' }}>
-                                                        {{ __('Select') }}
-                                                    </option>
-                                                    <option value="PRESENT" {{ $evaluateStatus('PRESENT') }}>
-                                                        {{ __('Present') }}</option>
-                                                    <option value="SICK" {{ $evaluateStatus('SICK') }}>
-                                                        {{ __('Sick') }}</option>
-                                                    <option value="EXCUSED" {{ $evaluateStatus('EXCUSED') }}>
-                                                        {{ __('Excused') }}</option>
-                                                    <option value="ABSENT" {{ $evaluateStatus('ABSENT') }}>
-                                                        {{ __('Absent') }}</option>
-                                                </x-slot>
-                                            </x-select-input>
+                                            @hasrole('assistant')
+                                                <x-select-input name="users[{{ $assistant->id }}]">
+                                                    <x-slot name="options">
+                                                        <option value="" disabled
+                                                            {{ !$assistantStatus ? 'selected' : '' }}>
+                                                            {{ __('Select') }}
+                                                        </option>
+                                                        <option value="PRESENT" {{ $evaluateStatus('PRESENT') }}>
+                                                            {{ __('Present') }}</option>
+                                                        <option value="SICK" {{ $evaluateStatus('SICK') }}>
+                                                            {{ __('Sick') }}</option>
+                                                        <option value="EXCUSED" {{ $evaluateStatus('EXCUSED') }}>
+                                                            {{ __('Excused') }}</option>
+                                                        <option value="ABSENT" {{ $evaluateStatus('ABSENT') }}>
+                                                            {{ __('Absent') }}</option>
+                                                    </x-slot>
+                                                </x-select-input>
+                                            @else
+                                                {{ Str::of($assistantStatus)->lower()->ucfirst() }}
+                                            @endhasrole
                                         </td>
                                     </tr>
                                 @endforeach
@@ -110,22 +117,26 @@
                                             {{ $enrollment->user->student->student_number }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            <x-select-input name="users[{{ $enrollment->user->id }}]">
-                                                <x-slot name="options">
-                                                    <option value="" disabled
-                                                        {{ !$studentStatus ? 'selected' : '' }}>
-                                                        {{ __('Select') }}
-                                                    </option>
-                                                    <option value="PRESENT" {{ $evaluateStatus('PRESENT') }}>
-                                                        {{ __('Present') }}</option>
-                                                    <option value="SICK" {{ $evaluateStatus('SICK') }}>
-                                                        {{ __('Sick') }}</option>
-                                                    <option value="EXCUSED" {{ $evaluateStatus('EXCUSED') }}>
-                                                        {{ __('Excused') }}</option>
-                                                    <option value="ABSENT" {{ $evaluateStatus('ABSENT') }}>
-                                                        {{ __('Absent') }}</option>
-                                                </x-slot>
-                                            </x-select-input>
+                                            @hasrole('assistant')
+                                                <x-select-input name="users[{{ $enrollment->user->id }}]">
+                                                    <x-slot name="options">
+                                                        <option value="" disabled
+                                                            {{ !$studentStatus ? 'selected' : '' }}>
+                                                            {{ __('Select') }}
+                                                        </option>
+                                                        <option value="PRESENT" {{ $evaluateStatus('PRESENT') }}>
+                                                            {{ __('Present') }}</option>
+                                                        <option value="SICK" {{ $evaluateStatus('SICK') }}>
+                                                            {{ __('Sick') }}</option>
+                                                        <option value="EXCUSED" {{ $evaluateStatus('EXCUSED') }}>
+                                                            {{ __('Excused') }}</option>
+                                                        <option value="ABSENT" {{ $evaluateStatus('ABSENT') }}>
+                                                            {{ __('Absent') }}</option>
+                                                    </x-slot>
+                                                </x-select-input>
+                                            @else
+                                                {{ Str::of($studentStatus ?? 'Not Attended Yet')->lower()->ucfirst() }}
+                                            @endhasrole
                                         </td>
                                     </tr>
                                 @endforeach
@@ -137,21 +148,23 @@
         </div>
     </div>
 
-    <x-modal name="add-attendance" focusable>
-        <div class="p-6">
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Save This Attendance') }}
-            </h2>
+    @hasrole('assistant')
+        <x-modal name="add-attendance" focusable>
+            <div class="p-6">
+                <h2 class="text-lg font-medium text-gray-900">
+                    {{ __('Save This Attendance') }}
+                </h2>
 
-            <div class="flex justify-end">
-                <x-secondary-button @click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
+                <div class="flex justify-end">
+                    <x-secondary-button @click="$dispatch('close')">
+                        {{ __('Cancel') }}
+                    </x-secondary-button>
 
-                <x-primary-button class="ms-3" @click="document.querySelector('#attendance').submit()">
-                    {{ __('Save') }}
-                </x-primary-button>
+                    <x-primary-button class="ms-3" @click="document.querySelector('#attendance').submit()">
+                        {{ __('Save') }}
+                    </x-primary-button>
+                </div>
             </div>
-        </div>
-    </x-modal>
+        </x-modal>
+    @endhasrole
 </x-app-layout>

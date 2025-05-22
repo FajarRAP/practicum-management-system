@@ -7,9 +7,11 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-4">
-            <x-primary-button class="self-end" x-data @click.prevent="$dispatch('open-modal', 'add-module')">
-                {{ __('Add Module') }}
-            </x-primary-button>
+            @hasrole('assistant')
+                <x-primary-button class="self-end" x-data @click.prevent="$dispatch('open-modal', 'add-module')">
+                    {{ __('Add Module') }}
+                </x-primary-button>
+            @endhasrole
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-96 flex flex-col justify-between">
@@ -45,37 +47,39 @@
         </div>
     </div>
 
-    <x-modal name="add-module" :show="$errors->addModule->isNotEmpty()" focusable>
-        <form method="POST" action="{{ route('schedule-module.store') }}" class="p-6 flex flex-col gap-4"
-            enctype="multipart/form-data">
-            @csrf
-            @method('POST')
+    @hasrole('assistant')
+        <x-modal name="add-module" :show="$errors->addModule->isNotEmpty()" focusable>
+            <form method="POST" action="{{ route('schedule-module.store') }}" class="p-6 flex flex-col gap-4"
+                enctype="multipart/form-data">
+                @csrf
+                @method('POST')
 
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Add Module') }}`
-            </h2>
+                <h2 class="text-lg font-medium text-gray-900">
+                    {{ __('Add Module') }}`
+                </h2>
 
-            <div>
-                <x-input-label for="title" value="{{ __('Title') }}" />
-                <x-text-input id="title" name="title" class="mt-1 block w-3/4"
-                    placeholder="{{ __('Title') }}" />
-                <x-input-error :messages="$errors->addModule->get('title')" />
-            </div>
-            <div>
-                <x-input-label for="file" value="{{ __('Submission File') }}" />
-                <x-file-input id="file" name="file" class="mt-1 block w-3/4" />
-                <x-input-error :messages="$errors->addModule->get('file')" />
-            </div>
+                <div>
+                    <x-input-label for="title" value="{{ __('Title') }}" />
+                    <x-text-input id="title" name="title" class="mt-1 block w-3/4"
+                        placeholder="{{ __('Title') }}" />
+                    <x-input-error :messages="$errors->addModule->get('title')" />
+                </div>
+                <div>
+                    <x-input-label for="file" value="{{ __('Submission File') }}" />
+                    <x-file-input id="file" name="file" class="mt-1 block w-3/4" />
+                    <x-input-error :messages="$errors->addModule->get('file')" />
+                </div>
 
-            <div class="flex justify-end">
-                <x-secondary-button @click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
+                <div class="flex justify-end">
+                    <x-secondary-button @click="$dispatch('close')">
+                        {{ __('Cancel') }}
+                    </x-secondary-button>
 
-                <x-primary-button class="ms-3">
-                    {{ __('Submit') }}
-                </x-primary-button>
-            </div>
-        </form>
-    </x-modal>
+                    <x-primary-button class="ms-3">
+                        {{ __('Submit') }}
+                    </x-primary-button>
+                </div>
+            </form>
+        </x-modal>
+    @endhasrole
 </x-app-layout>
