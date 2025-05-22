@@ -33,7 +33,7 @@
                                         {{ $submission->user->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $submission->user->email }}
+                                        {{ $submission->user->student->student_number }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $submission->created_at > $assignment->due_date ? __('Late') : __('On Time') }}

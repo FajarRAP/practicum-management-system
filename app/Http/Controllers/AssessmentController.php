@@ -44,6 +44,7 @@ class AssessmentController extends Controller
         $query = $announcement
             ->join('enrollments', 'enrollments.schedule_id', '=', 'announcements.schedule_id')
             ->join('users', 'users.id', '=', 'enrollments.user_id')
+            ->join('students', 'students.user_id', '=', 'users.id')
             ->join('attendances', 'attendances.user_id', '=', 'enrollments.user_id')
             ->join('assignments', 'assignments.announcement_id', '=', 'announcements.id')
             ->join('assignment_submissions', 'assignment_submissions.user_id', '=', 'attendances.user_id');
@@ -55,6 +56,7 @@ class AssessmentController extends Controller
                 'users.id as user_id',
                 'users.name',
                 'users.email',
+                'students.student_number',
                 'attendances.status',
                 'assignment_submissions.file_path',
                 'assessments.participation_score',
@@ -62,7 +64,7 @@ class AssessmentController extends Controller
                 'assessments.report_score'
             ) :
             $query
-            ->select('users.id as user_id', 'users.name', 'users.email', 'attendances.status', 'assignment_submissions.file_path');
+            ->select('users.id as user_id', 'users.name', 'users.email', 'students.student_number', 'attendances.status', 'assignment_submissions.file_path');
 
 
         return view('assistants.assessment-show', [

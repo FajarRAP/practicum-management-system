@@ -27,7 +27,7 @@
                                         {{ $enrollment->user->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $enrollment->user->email }}
+                                        {{ $enrollment->user->student->student_number }}
                                     </td>
                                 </tr>
                             @endforeach

@@ -47,7 +47,7 @@
                                             {{ $assistant->name }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ $assistant->email }}
+                                            {{ $assistant->student->student_number ?? 'Not Filled Yet' }}
                                         </td>
                                         <td class="px-6 py-4">
                                             <x-select-input name="users[{{ $assistant->id }}]">
@@ -107,7 +107,7 @@
                                             {{ $enrollment->user->name }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ $enrollment->user->email }}
+                                            {{ $enrollment->user->student->student_number }}
                                         </td>
                                         <td class="px-6 py-4">
                                             <x-select-input name="users[{{ $enrollment->user->id }}]">

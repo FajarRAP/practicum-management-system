@@ -51,7 +51,7 @@
                                             {{ $submission->name }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ $submission->email }}
+                                            {{ $submission->student_number }}
                                         <td class="px-6 py-4">
                                             {{ Str::ucfirst(Str::lower($submission->status)) }}
                                         </td>
