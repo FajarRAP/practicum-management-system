@@ -19,17 +19,17 @@ class StudentController extends Controller
         $storage = Storage::disk('public');
 
         $studyPlanFile = $request->file('study_plan');
-        if ($studyPlanFile && $request->user()->student->study_plan_path) {
+        if ($studyPlanFile && $request->user()->student?->study_plan_path) {
             $storage->delete($request->user()->student->study_plan_path);
         }
 
         $transcriptFile = $request->file('transcript');
-        if ($transcriptFile && $request->user()->student->transcript_path) {
+        if ($transcriptFile && $request->user()->student?->transcript_path) {
             $storage->delete($request->user()->student->transcript_path);
         }
 
         $photoFile = $request->file('photo');
-        if ($photoFile && $request->user()->student->photo_path) {
+        if ($photoFile && $request->user()->student?->photo_path) {
             $storage->delete($request->user()->student->photo_path);
         }
 
