@@ -31,7 +31,7 @@
                                         {{ $enrollment->schedule->course->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $enrollment->schedule->shift->name }}
+                                        {{ $enrollment->schedule->shift }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -58,7 +58,7 @@
                         <option value="" disabled selected>{{ __('Select') . ' ' . __('Schedule') }}</option>
                         @foreach ($schedules as $schedule)
                             <option value="{{ $schedule->id }}">
-                                {{ $schedule->course->name . ' - ' . $schedule->shift->name }}</option>
+                                {{ $schedule->course->name . ' - ' . $schedule->shift }}</option>
                         @endforeach
                     </x-slot>
                 </x-select-input>

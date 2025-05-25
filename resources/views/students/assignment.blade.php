@@ -45,7 +45,7 @@
                                         {{ $assignment->announcement->schedule->course->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assignment->announcement->schedule->shift->name }}
+                                        {{ $assignment->announcement->schedule->shift }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $assignment->title }}

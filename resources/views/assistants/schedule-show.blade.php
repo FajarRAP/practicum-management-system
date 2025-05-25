@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Registered Student at') . ' ' . $schedule->course->name . ' ' . $schedule->shift->name }}
+            {{ __('Registered Student at') . ' ' . $schedule->course->name . ' ' . $schedule->shift }}
         </h2>
     </x-slot>
 

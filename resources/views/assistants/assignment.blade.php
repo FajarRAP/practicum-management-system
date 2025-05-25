@@ -72,7 +72,7 @@
                             <option value="" disabled selected>{{ __('Select') . ' ' . __('Announcement') }}</option>
                             @foreach ($announcements as $announcement)
                                 <option value="{{ $announcement->id }}">
-                                    {{ $announcement->schedule->course->name . ' - ' . $announcement->schedule->shift->name . ' - ' . $announcement->activity }}
+                                    {{ $announcement->schedule->course->name . ' - ' . $announcement->schedule->shift . ' - ' . $announcement->activity }}
                                 </option>
                             @endforeach
                         </x-slot>

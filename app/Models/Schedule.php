@@ -18,11 +18,6 @@ class Schedule extends Model
         return $this->belongsTo(Day::class);
     }
 
-    public function shift()
-    {
-        return $this->belongsTo(Shift::class);
-    }
-
     public function announcements()
     {
         return $this->hasMany(Announcement::class);

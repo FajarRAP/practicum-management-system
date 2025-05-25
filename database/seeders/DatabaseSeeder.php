@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CourseSeeder::class,
             DaySeeder::class,
-            ShiftSeeder::class,
         ]);
     }
 }

@@ -42,7 +42,7 @@
                                         {{ $announcement->schedule->course->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $announcement->schedule->shift->name }}
+                                        {{ $announcement->schedule->shift }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $announcement->activity }}

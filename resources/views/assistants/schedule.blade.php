@@ -48,7 +48,7 @@
                                         {{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $schedule->shift->name }}
+                                        {{ $schedule->shift }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <a href="{{ route('schedule.show', $schedule) }}"
@@ -103,14 +103,8 @@
                 </div>
                 <div>
                     <x-input-label for="shift" value="{{ __('Shift') }}" />
-                    <x-select-input id="shift" name="shift" class="mt-1 block w-3/4">
-                        <x-slot name="options">
-                            <option value="" disabled selected>{{ __('Select') . ' ' . __('Shift') }}</option>
-                            @foreach ($shifts as $shift)
-                                <option value="{{ $shift->id }}">{{ $shift->name }}</option>
-                            @endforeach
-                        </x-slot>
-                    </x-select-input>
+                    <x-text-input id="shift" name="shift" type="text" class="mt-1 block w-3/4"
+                        placeholder="{{ __('Shift') }}" />
                     <x-input-error :messages="$errors->addSchedule->get('shift')" />
                 </div>
                 <div>
