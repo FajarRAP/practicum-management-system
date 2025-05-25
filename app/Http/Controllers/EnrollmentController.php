@@ -42,9 +42,9 @@ class EnrollmentController extends Controller
         Enrollment::create([
             'user_id' => $user->id,
             'schedule_id' => $validated['schedule'],
-            'study_plan_path' => $request->file('study_plan')->store('enrollments/', 'public'),
-            'transcript_path' => $request->file('transcript')->store('enrollments/', 'public'),
-            'photo_path' => $request->file('photo')->store('enrollments/', 'public'),
+            'study_plan_path' => $request->file('study_plan')->store('enrollments', 'public'),
+            'transcript_path' => $request->file('transcript')->store('enrollments', 'public'),
+            'photo_path' => $request->file('photo')->store('enrollments', 'public'),
         ]);
 
         return back()->with('success', 'Successfully enrolled in practicum.');

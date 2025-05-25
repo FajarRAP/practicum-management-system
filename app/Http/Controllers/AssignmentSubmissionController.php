@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class AssignmentSubmissionController extends Controller
 {
@@ -26,7 +25,7 @@ class AssignmentSubmissionController extends Controller
         AssignmentSubmission::create([
             'assignment_id' => $assignment->id,
             'user_id' => $request->user()->id,
-            'file_path' => Storage::disk('public')->putFile('submissions', $request->file('file')),
+            'file_path' => $request->file('file')->store('submissions', 'public'),
         ]);
 
         return back()->with('success', 'Assignment submitted successfully.');
