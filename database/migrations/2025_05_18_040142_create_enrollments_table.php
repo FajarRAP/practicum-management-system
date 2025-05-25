@@ -21,6 +21,9 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->string('study_plan_path');
+            $table->string('transcript_path');
+            $table->string('photo_path');
             $table->timestamps();
         });
     }

@@ -19,19 +19,20 @@ class EnrollmentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validateWithBag('addEnrollment', [
-            'schedule' => ['required', 'exists:schedules,id'],
+            'schedule' => ['required'],
+            'study_plan' => ['required', 'file', 'mimes:pdf', 'max:2048'],
+            'transcript' => ['required', 'file', 'mimes:pdf', 'max:2048'],
+            'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
         ]);
 
         $user = $request->user();
 
-        if (
-            !$user->student ||
-            !$user->student->student_number ||
-            !$user->student->study_plan_path ||
-            !$user->student->transcript_path ||
-            !$user->student->photo_path
-        ) {
+        if (!$user->identity_number) {
             return back()->with('error', 'You must complete your student identity before enrolling.');
+        }
+
+        if ($user->enrollments->isNotEmpty()) {
+            return back()->with('error', 'You are already enrolled practicum in this semester.');
         }
 
         if ($user->enrollments()->where('schedule_id', $validated['schedule'])->exists()) {
@@ -39,10 +40,13 @@ class EnrollmentController extends Controller
         }
 
         Enrollment::create([
-            'user_id' => $request->user()->id,
+            'user_id' => $user->id,
             'schedule_id' => $validated['schedule'],
+            'study_plan_path' => $request->file('study_plan')->store('enrollments/', 'public'),
+            'transcript_path' => $request->file('transcript')->store('enrollments/', 'public'),
+            'photo_path' => $request->file('photo')->store('enrollments/', 'public'),
         ]);
 
-        return back()->with('success', 'Successfully enrollment practicum.');
+        return back()->with('success', 'Successfully enrolled in practicum.');
     }
 }
