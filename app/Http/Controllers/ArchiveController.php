@@ -13,10 +13,10 @@ class ArchiveController extends Controller
 
         return $request->user()->hasRole('student') ?
             view('students.archive', [
-                'archive' => $archive,
+                'archives' => $archive,
             ]) :
             view('assistants.archive', [
-                'archive' => $archive,
+                'archives' => $archive,
             ]);
     }
 
@@ -32,6 +32,6 @@ class ArchiveController extends Controller
             'file_path' => $request->file('file')->store('archives', 'public'),
         ]);
 
-        return back()->with('success', 'Module added successfully.');
+        return back()->with('success', 'Archive added successfully');
     }
 }
