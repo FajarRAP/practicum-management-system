@@ -48,13 +48,13 @@
                                         {{ $announcement->activity }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ Carbon\Carbon::parse($announcement->datetime)->format('l') }}
+                                        {{ \Carbon\Carbon::parse($announcement->datetime)->format('l') }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ Carbon\Carbon::parse($announcement->datetime)->format('d M Y') }}
+                                        {{ \Carbon\Carbon::parse($announcement->datetime)->format('d M Y') }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ Carbon\Carbon::parse($announcement->datetime)->format('H:m') }}
+                                        {{ \Carbon\Carbon::parse($announcement->datetime)->format('H:m') }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $announcement->place }}

@@ -51,7 +51,7 @@
                                         {{ $assignment->title }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ Carbon\Carbon::parse($assignment->due_date)->format('l, d M Y H:i') }}
+                                        {{ \Carbon\Carbon::parse($assignment->due_date)->format('l, d M Y H:i') }}
                                     </td>
                                     <td class="px-6 py-4">
                                         @if (!$isAttended)
