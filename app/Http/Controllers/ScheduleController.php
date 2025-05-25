@@ -44,6 +44,6 @@ class ScheduleController extends Controller
             'time' => $validated['time'],
         ]);
 
-        return back()->with('success', 'Shift created successfully.');
+        return back()->with('success', 'Schedule created successfully.');
     }
 }
