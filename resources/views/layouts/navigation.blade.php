@@ -39,8 +39,8 @@
                     <x-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') || request()->routeIs('assessment.show')">
                         {{ __('Assessment') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('schedule-module.index')" :active="request()->routeIs('schedule-module.index')">
-                        {{ __('Module') }}
+                    <x-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
+                        {{ __('Archive') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -127,8 +127,8 @@
             <x-responsive-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') || request()->routeIs('assessment.show')">
                 {{ __('Assessment') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('schedule-module.index')" :active="request()->routeIs('schedule-module.index')">
-                {{ __('Module') }}
+            <x-responsive-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
+                {{ __('Archive') }}
             </x-responsive-nav-link>
         </div>
 

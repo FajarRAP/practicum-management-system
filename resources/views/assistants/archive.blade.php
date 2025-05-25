@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Module') }}
+            {{ __('Archives') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-4">
             @hasrole('assistant')
-                <x-primary-button class="self-end" x-data @click.prevent="$dispatch('open-modal', 'add-module')">
-                    {{ __('Add Module') }}
+                <x-primary-button class="self-end" x-data @click.prevent="$dispatch('open-modal', 'add-archive')">
+                    {{ __('Add Archives') }}
                 </x-primary-button>
             @endhasrole
 
@@ -27,14 +27,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($modules as $module)
+                            @foreach ($archives as $archive)
                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <td class="px-6 py-4">
-                                        {{ $module->title }}
+                                        {{ $archive->title }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                            href="{{ asset("storage/$module->file_path") }}">
+                                            href="{{ asset("storage/$archive->file_path") }}">
                                             {{ __('View') }}
                                         </a>
                                     </td>
@@ -48,26 +48,26 @@
     </div>
 
     @hasrole('assistant')
-        <x-modal name="add-module" :show="$errors->addModule->isNotEmpty()" focusable>
-            <form method="POST" action="{{ route('schedule-module.store') }}" class="p-6 flex flex-col gap-4"
+        <x-modal name="add-archive" :show="$errors->addArchive->isNotEmpty()" focusable>
+            <form method="POST" action="{{ route('archive.store') }}" class="p-6 flex flex-col gap-4"
                 enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
                 <h2 class="text-lg font-medium text-gray-900">
-                    {{ __('Add Module') }}`
+                    {{ __('Add Archive') }}`
                 </h2>
 
                 <div>
                     <x-input-label for="title" value="{{ __('Title') }}" />
                     <x-text-input id="title" name="title" class="mt-1 block w-3/4"
                         placeholder="{{ __('Title') }}" />
-                    <x-input-error :messages="$errors->addModule->get('title')" />
+                    <x-input-error :messages="$errors->addArchive->get('title')" />
                 </div>
                 <div>
                     <x-input-label for="file" value="{{ __('Submission File') }}" />
                     <x-file-input id="file" name="file" class="mt-1 block w-3/4" />
-                    <x-input-error :messages="$errors->addModule->get('file')" />
+                    <x-input-error :messages="$errors->addArchive->get('file')" />
                 </div>
 
                 <div class="flex justify-end">

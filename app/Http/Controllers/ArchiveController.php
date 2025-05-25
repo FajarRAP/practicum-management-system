@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ScheduleModule;
+use App\Models\Archive;
 use Illuminate\Http\Request;
 
-class ScheduleModuleController extends Controller
+class ArchiveController extends Controller
 {
     public function index(Request $request)
     {
-        $modules = ScheduleModule::all();
+        $archive = Archive::all();
 
         return $request->user()->hasRole('student') ?
-            view('students.schedule-module', [
-                'modules' => $modules,
+            view('students.archive', [
+                'archive' => $archive,
             ]) :
-            view('assistants.schedule-module', [
-                'modules' => $modules,
+            view('assistants.archive', [
+                'archive' => $archive,
             ]);
     }
 
@@ -27,9 +27,9 @@ class ScheduleModuleController extends Controller
             'file' => ['required', 'file', 'mimes:pdf', 'max:2048'],
         ]);
 
-        ScheduleModule::create([
+        Archive::create([
             'title' => $validated['title'],
-            'file_path' => $request->file('file')->store('schedule-modules', 'public'),
+            'file_path' => $request->file('file')->store('archives', 'public'),
         ]);
 
         return back()->with('success', 'Module added successfully.');

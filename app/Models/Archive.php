@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ScheduleModule extends Model
+class Archive extends Model
 {
     protected $guarded = [];
 }

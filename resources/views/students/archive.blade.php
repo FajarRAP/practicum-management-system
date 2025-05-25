@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Module') }}
+            {{ __('Archive') }}
         </h2>
     </x-slot>
 
@@ -21,14 +21,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($modules as $module)
+                            @foreach ($archives as $archive)
                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <td class="px-6 py-4">
-                                        {{ $module->title }}
+                                        {{ $archive->title }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                            href="{{ asset("storage/$module->file_path") }}">
+                                            href="{{ asset("storage/$archive->file_path") }}">
                                             {{ __('View') }}
                                         </a>
                                     </td>

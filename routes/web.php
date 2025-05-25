@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\ArchiveController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AssignmentSubmissionController;
@@ -8,7 +9,6 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\ScheduleModuleController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -64,10 +64,10 @@ Route::get('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissio
 Route::post('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('assignment-submission.store');
 
-Route::get('/dashboard/module', [ScheduleModuleController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('schedule-module.index');
-Route::post('/dashboard/module', [ScheduleModuleController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('schedule-module.store');
+Route::get('/dashboard/archive', [ArchiveController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('archive.index');
+Route::post('/dashboard/archive', [ArchiveController::class, 'store'])
+    ->middleware(['auth', 'verified'])->name('archive.store');
 
 Route::put('/profile/student', [StudentController::class, 'edit'])
     ->middleware(['auth', 'verified'])->name('student.edit');
