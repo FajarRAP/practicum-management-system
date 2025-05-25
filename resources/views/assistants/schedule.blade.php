@@ -45,7 +45,7 @@
                                         {{ $schedule->day->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ \Carbon\Carbon::parse($schedule->time)->format('H:m') }}
+                                        {{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $schedule->shift->name }}
