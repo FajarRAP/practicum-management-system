@@ -16,7 +16,10 @@
                                     {{ __('Name') }}
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    {{ __('Stundet Number') }}
+                                    {{ __('Student Number') }}
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    {{ __('Submitted At') }}
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     {{ __('Status') }}
@@ -33,7 +36,10 @@
                                         {{ $submission->user->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $submission->user->student->student_number }}
+                                        {{ $submission->user->identity_number }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ \Carbon\Carbon::parse($submission->created_at)->format('l, d M Y H:i') }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $submission->created_at > $assignment->due_date ? __('Late') : __('On Time') }}
