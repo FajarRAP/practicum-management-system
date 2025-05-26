@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-4">
             @hasrole('assistant')
                 <x-primary-button class="self-end" x-data @click.prevent="$dispatch('open-modal', 'add-archive')">
-                    {{ __('Add Archives') }}
+                    {{ __('Add Archive') }}
                 </x-primary-button>
             @endhasrole
 
@@ -55,7 +55,7 @@
                 @method('POST')
 
                 <h2 class="text-lg font-medium text-gray-900">
-                    {{ __('Add Archive') }}`
+                    {{ __('Add Archive') }}
                 </h2>
 
                 <div>
@@ -65,7 +65,7 @@
                     <x-input-error :messages="$errors->addArchive->get('title')" />
                 </div>
                 <div>
-                    <x-input-label for="file" value="{{ __('Submission File') }}" />
+                    <x-input-label for="file" value="{{ __('Archive File') }}" />
                     <x-file-input id="file" name="file" class="mt-1 block w-3/4" />
                     <x-input-error :messages="$errors->addArchive->get('file')" />
                 </div>
