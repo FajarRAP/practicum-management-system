@@ -36,7 +36,9 @@
                             {{ __('Attendance') }}
                         </x-nav-link>
                     @endhasanyrole
-                    <x-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') || request()->routeIs('assessment.show')">
+                    <x-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') ||
+                        request()->routeIs('assessment.show') ||
+                        request()->routeIs('assessment.final-score')">
                         {{ __('Assessment') }}
                     </x-nav-link>
                     <x-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
@@ -124,7 +126,9 @@
                     {{ __('Attendance') }}
                 </x-responsive-nav-link>
             @endhasanyrole
-            <x-responsive-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') || request()->routeIs('assessment.show')">
+            <x-responsive-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') ||
+                request()->routeIs('assessment.show') ||
+                request()->routeIs('assessment.final-score')">
                 {{ __('Assessment') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">

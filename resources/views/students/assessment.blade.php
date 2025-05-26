@@ -7,6 +7,12 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-4">
+            <a href="{{ route('assessment.final-score') }}" class="self-end">
+                <x-primary-button>
+                    {{ __('Final Score') }}
+                </x-primary-button>
+            </a>
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-96 flex flex-col justify-between">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 border-gray-300">
@@ -25,6 +31,14 @@
                         </thead>
                         <tbody>
                             @foreach ($announcements as $announcement)
+                                @php
+                                    $assessment = $announcement->assessments
+                                        ->where('user_id', request()->user()->id)
+                                        ->first();
+                                    $attendance = $announcement->attendances
+                                        ->where('user_id', request()->user()->id)
+                                        ->first();
+                                @endphp
                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <td class="px-6 py-4">
                                         {{ $announcement->schedule->course->name }}
@@ -43,50 +57,78 @@
                                                 <h2 class="text-lg font-medium text-gray-900">
                                                     {{ __('Assessment Details') }}
                                                 </h2>
-                                                <table
-                                                    class="w-full text-sm text-left rtl:text-right text-gray-500 border-gray-300">
-                                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                                        <tr>
-                                                            <th scope="col" class="px-6 py-3">
-                                                                {{ __('Attendance') }}
-                                                            </th>
-                                                            <th scope="col" class="px-6 py-3">
-                                                                {{ __('Participation') }}
-                                                            </th>
-                                                            <th scope="col" class="px-6 py-3">
-                                                                {{ __('Activeness') }}
-                                                            </th>
-                                                            <th scope="col" class="px-6 py-3">
-                                                                {{ __('Report') }}
-                                                            </th>
-                                                            <th scope="col" class="px-6 py-3">
-                                                                {{ __('Submisssion File') }}
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
-                                                            <td class="px-6 py-4">
-                                                                {{ $announcement->status }}
-                                                            </td>
-                                                            <td class="px-6 py-4">
-                                                                {{ $announcement->participation_score }}
-                                                            </td>
-                                                            <td class="px-6 py-4">
-                                                                {{ $announcement->active_score }}
-                                                            </td>
-                                                            <td class="px-6 py-4">
-                                                                {{ $announcement->report_score }}
-                                                            </td>
-                                                            <td class="px-6 py-4">
-                                                                <a href="{{ asset("storage/$announcement->file_path") }} "
-                                                                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                                    {{ __('View') }}
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
+                                                    <div
+                                                        class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-96 flex flex-col justify-between">
+                                                        <table
+                                                            class="w-full text-sm text-left rtl:text-right text-gray-500 border-gray-300">
+                                                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                                                <tr>
+                                                                    <th scope="col" class="px-6 py-3">
+                                                                        {{ __('Attendance Status') }}
+                                                                    </th>
+                                                                    <th scope="col" class="px-6 py-3">
+                                                                        {{ __('Attendance Score') }}
+                                                                    </th>
+                                                                    <th scope="col" class="px-6 py-3">
+                                                                        {{ __('Participation Score') }}
+                                                                    </th>
+                                                                    <th scope="col" class="px-6 py-3">
+                                                                        {{ __('Creativity Score') }}
+                                                                    </th>
+                                                                    @if ($announcement->is_schedule_announcement)
+                                                                        <th scope="col" class="px-6 py-3">
+                                                                            {{ __('Report Score') }}
+                                                                        </th>
+                                                                        <th scope="col" class="px-6 py-3">
+                                                                            {{ __('Submisssion File') }}
+                                                                        </th>
+                                                                    @endif
+                                                                    <th scope="col" class="px-6 py-3">
+                                                                        {{ __('Active Score') }}
+                                                                    </th>
+                                                                    <th scope="col" class="px-6 py-3">
+                                                                        {{ __('Module Score') }}
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr
+                                                                    class="bg-white border-b border-gray-200 hover:bg-gray-50">
+                                                                    <td class="px-6 py-4">
+                                                                        {{ $attendance->status }}
+                                                                    </td>
+                                                                    <td class="px-6 py-4">
+                                                                        {{ $assessment->attendance_score }}
+                                                                    </td>
+                                                                    <td class="px-6 py-4">
+                                                                        {{ $assessment->participation_score }}
+                                                                    </td>
+                                                                    <td class="px-6 py-4">
+                                                                        {{ $assessment->creativity_score }}
+                                                                    </td>
+                                                                    @if ($announcement->is_schedule_announcement)
+                                                                        <td class="px-6 py-4">
+                                                                            {{ $assessment->report_score }}
+                                                                        </td>
+                                                                        <td class="px-6 py-4">
+                                                                            <a href="{{ asset("storage/$announcement->file_path") }} "
+                                                                                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                                                {{ __('View') }}
+                                                                            </a>
+                                                                        </td>
+                                                                    @endif
+                                                                    <td class="px-6 py-4">
+                                                                        {{ $assessment->active_score }}
+                                                                    </td>
+                                                                    <td class="px-6 py-4">
+                                                                        {{ $assessment->module_score }}
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                                 <div class="flex justify-end">
                                                     <x-secondary-button @click="$dispatch('close')">
                                                         {{ __('Cancel') }}
@@ -103,8 +145,6 @@
                             @endforeach
                         </tbody>
                     </table>
-
-                    {{ $announcements->links('components.pagination.pagination') }}
                 </div>
             </div>
         </div>

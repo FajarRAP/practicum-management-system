@@ -49,6 +49,12 @@
                                             {{ __('Submisssion File') }}
                                         </th>
                                     @endif
+                                    <th scope="col" class="px-6 py-3">
+                                        {{ __('Active Score') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        {{ __('Module Score') }}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -109,6 +115,12 @@
                                                 </a>
                                             </td>
                                         @endif
+                                        <td class="px-6 py-4">
+                                            {{ $submission->active_score }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $submission->module_score }}
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

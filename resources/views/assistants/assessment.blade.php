@@ -7,6 +7,12 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-4">
+            <a href="{{ route('assessment.final-score') }}" class="self-end">
+                <x-primary-button>
+                    {{ __('Final Score') }}
+                </x-primary-button>
+            </a>
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-96 flex flex-col justify-between">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 border-gray-300">

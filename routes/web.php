@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/dashboard/schedule', [ScheduleController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('schedule.index');
 Route::get('/dashboard/schedule/{schedule}', [ScheduleController::class, 'show'])
-    ->middleware(['auth', 'verified'])->name('schedule.show');
+    ->middleware(['auth', 'verified'])->name('schedule.show')->whereNumber('schedule');
 Route::post('/dashboard/schedule', [ScheduleController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('schedule.store');
 
@@ -42,16 +42,18 @@ Route::post('/dashboard/assignment', [AssignmentController::class, 'store'])
 Route::get('/dashboard/attendance', [AttendanceController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('attendance.index');
 Route::get('/dashboard/attendance/{announcement}', [AttendanceController::class, 'show'])
-    ->middleware(['auth', 'verified'])->name('attendance.show');
+    ->middleware(['auth', 'verified'])->name('attendance.show')->whereNumber('announcement');
 Route::post('/dashboard/attendance/{announcement}', [AttendanceController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('attendance.store');
+    ->middleware(['auth', 'verified'])->name('attendance.store')->whereNumber('announcement');
 
 Route::get('/dashboard/assessment', [AssessmentController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('assessment.index');
 Route::get('/dashboard/assessment/{announcement}', [AssessmentController::class, 'show'])
-    ->middleware(['auth', 'verified'])->name('assessment.show');
+    ->middleware(['auth', 'verified'])->name('assessment.show')->whereNumber('announcement');
+Route::get('/dashboard/assessment/final-score', [AssessmentController::class, 'finalScore'])
+    ->middleware(['auth', 'verified'])->name('assessment.final-score');
 Route::post('/dashboard/assessment/{announcement}', [AssessmentController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('assessment.store');
+    ->middleware(['auth', 'verified'])->name('assessment.store')->whereNumber('announcement');
 
 Route::get('/dashboard/enrollment', [EnrollmentController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('enrollment.index');
@@ -59,9 +61,9 @@ Route::post('/dashboard/enrollment', [EnrollmentController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('enrollment.store');
 
 Route::get('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('assignment-submission.index');
+    ->middleware(['auth', 'verified'])->name('assignment-submission.index')->whereNumber('assignment');
 Route::post('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('assignment-submission.store');
+    ->middleware(['auth', 'verified'])->name('assignment-submission.store')->whereNumber('assignment');
 
 Route::get('/dashboard/archive', [ArchiveController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('archive.index');

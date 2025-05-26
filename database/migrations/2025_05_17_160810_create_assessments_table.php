@@ -25,6 +25,8 @@ return new class extends Migration
             $table->float('participation_score')->nullable();
             $table->float('creativity_score')->nullable();
             $table->float('report_score')->nullable();
+            $table->float('active_score')->nullable();
+            $table->float('module_score')->nullable();
             $table->unique(['announcement_id', 'user_id']);
             $table->timestamps();
         });
