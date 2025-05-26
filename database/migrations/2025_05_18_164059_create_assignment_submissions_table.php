@@ -22,6 +22,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('file_path');
+            $table->dateTime('submitted_at');
             $table->timestamps();
         });
     }

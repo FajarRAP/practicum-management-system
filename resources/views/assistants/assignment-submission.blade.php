@@ -39,10 +39,10 @@
                                         {{ $submission->user->identity_number }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ \Carbon\Carbon::parse($submission->created_at)->format('l, d M Y H:i') }}
+                                        {{ \Carbon\Carbon::parse($submission->submitted_at)->setTimezone('Asia/Jakarta')->format('l, d M Y H:i') }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $submission->created_at > $assignment->due_date ? __('Late') : __('On Time') }}
+                                        {{ $submission->submitted_at > $assignment->due_date ? __('Late') : __('On Time') }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <a href="{{ asset("storage/$submission->file_path") }}"

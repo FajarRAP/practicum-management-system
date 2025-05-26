@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class AssignmentSubmissionController extends Controller
 {
-    public function index(Request $request, Assignment $assignment)
+    public function index(Assignment $assignment)
     {
         return view('assistants.assignment-submission', [
             'assignment' => $assignment,
@@ -26,6 +26,7 @@ class AssignmentSubmissionController extends Controller
             'assignment_id' => $assignment->id,
             'user_id' => $request->user()->id,
             'file_path' => $request->file('file')->store('submissions', 'public'),
+            'submitted_at' => now(),
         ]);
 
         return back()->with('success', 'Assignment submitted successfully.');
