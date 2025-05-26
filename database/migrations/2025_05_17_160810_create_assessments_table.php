@@ -21,8 +21,9 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->float('attendance_score')->nullable();
             $table->float('participation_score')->nullable();
-            $table->float('active_score')->nullable();
+            $table->float('creativity_score')->nullable();
             $table->float('report_score')->nullable();
             $table->unique(['announcement_id', 'user_id']);
             $table->timestamps();

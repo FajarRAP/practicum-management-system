@@ -15,7 +15,6 @@ class AssessmentController extends Controller
 
         $assistantDatas = [
             'announcements' => $announcements
-                ->where('is_schedule_announcement', true)
                 ->paginate($perPage)
                 ->appends(['per_page' => $perPage])
         ];
@@ -41,43 +40,52 @@ class AssessmentController extends Controller
 
     public function show(Request $request, Announcement $announcement)
     {
-        $query = $announcement
+        $fields = [
+            'users.id as user_id',
+            'users.name',
+            'users.email',
+            'users.identity_number',
+            'attendances.status',
+        ];
+
+        $query = Announcement::query()
             ->join('enrollments', 'enrollments.schedule_id', '=', 'announcements.schedule_id')
+            ->where('announcements.id', '=', $announcement->id)
             ->join('users', 'users.id', '=', 'enrollments.user_id')
-            ->join('students', 'students.user_id', '=', 'users.id')
             ->join('attendances', 'attendances.user_id', '=', 'enrollments.user_id')
-            ->join('assignments', 'assignments.announcement_id', '=', 'announcements.id')
-            ->join('assignment_submissions', 'assignment_submissions.user_id', '=', 'attendances.user_id');
+            ->where('attendances.announcement_id', '=', $announcement->id);
 
-        $query = Assessment::exists() ?
-            $query
-            ->join('assessments', 'assessments.user_id', '=', 'assignment_submissions.user_id')
-            ->select(
-                'users.id as user_id',
-                'users.name',
-                'users.email',
-                'students.student_number',
-                'attendances.status',
-                'assignment_submissions.file_path',
+        if ($announcement->is_schedule_announcement) {
+            $query = $query
+                ->join('assignments', 'assignments.announcement_id', '=', 'announcements.id')
+                ->join('assignment_submissions', 'assignment_submissions.user_id', '=', 'attendances.user_id');
+            $fields[] = 'assignment_submissions.file_path';
+        }
+
+        if (Assessment::where('announcement_id', $announcement->id)->exists()) {
+            $query = $query
+                ->join('assessments', 'assessments.user_id', '=', 'attendances.user_id')
+                ->where('assessments.announcement_id', '=', $announcement->id);
+            $fields = array_merge($fields, [
+                'assessments.attendance_score',
                 'assessments.participation_score',
-                'assessments.active_score',
+                'assessments.creativity_score',
                 'assessments.report_score'
-            ) :
-            $query
-            ->select('users.id as user_id', 'users.name', 'users.email', 'students.student_number', 'attendances.status', 'assignment_submissions.file_path');
-
+            ]);
+        }
 
         return view('assistants.assessment-show', [
             'announcement' => $announcement,
-            'submissions' => $query->get(),
+            'submissions' => $query->select($fields)->get(),
         ]);
     }
 
     public function store(Request $request, Announcement $announcement)
     {
         $validated = $request->validate([
+            'assessments.*.attendance' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'assessments.*.participation' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'assessments.*.activeness' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'assessments.*.creativity' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'assessments.*.report' => ['nullable', 'numeric', 'min:0', 'max:100'],
         ]);
 
@@ -86,16 +94,17 @@ class AssessmentController extends Controller
             $mappedAssessments[] = [
                 'announcement_id' => $announcement->id,
                 'user_id' => $userId,
-                'participation_score' => $score['participation'],
-                'active_score' => $score['activeness'],
-                'report_score' => $score['report'],
+                'attendance_score' => $score['attendance'] ?? null,
+                'participation_score' => $score['participation'] ?? null,
+                'creativity_score' => $score['creativity'] ?? null,
+                'report_score' => $score['report'] ?? null,
             ];
         }
 
         Assessment::upsert(
             $mappedAssessments,
             ['announcement_id', 'user_id'],
-            ['participation_score', 'active_score', 'report_score']
+            ['attendance_score', 'participation_score', 'creativity_score', 'report_score']
         );
 
         return back()->with('success', 'Assessment created successfully.');

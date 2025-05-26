@@ -30,20 +30,25 @@
                                         {{ __('Student Number') }}
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        {{ __('Attendance') }}
+                                        {{ __('Attendance Status') }}
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        {{ __('Participation') }}
+                                        {{ __('Attendance Score') }}
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        {{ __('Activeness') }}
+                                        {{ __('Participation Score') }}
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        {{ __('Report') }}
+                                        {{ __('Creativity Score') }}
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        {{ __('Submisssion File') }}
-                                    </th>
+                                    @if ($announcement->is_schedule_announcement)
+                                        <th scope="col" class="px-6 py-3">
+                                            {{ __('Report') }}
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            {{ __('Submisssion File') }}
+                                        </th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,26 +58,33 @@
                                             {{ $submission->name }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ $submission->student_number }}
+                                            {{ $submission->identity_number }}
                                         <td class="px-6 py-4">
                                             {{ Str::of($submission->status)->lower()->ucfirst() }}
                                         </td>
                                         @hasrole('assistant')
                                             <td class="px-6 py-4">
                                                 <x-text-input type="number"
+                                                    name="assessments[{{ $submission->user_id }}][attendance]"
+                                                    min="0" max="100" :value="$submission->attendance_score" class="w-20" />
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <x-text-input type="number"
                                                     name="assessments[{{ $submission->user_id }}][participation]"
-                                                    :value="$submission->participation_score" />
+                                                    min="0" max="100" :value="$submission->participation_score" class="w-20" />
                                             </td>
                                             <td class="px-6 py-4">
                                                 <x-text-input type="number"
-                                                    name="assessments[{{ $submission->user_id }}][activeness]"
-                                                    :value="$submission->active_score" />
+                                                    name="assessments[{{ $submission->user_id }}][creativity]"
+                                                    min="0" max="100" :value="$submission->creativity_score" class="w-20" />
                                             </td>
-                                            <td class="px-6 py-4">
-                                                <x-text-input type="number"
-                                                    name="assessments[{{ $submission->user_id }}][report]"
-                                                    :value="$submission->report_score" />
-                                            </td>
+                                            @if ($announcement->is_schedule_announcement)
+                                                <td class="px-6 py-4">
+                                                    <x-text-input type="number"
+                                                        name="assessments[{{ $submission->user_id }}][report]"
+                                                        min="0" max="100" :value="$submission->report_score" class="w-20" />
+                                                </td>
+                                            @endif
                                         @else
                                             <td class="px-6 py-4">
                                                 {{ $submission->participation_score }}
@@ -83,13 +95,20 @@
                                             <td class="px-6 py-4">
                                                 {{ $submission->report_score }}
                                             </td>
+                                            @if ($announcement->is_schedule_announcement)
+                                                <td class="px-6 py-4">
+                                                    {{ $submission->report_score }}
+                                                </td>
+                                            @endif
                                         @endhasrole
-                                        <td class="px-6 py-4">
-                                            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                                href="{{ asset("storage/$submission->file_path") }}">
-                                                {{ __('View') }}
-                                            </a>
-                                        </td>
+                                        @if ($announcement->is_schedule_announcement)
+                                            <td class="px-6 py-4">
+                                                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                    href="{{ asset("storage/$submission->file_path") }}">
+                                                    {{ __('View') }}
+                                                </a>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>
