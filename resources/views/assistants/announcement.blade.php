@@ -39,6 +39,14 @@
                                 <th scope="col" class="px-6 py-3">
                                     {{ __('Place') }}
                                 </th>
+                                <th scope="col" class="px-6 py-3">
+                                    {{ __('Is Approved') }}
+                                </th>
+                                @hasrole('lab_tech')
+                                    <th scope="col" class="px-6 py-3">
+                                        {{ __('Actions') }}
+                                    </th>
+                                @endhasrole
                             </tr>
                         </thead>
                         <tbody>
@@ -65,6 +73,37 @@
                                     <td class="px-6 py-4">
                                         {{ $announcement->place }}
                                     </td>
+                                    <td class="px-6 py-4">
+                                        {{ __(
+                                            $announcement->is_approved === null
+                                                ? 'Waiting to Approve'
+                                                : ($announcement->is_approved === 0
+                                                    ? 'Not Approved'
+                                                    : 'Approved'),
+                                        ) }}
+                                    </td>
+                                    @hasrole('lab_tech')
+                                        <td class="px-6 py-4 flex flex-col gap-2">
+                                            <form action="{{ route('announcement.confirm', $announcement) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="is_approved" value="true">
+                                                <x-primary-button class="w-full justify-center">
+                                                    {{ __('Approve') }}
+                                                </x-primary-button>
+                                            </form>
+                                            <form action="{{ route('announcement.confirm', $announcement) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="is_approved" value="false">
+                                                <x-danger-button class="w-full justify-center">
+                                                    {{ __('Decline') }}
+                                                </x-danger-button>
+                                            </form>
+                                        </td>
+                                    @endhasrole
                                 </tr>
                             @endforeach
                         </tbody>

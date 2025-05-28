@@ -23,6 +23,7 @@ class AnnouncementController extends Controller
 
         $studentDatas = [
             'announcements' => $announcements
+                ->where('announcements.is_approved', '=', 1)
                 ->join('enrollments', 'announcements.schedule_id', '=', 'enrollments.schedule_id')
                 ->where('enrollments.user_id', '=', $request->user()->id)
                 ->paginate($perPage)
@@ -52,5 +53,17 @@ class AnnouncementController extends Controller
         ]);
 
         return back()->with('success', 'Announcement created successfully.');
+    }
+
+    public function confirmAnnouncement(Request $request, Announcement $announcement)
+    {
+        if (!$request->user()->hasRole('lab_tech')) {
+            return back()->with('error', 'You do not have permission to confirm announcements.');
+        }
+
+        $announcement->is_approved = $request->boolean('is_approved');
+        $announcement->save();
+
+        return back()->with('success', 'Confirm Announcement Successful');
     }
 }

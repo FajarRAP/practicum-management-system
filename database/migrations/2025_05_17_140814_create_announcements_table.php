@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('place');
             $table->dateTime('datetime');
             $table->boolean('is_schedule_announcement');
+            $table->boolean('is_approved')->nullable();
             $table->timestamps();
         });
     }

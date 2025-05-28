@@ -33,6 +33,8 @@ Route::get('/dashboard/announcement', [AnnouncementController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('announcement.index');
 Route::post('/dashboard/announcement', [AnnouncementController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('announcement.store');
+Route::patch('/dashboard/announcement/{announcement}/confirm', [AnnouncementController::class, 'confirmAnnouncement'])
+    ->middleware(['auth', 'verified'])->name('announcement.confirm');
 
 Route::get('/dashboard/assignment', [AssignmentController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('assignment.index');
