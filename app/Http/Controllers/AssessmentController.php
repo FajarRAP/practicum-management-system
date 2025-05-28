@@ -11,6 +11,10 @@ class AssessmentController extends Controller
 {
     public function index(Request $request)
     {
+        if ($request->user()->hasRole('lab_tech')) {
+            return redirect()->route('dashboard');
+        }
+
         $perPage = $request->query('per_page', 10);
 
         $studentAnnouncements = collect([]);

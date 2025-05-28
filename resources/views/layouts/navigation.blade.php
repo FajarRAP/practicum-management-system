@@ -36,11 +36,13 @@
                             {{ __('Attendance') }}
                         </x-nav-link>
                     @endhasanyrole
-                    <x-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') ||
-                        request()->routeIs('assessment.show') ||
-                        request()->routeIs('assessment.final-score')">
-                        {{ __('Assessment') }}
-                    </x-nav-link>
+                    @hasanyrole('student|assistant|lecturer')
+                        <x-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') ||
+                            request()->routeIs('assessment.show') ||
+                            request()->routeIs('assessment.final-score')">
+                            {{ __('Assessment') }}
+                        </x-nav-link>
+                    @endhasanyrole
                     <x-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
                         {{ __('Archive') }}
                     </x-nav-link>
@@ -126,11 +128,13 @@
                     {{ __('Attendance') }}
                 </x-responsive-nav-link>
             @endhasanyrole
-            <x-responsive-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') ||
-                request()->routeIs('assessment.show') ||
-                request()->routeIs('assessment.final-score')">
-                {{ __('Assessment') }}
-            </x-responsive-nav-link>
+            @hasanyrole('student|assistant|lecturer')
+                <x-responsive-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') ||
+                    request()->routeIs('assessment.show') ||
+                    request()->routeIs('assessment.final-score')">
+                    {{ __('Assessment') }}
+                </x-responsive-nav-link>
+            @endhasanyrole
             <x-responsive-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
                 {{ __('Archive') }}
             </x-responsive-nav-link>
