@@ -13,38 +13,92 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = [
-            [
-                'name' => 'Fajar',
-                'email' => 'fajar@gmail.com',
-                'password' => bcrypt('password'),
-            ],
+        $assistants = [
             [
                 'name' => 'Assistant',
                 'email' => 'assistant@gmail.com',
                 'password' => bcrypt('password'),
             ],
             [
+                'name' => 'Raisha',
+                'email' => 'raisha.asistenssi@gmail.com',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Mutiah',
+                'email' => 'mutiah.asistenssi@gmail.com',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Bene',
+                'email' => 'bene.asistenssi@gmail.com',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Kalila',
+                'email' => 'kalila.asistenssi@gmail.com',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Rama',
+                'email' => 'rama.asistenssi@gmail.com',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Teguh',
+                'email' => 'teguh.asistenssi@gmail.com',
+                'password' => bcrypt('password'),
+            ],
+        ];
+
+        $students = [
+            [
+                'name' => 'Fajar',
+                'email' => 'fajar@gmail.com',
+                'password' => bcrypt('password'),
+            ],
+        ];
+
+        $lecturers = [
+            [
                 'name' => 'Lecturer',
                 'email' => 'lecturer@gmail.com',
                 'password' => bcrypt('password'),
             ],
             [
-                'name' => 'Lab Tech',
-                'email' => 'labtech@gmail.com',
+                'name' => 'Dosen',
+                'email' => 'dosen@gmail.com',
                 'password' => bcrypt('password'),
             ],
         ];
 
-        $roles = [
-            'student',
-            'assistant',
-            'lecturer',
-            'lab_tech',
+        $labtechs = [
+            [
+                'name' => 'Lab Tech',
+                'email' => 'labtech@gmail.com',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Laboran',
+                'email' => 'laboranssi@gmail.com',
+                'password' => bcrypt('password'),
+            ],
         ];
 
-        foreach ($users as $i => $user) {
-            User::create($user)->assignRole($roles[$i]);
+        foreach ($students as $student) {
+            User::create($student)->assignRole('student');
+        }
+
+        foreach ($assistants as $assistant) {
+            User::create($assistant)->assignRole('assistant');
+        }
+
+        foreach ($lecturers as $lecturer) {
+            User::create($lecturer)->assignRole('lecturer');
+        }
+
+        foreach ($labtechs as $labtech) {
+            User::create($labtech)->assignRole('lab_tech');
         }
     }
 }
