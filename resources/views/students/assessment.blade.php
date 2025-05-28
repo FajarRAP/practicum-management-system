@@ -96,33 +96,35 @@
                                                                 <tr
                                                                     class="bg-white border-b border-gray-200 hover:bg-gray-50">
                                                                     <td class="px-6 py-4">
-                                                                        {{ $attendance->status }}
+                                                                        {{ $attendance?->status }}
                                                                     </td>
                                                                     <td class="px-6 py-4">
-                                                                        {{ $assessment->attendance_score }}
+                                                                        {{ $assessment?->attendance_score }}
                                                                     </td>
                                                                     <td class="px-6 py-4">
-                                                                        {{ $assessment->participation_score }}
+                                                                        {{ $assessment?->participation_score }}
                                                                     </td>
                                                                     <td class="px-6 py-4">
-                                                                        {{ $assessment->creativity_score }}
+                                                                        {{ $assessment?->creativity_score }}
                                                                     </td>
-                                                                    @if ($announcement->is_schedule_announcement)
+                                                                    @if ($announcement?->is_schedule_announcement)
                                                                         <td class="px-6 py-4">
-                                                                            {{ $assessment->report_score }}
+                                                                            {{ $assessment?->report_score }}
                                                                         </td>
                                                                         <td class="px-6 py-4">
-                                                                            <a href="{{ asset("storage/$announcement->file_path") }} "
-                                                                                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                                                {{ __('View') }}
-                                                                            </a>
+                                                                            @if ($announcement->file_path)
+                                                                                <a href="{{ asset("storage/$announcement->file_path") }} "
+                                                                                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                                                    {{ __('View') }}
+                                                                                </a>
+                                                                            @endif
                                                                         </td>
                                                                     @endif
                                                                     <td class="px-6 py-4">
-                                                                        {{ $assessment->active_score }}
+                                                                        {{ $assessment?->active_score }}
                                                                     </td>
                                                                     <td class="px-6 py-4">
-                                                                        {{ $assessment->module_score }}
+                                                                        {{ $assessment?->module_score }}
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -130,12 +132,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex justify-end">
-                                                    <x-secondary-button @click="$dispatch('close')">
-                                                        {{ __('Cancel') }}
-                                                    </x-secondary-button>
-
-                                                    <x-primary-button class="ms-3">
-                                                        {{ __('Save') }}
+                                                    <x-primary-button @click="$dispatch('close')">
+                                                        {{ __('OK') }}
                                                     </x-primary-button>
                                                 </div>
                                             </div>
