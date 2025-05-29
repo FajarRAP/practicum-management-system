@@ -62,7 +62,12 @@
                             <option value="" disabled selected>{{ __('Select') . ' ' . __('Schedule') }}</option>
                             @foreach ($schedules as $schedule)
                                 <option value="{{ $schedule->id }}">
-                                    {{ $schedule->course->name . ' - ' . $schedule->shift }}</option>
+                                    @if ($schedule->shift)
+                                        {{ $schedule->course->name . ' - ' . $schedule->shift . ' - ' . \Carbon\Carbon::parse($schedule->time)->format('H:i') }}
+                                    @else
+                                        {{ $schedule->course->name . ' - ' . \Carbon\Carbon::parse($schedule->time)->format('H:i') }}
+                                    @endif
+                                </option>
                             @endforeach
                         </x-slot>
                     </x-select-input>
