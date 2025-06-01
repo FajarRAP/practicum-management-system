@@ -30,9 +30,10 @@ class AnnouncementController extends Controller
                 ->appends(['per_page' => $perPage]),
         ];
 
-        return $request->user()->hasRole('student') ?
-            view('students.announcement', $studentDatas) :
-            view('assistants.announcement', $assistantDatas);
+        return view(
+            'announcement',
+            $request->user()->hasRole('student') ? $studentDatas : $assistantDatas
+        );
     }
 
     public function store(Request $request)

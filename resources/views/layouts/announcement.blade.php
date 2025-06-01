@@ -7,6 +7,8 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-4">
+            @yield('add-announcement-button')
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-96 flex flex-col justify-between">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 border-gray-300">
@@ -33,6 +35,8 @@
                                 <th scope="col" class="px-6 py-3">
                                     {{ __('Place') }}
                                 </th>
+                                @yield('is-approved-header')
+                                @yield('approve-announcement-header')
                             </tr>
                         </thead>
                         <tbody>
@@ -54,11 +58,21 @@
                                         {{ \Carbon\Carbon::parse($announcement->datetime)->format('d M Y') }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ \Carbon\Carbon::parse($announcement->datetime)->format('H:m') }}
+                                        {{ \Carbon\Carbon::parse($announcement->datetime)->format('H:i') }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $announcement->place }}
                                     </td>
+                                    @unlessrole('student')
+                                        @include('components.user.announcement-status', [
+                                            'announcement' => $announcement,
+                                        ])
+                                    @endunlessrole
+                                    @hasrole('lab_tech')
+                                        @include('components.user.approve-announcement-button', [
+                                            'announcement' => $announcement,
+                                        ])
+                                    @endhasrole
                                 </tr>
                             @endforeach
                         </tbody>
@@ -69,4 +83,6 @@
             </div>
         </div>
     </div>
+
+    @yield('add-announcement-modal')
 </x-app-layout>
