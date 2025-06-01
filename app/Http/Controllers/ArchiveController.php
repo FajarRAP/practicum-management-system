@@ -11,13 +11,11 @@ class ArchiveController extends Controller
     {
         $archive = Archive::all();
 
-        return $request->user()->hasRole('student') ?
-            view('students.archive', [
-                'archives' => $archive,
-            ]) :
-            view('assistants.archive', [
-                'archives' => $archive,
-            ]);
+        // $view = $request->user()->hasRole('student')
+        //     ? 'students.archive'
+        //     : 'assistants.archive';
+
+        return view('archive', ['archives' => $archive]);
     }
 
     public function store(Request $request)

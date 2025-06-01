@@ -7,11 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-4">
-            @hasrole('assistant')
-                <x-primary-button class="self-end" x-data @click.prevent="$dispatch('open-modal', 'add-archive')">
-                    {{ __('Add Archive') }}
-                </x-primary-button>
-            @endhasrole
+            @yield('add-data-button')
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-96 flex flex-col justify-between">
@@ -47,39 +43,5 @@
         </div>
     </div>
 
-    @hasrole('assistant')
-        <x-modal name="add-archive" :show="$errors->addArchive->isNotEmpty()" focusable>
-            <form method="POST" action="{{ route('archive.store') }}" class="p-6 flex flex-col gap-4"
-                enctype="multipart/form-data">
-                @csrf
-                @method('POST')
-
-                <h2 class="text-lg font-medium text-gray-900">
-                    {{ __('Add Archive') }}
-                </h2>
-
-                <div>
-                    <x-input-label for="title" value="{{ __('Title') }}" />
-                    <x-text-input id="title" name="title" class="mt-1 block w-3/4"
-                        placeholder="{{ __('Title') }}" />
-                    <x-input-error :messages="$errors->addArchive->get('title')" />
-                </div>
-                <div>
-                    <x-input-label for="file" value="{{ __('Archive File') }}" />
-                    <x-file-input id="file" name="file" class="mt-1 block w-3/4" />
-                    <x-input-error :messages="$errors->addArchive->get('file')" />
-                </div>
-
-                <div class="flex justify-end">
-                    <x-secondary-button @click="$dispatch('close')">
-                        {{ __('Cancel') }}
-                    </x-secondary-button>
-
-                    <x-primary-button class="ms-3">
-                        {{ __('Submit') }}
-                    </x-primary-button>
-                </div>
-            </form>
-        </x-modal>
-    @endhasrole
+    @yield('add-data-modal')
 </x-app-layout>
