@@ -19,6 +19,12 @@
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
+                                    {{ __('Course') }}
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    {{ __('Shift') }}
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     {{ __('Title') }}
                                 </th>
                                 <th scope="col" class="px-6 py-3">
@@ -32,6 +38,12 @@
                         <tbody>
                             @foreach ($assignments as $assignment)
                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        {{ $assignment->announcement->schedule->course->name }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $assignment->announcement->schedule->shift ?? __('-') }}
+                                    </td>
                                     <td class="px-6 py-4">
                                         {{ $assignment->title }}
                                     </td>

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Announcement;
 use App\Models\Assignment;
-use App\Models\Schedule;
 use Illuminate\Http\Request;
 
 class AssignmentController extends Controller
@@ -14,10 +13,9 @@ class AssignmentController extends Controller
 
         $perPage = $request->query('per_page', 10);
         $assignments = Assignment::query();
-        $announcements = Announcement::all();
-
+        $announcements = Announcement::query();
         $assistantDatas = [
-            'announcements' => $announcements->where('is_schedule_announcement', true),
+            'announcements' => $announcements->where(['is_schedule_announcement' => true, 'is_approved' => true])->get(),
             'assignments' => $assignments->paginate($perPage)->appends(['per_page' => $perPage]),
         ];
 
