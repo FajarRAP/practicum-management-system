@@ -14,7 +14,8 @@ class AttendanceController extends Controller
         $perPage = $request->query('per_page', 10);
 
         return  view('assistants.attendance', [
-            'announcements' => Announcement::paginate($perPage)
+            'announcements' => Announcement::where('is_approved', true)
+                ->paginate($perPage)
                 ->appends(['per_page' => $perPage]),
         ]);
     }
