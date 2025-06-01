@@ -31,8 +31,10 @@ class EnrollmentController extends Controller
             return back()->with('error', 'You must complete your student identity before enrolling.');
         }
 
-        if ($user->enrollments->isNotEmpty()) {
-            return back()->with('error', 'You are already enrolled practicum in this semester.');
+        $schedule = Schedule::find($validated['schedule']);
+
+        if ($user->enrollments->where(fn($enrollment) => $enrollment->schedule->course->id == $schedule->course->id)->isNotEmpty()) {
+            return back()->with('error', 'You are already enrolled in a practicum for this course.');
         }
 
         if ($user->enrollments()->where('schedule_id', $validated['schedule'])->exists()) {
