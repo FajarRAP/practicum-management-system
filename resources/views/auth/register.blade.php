@@ -38,19 +38,23 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
+        <!-- Security Question -->
         <div class="mt-4">
-            <x-input-label for="user_role" :value="__('Role')" />
+            <x-input-label for="security_question" :value="__('Security Question')" />
 
-            <x-select-input class="block mt-1 w-full" id="user_role" name="user_role" required>
-                <x-slot name="options">
-                    <option value="">{{ __('Select Role') }}</option>
-                    @foreach ($roles as $role)
-                        <option value="{{ $role['name'] }}">{{ $role['formatted_name'] }}</option>
-                    @endforeach
-                </x-slot>
-            </x-select-input>
+            <x-security-question-display id="security_question" class="block mt-1 w-full" :question="$security_question->question" />
 
-            <x-input-error :messages="$errors->get('user_role')" class="mt-2" />
+            <x-text-input type="hidden" id="security_question" name="security_question" :value="$security_question->id" />
+
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="security_question_answer" :value="__('Answer')" />
+
+            <x-text-input id="security_question_answer" class="block mt-1 w-full" name="security_question_answer"
+                required />
+
+            <x-input-error :messages="$errors->get('security_question_answer')" class="mt-2" />
         </div>
 
         <div class="flex items-center justify-end mt-4">
