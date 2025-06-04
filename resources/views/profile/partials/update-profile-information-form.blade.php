@@ -18,7 +18,11 @@
         @method('patch')
 
         <div>
-            <x-input-label for="identity_number" :value="__('Student Number')" />
+            @hasanyrole(['lecturer', 'lab_tech'])
+                <x-input-label for="identity_number" :value="__('Identity Number')" />
+            @else
+                <x-input-label for="identity_number" :value="__('Student Number')" />
+            @endhasanyrole
             <x-text-input id="identity_number" name="identity_number" type="text" class="mt-1 block w-full"
                 :value="old('identity_number', $user->identity_number)" autofocus autocomplete="identity_number" />
             <x-input-error class="mt-2" :messages="$errors->get('identity_number')" />
