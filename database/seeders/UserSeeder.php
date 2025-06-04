@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\UserSecurityQuestion;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -86,19 +87,39 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($students as $student) {
-            User::create($student)->assignRole('student');
+            $user = User::create($student)->assignRole('student');
+            UserSecurityQuestion::create([
+                'user_id' => $user->id,
+                'security_question_id' => 1,
+                'answer' => 'Jawaban',
+            ]);
         }
 
         foreach ($assistants as $assistant) {
-            User::create($assistant)->assignRole('assistant');
+            $user = User::create($assistant)->assignRole('assistant');
+            UserSecurityQuestion::create([
+                'user_id' => $user->id,
+                'security_question_id' => 1,
+                'answer' => 'Jawaban',
+            ]);
         }
 
         foreach ($lecturers as $lecturer) {
-            User::create($lecturer)->assignRole('lecturer');
+            $user = User::create($lecturer)->assignRole('lecturer');
+            UserSecurityQuestion::create([
+                'user_id' => $user->id,
+                'security_question_id' => 1,
+                'answer' => 'Jawaban',
+            ]);
         }
 
         foreach ($labtechs as $labtech) {
-            User::create($labtech)->assignRole('lab_tech');
+            $user = User::create($labtech)->assignRole('lab_tech');
+            UserSecurityQuestion::create([
+                'user_id' => $user->id,
+                'security_question_id' => 1,
+                'answer' => 'Jawaban',
+            ]);
         }
     }
 }
