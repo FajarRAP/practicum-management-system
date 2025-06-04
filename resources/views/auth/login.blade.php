@@ -16,11 +16,18 @@
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-
             <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
                 autocomplete="current-password" />
-
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+        <!-- Forgot Password Link -->
+        <div class="mt-2">
+            @if (Route::has('password.request'))
+                <a class="text-sm text-gray-600 hover:text-gray-900 underline" href="{{ route('password.request') }}">
+                    {{ __('Forgot your password?') }}
+                </a>
+            @endif
         </div>
 
         <!-- Remember Me -->
