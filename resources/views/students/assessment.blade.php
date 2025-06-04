@@ -32,12 +32,25 @@
                         <tbody>
                             @foreach ($announcements as $announcement)
                                 @php
-                                    $assessment = $announcement->assessments
-                                        ->where('user_id', request()->user()->id)
+                                    $assessment = request()
+                                        ->user()
+                                        ->assessments->where('announcement_id', $announcement->id)
                                         ->first();
-                                    $attendance = $announcement->attendances
-                                        ->where('user_id', request()->user()->id)
+                                    $attendance = request()
+                                        ->user()
+                                        ->attendances->where('announcement_id', $announcement->id)
                                         ->first();
+                                    $submission = null;
+                                    request()
+                                        ->user()
+                                        ->submissions->each(function ($submissionItem) use (
+                                            $announcement,
+                                            &$submission,
+                                        ) {
+                                            if ($submissionItem->assignment->announcement_id === $announcement->id) {
+                                                $submission = $submissionItem;
+                                            }
+                                        });
                                 @endphp
                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <td class="px-6 py-4">
@@ -112,8 +125,8 @@
                                                                             {{ $assessment?->report_score }}
                                                                         </td>
                                                                         <td class="px-6 py-4">
-                                                                            @if ($announcement->file_path)
-                                                                                <a href="{{ asset("storage/$announcement->file_path") }} "
+                                                                            @if ($submission?->file_path)
+                                                                                <a href="{{ asset("storage/{$submission?->file_path}") }} "
                                                                                     class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                                                     {{ __('View') }}
                                                                                 </a>
