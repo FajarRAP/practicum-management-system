@@ -11,10 +11,6 @@ class ArchiveController extends Controller
     {
         $archive = Archive::all();
 
-        // $view = $request->user()->hasRole('student')
-        //     ? 'students.archive'
-        //     : 'assistants.archive';
-
         return view('archive', ['archives' => $archive]);
     }
 
@@ -22,7 +18,7 @@ class ArchiveController extends Controller
     {
         $validated = $request->validateWithBag('addModule', [
             'title' => ['required', 'string', 'max:255'],
-            'file' => ['required', 'file', 'mimes:pdf', 'max:2048'],
+            'file' => ['required', 'file', 'mimes:pdf'],
         ]);
 
         Archive::create([
