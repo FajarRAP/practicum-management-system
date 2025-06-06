@@ -45,7 +45,7 @@
                                         {{ $submission->submitted_at > $assignment->due_date ? __('Late') : __('On Time') }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        <a href="{{ asset("storage/$submission->file_path") }}"
+                                        <a href="{{ "../storage/$submission->file_path" }}"
                                             class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                             {{ __('Download') }}
                                         </a>
