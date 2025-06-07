@@ -25,7 +25,10 @@
                                     {{ __('Due Date') }}
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    {{ __('Submission') }}
+                                    {{ __('Submission Status') }}
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    {{ __('Submission File') }}
                                 </th>
                             </tr>
                         </thead>
@@ -38,7 +41,7 @@
                                     $isAttended = auth()
                                         ->user()
                                         ->attendances->contains('announcement_id', $assignment->announcement->id);
-
+                                    $submission = $assignment->submissions->firstWhere('user_id', auth()->id());
                                 @endphp
                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <td class="px-6 py-4">
@@ -103,6 +106,19 @@
                                                 class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                 {{ __('Submitted') }}
                                             </p>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        @if ($isSubmitted && $submission->file_path)
+                                            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                href="{{ asset("storage/{$submission->file_path}") }}">
+                                                {{ __('View') }}
+                                            </a>
+                                        @else
+                                            <span
+                                                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                {{ __('Not Available') }}
+                                            </span>
                                         @endif
                                     </td>
                                 </tr>
