@@ -16,6 +16,7 @@ class AnnouncementController extends Controller
 
         $assistantDatas = [
             'announcements' => $announcements
+                ->orderByDesc('created_at')
                 ->paginate($perPage)
                 ->appends(['per_page' => $perPage]),
             'schedules' => $schedules,
@@ -26,6 +27,8 @@ class AnnouncementController extends Controller
                 ->where('announcements.is_approved', '=', 1)
                 ->join('enrollments', 'announcements.schedule_id', '=', 'enrollments.schedule_id')
                 ->where('enrollments.user_id', '=', $request->user()->id)
+                ->select('announcements.*')
+                ->orderByDesc('announcements.created_at')
                 ->paginate($perPage)
                 ->appends(['per_page' => $perPage]),
         ];
