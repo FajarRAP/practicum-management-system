@@ -35,6 +35,7 @@ class ScheduleController extends Controller
             'day' => ['required', 'exists:days,id'],
             'shift' => ['nullable'],
             'time' => ['required', 'date_format:H:i'],
+            'academic_year' => ['required', 'string', 'max:255'],
         ]);
 
         Schedule::create([
@@ -42,6 +43,7 @@ class ScheduleController extends Controller
             'day_id' => $validated['day'],
             'shift' => $validated['shift'],
             'time' => $validated['time'],
+            'academic_year' => $validated['academic_year'],
         ]);
 
         return back()->with('success', 'Schedule created successfully.');

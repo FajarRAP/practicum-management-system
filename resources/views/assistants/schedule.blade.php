@@ -22,6 +22,9 @@
                                     {{ __('Course') }}
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                    {{ __('Academic Year') }}
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     {{ __('Day') }}
                                 </th>
                                 <th scope="col" class="px-6 py-3">
@@ -40,6 +43,9 @@
                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <td class="px-6 py-4">
                                         {{ $schedule->course->name }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $schedule->academic_year }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $schedule->day->name }}
@@ -88,6 +94,12 @@
                         </x-slot>
                     </x-select-input>
                     <x-input-error :messages="$errors->addSchedule->get('course')" />
+                </div>
+                <div>
+                    <x-input-label for="academic_year" value="{{ __('Academic Year') }}" />
+                    <x-text-input id="academic_year" name="academic_year" type="text" class="mt-1 block w-3/4"
+                        placeholder="{{ __('Academic Year') }}" />
+                    <x-input-error :messages="$errors->addSchedule->get('academic_year')" />
                 </div>
                 <div>
                     <x-input-label for="day" value="{{ __('Day') }}" />

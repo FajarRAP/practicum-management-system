@@ -23,6 +23,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->string('shift')->nullable();
             $table->time('time');
+            $table->string('academic_year');
             $table->timestamps();
         });
     }
