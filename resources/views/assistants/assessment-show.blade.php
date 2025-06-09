@@ -109,10 +109,17 @@
                                         @endhasrole
                                         @if ($announcement->is_schedule_announcement)
                                             <td class="px-6 py-4">
-                                                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                                    href="{{ asset("storage/$submission->file_path") }}">
-                                                    {{ __('View') }}
-                                                </a>
+                                                @if ($submission->file_path)
+                                                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                        href="{{ asset("storage/$submission->file_path") }}">
+                                                        {{ __('View') }}
+                                                    </a>
+                                                @else
+                                                    <span
+                                                        class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                        {{ __('Not Submitted') }}
+                                                    </span>
+                                                @endif
                                             </td>
                                         @endif
                                         <td class="px-6 py-4">

@@ -52,8 +52,8 @@ class AssessmentController extends Controller
 
         if ($announcement->is_schedule_announcement) {
             $query = $query
-                ->join('assignments', 'assignments.announcement_id', '=', 'announcements.id')
-                ->join('assignment_submissions', 'assignment_submissions.user_id', '=', 'attendances.user_id');
+                ->leftJoin('assignments', 'assignments.announcement_id', '=', 'announcements.id')
+                ->leftJoin('assignment_submissions', 'assignment_submissions.user_id', '=', 'attendances.user_id');
             $fields[] = 'assignment_submissions.file_path';
         }
 
