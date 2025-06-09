@@ -16,7 +16,7 @@ class ArchiveController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validateWithBag('addModule', [
+        $validated = $request->validateWithBag('addArchive', [
             'title' => ['required', 'string', 'max:255'],
             'file' => ['required', 'file', 'mimes:pdf'],
         ]);
