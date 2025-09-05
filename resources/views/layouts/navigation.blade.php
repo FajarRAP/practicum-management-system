@@ -16,6 +16,9 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('academic-year.index')" :active="request()->routeIs('academic-year.index')">
+                        {{ __('Academic Year') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
                         {{ __('Announcement') }}
                     </x-nav-link>
@@ -46,6 +49,7 @@
                     <x-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
                         {{ __('Archive') }}
                     </x-nav-link>
+
                 </div>
             </div>
 
