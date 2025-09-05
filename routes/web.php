@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\ArchiveController;
 use App\Http\Controllers\AssessmentController;
@@ -71,5 +72,14 @@ Route::get('/dashboard/archive', [ArchiveController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('archive.index');
 Route::post('/dashboard/archive', [ArchiveController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('archive.store');
+
+Route::get('/dashboard/academic-year', [AcademicYearController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('academic-year.index');
+Route::post('/dashboard/academic-year', [AcademicYearController::class, 'store'])
+    ->middleware(['auth', 'verified'])->name('academic-year.store');
+Route::delete('/dashboard/academic-year/{academicYear}', [AcademicYearController::class, 'destroy'])
+    ->middleware(['auth', 'verified'])->name('academic-year.destroy');
+Route::put('/dashboard/academic-year/{academicYear}', [AcademicYearController::class, 'update'])
+    ->middleware(['auth', 'verified'])->name('academic-year.update');
 
 require __DIR__ . '/auth.php';
