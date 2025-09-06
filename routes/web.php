@@ -8,6 +8,7 @@ use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AssignmentSubmissionController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\PracticumController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
@@ -81,5 +82,16 @@ Route::delete('/dashboard/academic-year/{academicYear}', [AcademicYearController
     ->middleware(['auth', 'verified'])->name('academic-year.destroy');
 Route::put('/dashboard/academic-year/{academicYear}', [AcademicYearController::class, 'update'])
     ->middleware(['auth', 'verified'])->name('academic-year.update');
+
+Route::get('/dashboard/practicum', [PracticumController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('practicum.index');
+Route::get('/dashboard/practicum/{practicum}', [PracticumController::class, 'show'])
+    ->middleware(['auth', 'verified'])->name('practicum.show');
+Route::post('/dashboard/practicum', [PracticumController::class, 'store'])
+    ->middleware(['auth', 'verified'])->name('practicum.store');
+Route::delete('/dashboard/practicum/{practicum}', [PracticumController::class, 'destroy'])
+    ->middleware(['auth', 'verified'])->name('practicum.destroy');
+Route::put('/dashboard/practicum/{practicum}', [PracticumController::class, 'update'])
+    ->middleware(['auth', 'verified'])->name('practicum.update');
 
 require __DIR__ . '/auth.php';
