@@ -17,4 +17,9 @@ class Course extends Model
     {
         return $this->hasMany(Announcement::class);
     }
+
+    public function practicums()
+    {
+        return $this->hasMany(Practicum::class);
+    }
 }
