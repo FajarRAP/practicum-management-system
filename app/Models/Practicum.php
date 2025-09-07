@@ -27,4 +27,9 @@ class Practicum extends Model
     {
         return $this->hasMany(Enrollment::class);
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
 }
