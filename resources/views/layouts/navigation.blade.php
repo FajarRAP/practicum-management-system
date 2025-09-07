@@ -16,36 +16,48 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('academic-year.index')" :active="request()->routeIs('academic-year.index')">
-                        {{ __('Academic Year') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
-                        {{ __('Announcement') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('assignment.index')" :active="request()->routeIs('assignment.index') ||
-                        request()->routeIs('assignment-submission.index')">
-                        {{ __('Assignment') }}
-                    </x-nav-link>
+                    @hasrole('assistant')
+                        <x-nav-link :href="route('academic-year.index')" :active="request()->routeIs('academic-year.index')">
+                            {{ __('Academic Year') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('shift.index')" :active="Str::of(request()->path())->contains('shift')">
+                            {{ __('Shift') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('practicum.index')" :active="Str::of(request()->path())->contains('/practicum')">
+                            {{ __('Practicum') }}
+                        </x-nav-link>
+                    @endhasrole
                     @hasrole('student')
                         <x-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')">
                             {{ __('Enrollment') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('my-practicum.index')" :active="request()->routeIs('my-practicum.index') ||
+                            Str::of(request()->path())->contains('/practicum')">
+                            {{ __('My Practicum') }}
+                        </x-nav-link>
                     @endhasrole
+                    {{-- <x-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
+                        {{ __('Announcement') }}
+                    </x-nav-link> --}}
+                    {{-- <x-nav-link :href="route('assignment.index')" :active="request()->routeIs('assignment.index') ||
+                        request()->routeIs('assignment-submission.index')">
+                        {{ __('Assignment') }}
+                    </x-nav-link> --}}
                     @hasanyrole('assistant|lecturer|lab_tech')
-                        <x-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index') || request()->routeIs('schedule.show')">
+                        {{-- <x-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index') || request()->routeIs('schedule.show')">
                             {{ __('Schedule') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index') || request()->routeIs('attendance.show')">
+                        </x-nav-link> --}}
+                        {{-- <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index') || request()->routeIs('attendance.show')">
                             {{ __('Attendance') }}
-                        </x-nav-link>
+                        </x-nav-link> --}}
                     @endhasanyrole
-                    @hasanyrole('student|assistant|lecturer')
+                    {{-- @hasanyrole('student|assistant|lecturer')
                         <x-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') ||
                             request()->routeIs('assessment.show') ||
                             request()->routeIs('assessment.final-score')">
                             {{ __('Assessment') }}
                         </x-nav-link>
-                    @endhasanyrole
+                    @endhasanyrole --}}
                     <x-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
                         {{ __('Archive') }}
                     </x-nav-link>
@@ -123,11 +135,14 @@
                 <x-responsive-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')">
                     {{ __('Enrollment') }}
                 </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')">
+                    {{ __('My Practicum') }}
+                </x-responsive-nav-link>
             @endhasrole
             @hasanyrole('assistant|lecturer|lab_tech')
-                <x-responsive-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index') || request()->routeIs('schedule.show')">
+                {{-- <x-responsive-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index') || request()->routeIs('schedule.show')">
                     {{ __('Schedule') }}
-                </x-responsive-nav-link>
+                </x-responsive-nav-link> --}}
                 <x-responsive-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index') || request()->routeIs('attendance.show')">
                     {{ __('Attendance') }}
                 </x-responsive-nav-link>
