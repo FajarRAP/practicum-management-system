@@ -98,11 +98,11 @@
             @method('POST')
 
             <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Tambah Tahun Ajaran') }}
+                {{ __('Add Academic Year') }}
             </h2>
 
             <div>
-                <x-input-label for="year" value="{{ __('Tahun Ajaran (Contoh: 2025/2026)') }}" />
+                <x-input-label for="year" value="{{ __('Academic Year (Example: 2025/2026)') }}" />
                 <x-text-input id="year" name="year" type="text" class="mt-1 block w-full"
                     placeholder="{{ __('2025/2026') }}" :value="old('year')" />
                 <x-input-error :messages="$errors->default->get('year')" />
@@ -112,10 +112,10 @@
                 <x-input-label for="semester" value="{{ __('Semester') }}" />
                 <x-select-input id="semester" name="semester" class="mt-1 block w-full">
                     <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Pilih Semester') }}</option>
-                        <option value="Ganjil" @if (old('semester') == 'Ganjil') selected @endif>{{ __('Ganjil') }}
+                        <option value="" disabled selected>{{ __('Select Semester') }}</option>
+                        <option value="ODD" @if (old('semester') == 'ODD') selected @endif>{{ __('ODD') }}
                         </option>
-                        <option value="Genap" @if (old('semester') == 'Genap') selected @endif>{{ __('Genap') }}
+                        <option value="EVEN" @if (old('semester') == 'EVEN') selected @endif>{{ __('EVEN') }}
                         </option>
                     </x-slot>
                 </x-select-input>
@@ -123,10 +123,10 @@
             </div>
 
             <div>
-                <x-input-label for="status" value="{{ __('Status') }}" />
+                <x-input-label for="status" value="{{ __('Status (Default DRAFT)') }}" />
                 <x-select-input id="status" name="status" class="mt-1 block w-full">
                     <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Pilih status') }}</option>
+                        <option value="" disabled selected>{{ __('Select Status') }}</option>
                         <option value="DRAFT" @if (old('status') == 'DRAFT') selected @endif>{{ __('DRAFT') }}
                         </option>
                         <option value="ACTIVE" @if (old('status') == 'ACTIVE') selected @endif>{{ __('ACTIVE') }}
@@ -138,32 +138,32 @@
                 <x-input-error :messages="$errors->default->get('status')" />
             </div>
 
-            <div class="flex justify-end">
+            <div class="mt-6 flex justify-end">
                 <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Batal') }}
+                    {{ __('Cancel') }}
                 </x-secondary-button>
 
                 <x-primary-button class="ms-3">
-                    {{ __('Simpan') }}
+                    {{ __('Create') }}
                 </x-primary-button>
             </div>
         </form>
     </x-modal>
 
-    <x-modal name="edit-academic-year" :show="$errors->deafult->isNotEmpty()" focusable>
+    <x-modal name="edit-academic-year" :show="$errors->default->isNotEmpty()" focusable>
         <form method="POST" x-bind:action="action" class="p-6 flex flex-col gap-4">
             @csrf
             @method('PUT')
 
             <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Edit Tahun Ajaran') }}
+                {{ __('Edit Academic Year') }}
             </h2>
 
             <div>
-                <x-input-label for="edit_year" value="{{ __('Tahun Ajaran (Contoh: 2025/2026)') }}" />
+                <x-input-label for="edit_year" value="{{ __('Academic Year (Example: 2025/2026)') }}" />
                 <x-text-input id="edit_year" name="year" type="text" class="mt-1 block w-full" :value="old('year')"
                     x-model="academicYear.year" />
-                <x-input-error :messages="$errors->deafult->get('year')" />
+                <x-input-error :messages="$errors->default->get('year')" />
             </div>
 
             <div>
@@ -171,20 +171,19 @@
                 <x-select-input id="edit_semester" name="semester" x-model="academicYear.semester"
                     class="mt-1 block w-full">
                     <x-slot name="options">
-                        <option value="Ganjil" @if (old('semester') == 'Ganjil') selected @endif>{{ __('Ganjil') }}
+                        <option value="ODD" @if (old('semester') == 'ODD') selected @endif>{{ __('ODD') }}
                         </option>
-                        <option value="Genap" @if (old('semester') == 'Genap') selected @endif>{{ __('Genap') }}
+                        <option value="EVEN" @if (old('semester') == 'EVEN') selected @endif>{{ __('EVEN') }}
                         </option>
                     </x-slot>
                 </x-select-input>
-                <x-input-error :messages="$errors->deafult->get('semester')" />
+                <x-input-error :messages="$errors->default->get('semester')" />
             </div>
 
             <div>
                 <x-input-label for="edit_status" value="{{ __('Status') }}" />
                 <x-select-input id="edit_status" name="status" x-model="academicYear.status" class="mt-1 block w-full">
                     <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Pilih status') }}</option>
                         <option value="DRAFT" @if (old('status') == 'DRAFT') selected @endif>{{ __('DRAFT') }}
                         </option>
                         <option value="ACTIVE" @if (old('status') == 'ACTIVE') selected @endif>{{ __('ACTIVE') }}
@@ -199,11 +198,11 @@
 
             <div class="flex justify-end">
                 <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Batal') }}
+                    {{ __('Cancel') }}
                 </x-secondary-button>
 
                 <x-primary-button class="ms-3">
-                    {{ __('Simpan Perubahan') }}
+                    {{ __('Save Changes') }}
                 </x-primary-button>
             </div>
         </form>
