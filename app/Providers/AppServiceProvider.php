@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Models\AcademicYear;
+use App\Models\Practicum;
+use App\Policies\PracticumPolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View as FacadeView;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
@@ -26,5 +29,7 @@ class AppServiceProvider extends ServiceProvider
             $activeAcademicYear = AcademicYear::where('status', 'ACTIVE')->first();
             $view->with('activeAcademicYear', $activeAcademicYear);
         });
+
+        Gate::policy(Practicum::class, PracticumPolicy::class);
     }
 }
