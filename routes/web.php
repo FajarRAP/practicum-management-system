@@ -12,6 +12,7 @@ use App\Http\Controllers\PracticumController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\StudentPracticumController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect(route('login')));
@@ -110,5 +111,8 @@ Route::put('/dashboard/schedule/{schedule}', [ScheduleController::class, 'update
     ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('schedule.update');
 Route::delete('/dashboard/schedule/{schedule}', [ScheduleController::class, 'destroy'])
     ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('schedule.destroy');
+
+Route::get('/dashboard/student-practicum', [StudentPracticumController::class, 'index'])
+    ->middleware(['auth', 'verified', 'hasRole:student'])->name('my-practicum.index');
 
 require __DIR__ . '/auth.php';
