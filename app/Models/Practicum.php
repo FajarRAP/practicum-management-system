@@ -17,4 +17,14 @@ class Practicum extends Model
     {
         return $this->belongsTo(AcademicYear::class);
     }
+
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class);
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
 }

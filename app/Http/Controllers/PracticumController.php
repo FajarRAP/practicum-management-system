@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AcademicYear;
 use App\Models\Course;
 use App\Models\Practicum;
+use App\Models\Shift;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -17,27 +18,21 @@ class PracticumController extends Controller
 
         $academicYears = AcademicYear::where('status', '!=', 'FINISHED')->orderBy('year', 'desc')->get();
         $courses = Course::orderBy('name')->get();
-        $practicums = Practicum::with(['course', 'academicYear'])->latest()->paginate($perPage);
+        $shifts = Shift::orderBy('name')->get();
+        $practicums = Practicum::with(['course', 'academicYear', 'shift'])->latest()->paginate($perPage);
 
         return view('practicum', [
-            'courses' => $courses,
             'academicYears' => $academicYears,
+            'courses' => $courses,
+            'shifts' => $shifts,
             'practicums' => $practicums,
         ]);
     }
 
     public function show(Practicum $practicum)
     {
-        // $data = Practicum::with([
-        //     'course',
-        //     'academicYear',
-        //     // 'enrollments.student', // Contoh relasi ke mahasiswa
-        //     // 'schedules',           // Contoh relasi ke jadwal
-        //     // 'assignments'          // Contoh relasi ke tugas
-        // ])->findOrFail($practicum->id);
-
         return view('practicum-detail', [
-            'practicum' => $practicum->load(['course', 'academicYear']),
+            'practicum' => $practicum->load(['course', 'academicYear', 'shift', 'enrollments']),
         ]);
     }
 
@@ -47,14 +42,16 @@ class PracticumController extends Controller
             'course_id' => [
                 'required',
                 'exists:courses,id',
-                Rule::unique('practicums')->where(
-                    fn(Builder $query)
-                    => $query->where('academic_year_id', $request->academic_year_id)
-                ),
+                // Ensure the combination of all three is unique
+                Rule::unique('practicums')->where(function (Builder $query) use ($request) {
+                    return $query->where('academic_year_id', $request->academic_year_id)
+                        ->where('shift_id', $request->shift_id);
+                }),
             ],
-            'academic_year_id' => 'required|exists:academic_years,id',
+            'academic_year_id' => ['required', 'exists:academic_years,id'],
+            'shift_id' => ['required', 'exists:shifts,id'],
         ], [
-            'course_id.unique' => 'A practicum for this course in the selected academic year already exists.',
+            'course_id.unique' => 'The practicum for this course, academic year, and shift already exists.',
         ]);
 
         Practicum::create($validated);

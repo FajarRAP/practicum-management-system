@@ -1,7 +1,7 @@
 <x-app-layout x-data="{ practicum: {}, action: '' }">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Manage Practicum') }}
+            {{ __('Manage Practicums') }}
         </h2>
     </x-slot>
 
@@ -26,6 +26,9 @@
                                     {{ __('Semester') }}
                                 </th>
                                 <th scope="col" class="py-3 px-6">
+                                    {{ __('Shift') }}
+                                </th>
+                                <th scope="col" class="py-3 px-6">
                                     {{ __('Status') }}
                                 </th>
                                 <th scope="col" class="py-3 px-6">
@@ -40,41 +43,32 @@
                                         <div class="font-medium text-gray-900">{{ $practicum->course->name }}</div>
                                         <div class="text-xs text-gray-500">{{ $practicum->course->code }}</div>
                                     </th>
-
                                     <td class="py-4 px-6">
                                         {{ $practicum->academicYear->year }}
                                     </td>
-
                                     <td class="py-4 px-6">
                                         {{ $practicum->academicYear->semester }}
                                     </td>
-
+                                    <td class="py-4 px-6">
+                                        {{ $practicum->shift->name ?? '-' }}
+                                    </td>
                                     <td class="py-4 px-6">
                                         @if ($practicum->academicYear->status == 'ACTIVE')
                                             <span
-                                                class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full">
-                                                Aktif
-                                            </span>
+                                                class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full text-xs">{{ __('Active') }}</span>
                                         @elseif ($practicum->academicYear->status == 'FINISHED')
                                             <span
-                                                class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full">
-                                                Selesai
-                                            </span>
+                                                class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full text-xs">{{ __('Finished') }}</span>
                                         @else
                                             <span
-                                                class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full">
-                                                Draft
-                                            </span>
+                                                class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full text-xs">{{ __('Draft') }}</span>
                                         @endif
                                     </td>
-
                                     <td class="py-4 px-6 flex items-center justify-start space-x-4">
-
                                         <a href="{{ route('practicum.show', $practicum) }}"
                                             class="font-medium text-indigo-600 hover:underline">
-                                            Kelola
+                                            {{ __('Manage') }}
                                         </a>
-
                                         <form action="{{ route('practicum.destroy', $practicum) }}" method="POST"
                                             onsubmit="return confirm('Are you sure you want to delete this practicum?');">
                                             @csrf
@@ -84,11 +78,10 @@
                                             </button>
                                         </form>
                                     </td>
-
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="py-4 px-6 text-center text-gray-500">
+                                    <td colspan="6" class="py-4 px-6 text-center text-gray-500">
                                         {{ __('No practicum data available.') }}
                                     </td>
                                 </tr>
@@ -102,25 +95,25 @@
         </div>
     </div>
 
+    {{-- Modal "Add Practicum" --}}
     <x-modal name="add-practicum" :show="$errors->default->isNotEmpty()" focusable>
         <form method="POST" action="{{ route('practicum.store') }}" class="p-6 flex flex-col gap-4">
             @csrf
             @method('POST')
 
             <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Buka Praktikum Baru') }}
+                {{ __('Open New Practicum') }}
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                {{ __('Pilih mata kuliah dan tahun ajaran untuk membuka pendaftaran praktikum baru. Kombinasi yang sudah ada tidak akan muncul di pilihan.') }}
+                {{ __('Select the course, academic year, and shift to open a new practicum. Existing combinations will not be available.') }}
             </p>
 
-            {{-- Dropdown untuk memilih Mata Kuliah --}}
             <div class="mt-4">
-                <x-input-label for="course_id" value="{{ __('Mata Kuliah') }}" />
+                <x-input-label for="course_id" value="{{ __('Course') }}" />
                 <x-select-input id="course_id" name="course_id" class="mt-1 block w-full">
                     <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Pilih Mata Kuliah') }}</option>
+                        <option value="" disabled selected>{{ __('Select Course') }}</option>
                         @foreach ($courses as $course)
                             <option value="{{ $course->id }}" @if (old('course_id') == $course->id) selected @endif>
                                 {{ $course->name }}
@@ -131,12 +124,11 @@
                 <x-input-error :messages="$errors->default->get('course_id')" class="mt-2" />
             </div>
 
-            {{-- Dropdown untuk memilih Tahun Ajaran --}}
             <div>
-                <x-input-label for="academic_year_id" value="{{ __('Tahun Ajaran') }}" />
+                <x-input-label for="academic_year_id" value="{{ __('Academic Year') }}" />
                 <x-select-input id="academic_year_id" name="academic_year_id" class="mt-1 block w-full">
                     <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Pilih Tahun Ajaran') }}</option>
+                        <option value="" disabled selected>{{ __('Select Academic Year') }}</option>
                         @foreach ($academicYears as $academicYear)
                             <option value="{{ $academicYear->id }}" @if (old('academic_year_id') == $academicYear->id) selected @endif>
                                 {{ $academicYear->year }} - {{ $academicYear->semester }}
@@ -147,14 +139,28 @@
                 <x-input-error :messages="$errors->default->get('academic_year_id')" class="mt-2" />
             </div>
 
+            <div>
+                <x-input-label for="shift_id" value="{{ __('Shift') }}" />
+                <x-select-input id="shift_id" name="shift_id" class="mt-1 block w-full">
+                    <x-slot name="options">
+                        <option value="" disabled selected>{{ __('Select Shift') }}</option>
+                        @foreach ($shifts as $shift)
+                            <option value="{{ $shift->id }}" @if (old('shift_id') == $shift->id) selected @endif>
+                                {{ $shift->name }}
+                            </option>
+                        @endforeach
+                    </x-slot>
+                </x-select-input>
+                <x-input-error :messages="$errors->default->get('shift_id')" class="mt-2" />
+            </div>
 
             <div class="mt-6 flex justify-end">
                 <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Batal') }}
+                    {{ __('Cancel') }}
                 </x-secondary-button>
 
                 <x-primary-button class="ms-3">
-                    {{ __('Buka Praktikum') }}
+                    {{ __('Open Practicum') }}
                 </x-primary-button>
             </div>
         </form>
