@@ -45,13 +45,6 @@ Route::get('/dashboard/assignment', [AssignmentController::class, 'index'])
 Route::post('/dashboard/assignment', [AssignmentController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('assignment.store');
 
-Route::get('/dashboard/attendance', [AttendanceController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('attendance.index');
-Route::get('/dashboard/attendance/{announcement}', [AttendanceController::class, 'show'])
-    ->middleware(['auth', 'verified'])->name('attendance.show')->whereNumber('announcement');
-Route::post('/dashboard/attendance/{announcement}', [AttendanceController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('attendance.store')->whereNumber('announcement');
-
 Route::get('/dashboard/assessment', [AssessmentController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('assessment.index');
 Route::get('/dashboard/assessment/{announcement}', [AssessmentController::class, 'show'])
@@ -95,6 +88,10 @@ Route::delete('/dashboard/practicum/{practicum}', [PracticumController::class, '
     ->middleware(['auth', 'verified'])->name('practicum.destroy');
 Route::put('/dashboard/practicum/{practicum}', [PracticumController::class, 'update'])
     ->middleware(['auth', 'verified'])->name('practicum.update');
+Route::get('/dashboard/practicum/{practicum}/schedule/{schedule}/attendance', [AttendanceController::class, 'index'])
+    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('attendance.index');
+Route::post('/dashboard/practicum/{practicum}/schedule/{schedule}/attendance', [AttendanceController::class, 'store'])
+    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('attendance.store');
 
 Route::get('/dashboard/shift', [ShiftController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('shift.index');
