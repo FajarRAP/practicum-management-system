@@ -30,7 +30,7 @@
 
                     @if (isset($activeAcademicYear))
                         <div class="text-sm">
-                            <span class="font-medium text-gray-500">Tahun Ajaran Aktif:</span>
+                            <span class="font-medium text-gray-500">{{ __('Active Academic Year:') }}</span>
                             <span
                                 class="ms-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
                                 {{ $activeAcademicYear->year }} - {{ $activeAcademicYear->semester }}
@@ -40,7 +40,7 @@
                         <div class="text-sm">
                             <span
                                 class="ms-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
-                                Tidak ada tahun ajaran yang aktif
+                                {{ __('No active academic year') }}
                             </span>
                         </div>
                     @endif
