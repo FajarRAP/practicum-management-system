@@ -50,7 +50,7 @@
                                         {{ $practicum->academicYear->semester }}
                                     </td>
                                     <td class="py-4 px-6">
-                                        {{ $practicum->shift->name ?? '-' }}
+                                        {{ $practicum->shift->name }}
                                     </td>
                                     <td class="py-4 px-6">
                                         @if ($practicum->academicYear->status == 'ACTIVE')
