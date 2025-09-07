@@ -12,18 +12,30 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('schedules', function (Blueprint $table) {
+            // $table->id();
+            // $table->foreignId('course_id')
+            //     ->constrained()
+            //     ->onUpdate('cascade')
+            //     ->onDelete('cascade');
+            // $table->foreignId('day_id')
+            //     ->constrained()
+            //     ->onUpdate('cascade')
+            //     ->onDelete('cascade');
+            // $table->string('shift')->nullable();
+            // $table->time('time');
+            // $table->string('academic_year');
+            // $table->timestamps();
             $table->id();
-            $table->foreignId('course_id')
+            $table->foreignId('practicum_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreignId('day_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->string('shift')->nullable();
-            $table->time('time');
-            $table->string('academic_year');
+            $table->integer('meeting_number');
+            $table->string('topic');
+            $table->date('date');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->string('location')->nullable();
             $table->timestamps();
         });
     }
