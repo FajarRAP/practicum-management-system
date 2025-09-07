@@ -8,9 +8,9 @@ class Attendance extends Model
 {
     protected $guarded = [];
 
-    public function announcement()
+    public function schedule()
     {
-        return $this->belongsTo(Announcement::class);
+        return $this->belongsTo(Schedule::class);
     }
 
     public function user()
