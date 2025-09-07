@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('academic_years', function (Blueprint $table) {
             $table->id();
             $table->string('year');
-            $table->enum('semester', ['Ganjil', 'Genap']);
+            $table->enum('semester', ['ODD', 'EVEN']);
             $table->enum('status', ['DRAFT', 'ACTIVE', 'FINISHED'])->default('DRAFT');
             $table->timestamps();
             $table->unique(['year', 'semester']);

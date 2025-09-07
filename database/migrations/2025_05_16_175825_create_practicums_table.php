@@ -21,8 +21,12 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->foreignId('shift_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
-            $table->unique(['academic_year_id', 'course_id']);
+            $table->unique(['academic_year_id', 'course_id', 'shift_id']);
         });
     }
 
