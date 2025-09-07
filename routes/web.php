@@ -25,12 +25,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/dashboard/schedule', [ScheduleController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('schedule.index');
-Route::get('/dashboard/schedule/{schedule}', [ScheduleController::class, 'show'])
-    ->middleware(['auth', 'verified'])->name('schedule.show')->whereNumber('schedule');
-Route::post('/dashboard/schedule', [ScheduleController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('schedule.store');
+// Route::get('/dashboard/schedule', [ScheduleController::class, 'index'])
+//     ->middleware(['auth', 'verified'])->name('schedule.index');
+// Route::get('/dashboard/schedule/{schedule}', [ScheduleController::class, 'show'])
+//     ->middleware(['auth', 'verified'])->name('schedule.show')->whereNumber('schedule');
+// Route::post('/dashboard/schedule', [ScheduleController::class, 'store'])
+//     ->middleware(['auth', 'verified'])->name('schedule.store');
 
 Route::get('/dashboard/announcement', [AnnouncementController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('announcement.index');
@@ -103,5 +103,12 @@ Route::put('/dashboard/shift/{shift}', [ShiftController::class, 'update'])
     ->middleware(['auth', 'verified'])->name('shift.update');
 Route::delete('/dashboard/shift/{shift}', [ShiftController::class, 'destroy'])
     ->middleware(['auth', 'verified'])->name('shift.destroy');
+
+Route::post('/dashboard/schedule', [ScheduleController::class, 'store'])
+    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('schedule.store');
+Route::put('/dashboard/schedule/{schedule}', [ScheduleController::class, 'update'])
+    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('schedule.update');
+Route::delete('/dashboard/schedule/{schedule}', [ScheduleController::class, 'destroy'])
+    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('schedule.destroy');
 
 require __DIR__ . '/auth.php';
