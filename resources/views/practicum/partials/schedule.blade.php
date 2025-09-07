@@ -35,7 +35,8 @@
                         <td class="py-4 px-6">{{ $schedule->location }}</td>
                         <td class="py-4 px-6 text-right">
                             <div class="flex justify-end items-center space-x-4">
-                                <a href="#" class="font-medium text-indigo-600 hover:underline text-xs">
+                                <a href="{{ route('attendance.index', [$practicum, $schedule]) }}"
+                                    class="font-medium text-indigo-600 hover:underline text-xs">
                                     {{ __('Manage Attendance') }}</a>
                                 <button
                                     x-on:click.prevent="editSchedule = {{ $schedule }}; action = '{{ route('schedule.update', $schedule) }}'; $dispatch('open-modal', 'edit-schedule-modal');"
