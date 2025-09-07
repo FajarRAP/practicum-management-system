@@ -8,12 +8,15 @@ use App\Models\Practicum;
 use App\Models\Shift;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class PracticumController extends Controller
 {
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', Practicum::class);
+
         $perPage = $request->query('per_page', 10);
 
         $academicYears = AcademicYear::where('status', '!=', 'FINISHED')->orderBy('year', 'desc')->get();
@@ -29,15 +32,27 @@ class PracticumController extends Controller
         ]);
     }
 
-    public function show(Practicum $practicum)
+    public function show(Request $request, Practicum $practicum)
     {
+        Gate::authorize('view', $practicum);
+
+        $practicum->load(['course', 'academicYear', 'shift', 'enrollments']);
+
+        if ($request->user()->hasRole('student')) {
+            return view('students.practicum.show', [
+                'practicum' => $practicum,
+            ]);
+        }
+
         return view('practicum-detail', [
-            'practicum' => $practicum->load(['course', 'academicYear', 'shift', 'enrollments']),
+            'practicum' => $practicum,
         ]);
     }
 
     public function store(Request $request)
     {
+        Gate::authorize('create', Practicum::class);
+
         $validated = $request->validate([
             'course_id' => [
                 'required',
@@ -61,6 +76,8 @@ class PracticumController extends Controller
 
     public function destroy(Practicum $practicum)
     {
+        Gate::authorize('delete', Practicum::class);
+
         try {
             $practicum->delete();
 
