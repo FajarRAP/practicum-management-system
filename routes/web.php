@@ -11,6 +11,7 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\PracticumController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\ShiftController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect(route('login')));
@@ -60,7 +61,7 @@ Route::post('/dashboard/assessment/{announcement}', [AssessmentController::class
     ->middleware(['auth', 'verified'])->name('assessment.store')->whereNumber('announcement');
 
 Route::get('/dashboard/enrollment', [EnrollmentController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('enrollment.index');
+    ->middleware(['auth', 'verified', 'hasRole:student'])->name('enrollment.index');
 Route::post('/dashboard/enrollment', [EnrollmentController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('enrollment.store');
 
@@ -93,5 +94,14 @@ Route::delete('/dashboard/practicum/{practicum}', [PracticumController::class, '
     ->middleware(['auth', 'verified'])->name('practicum.destroy');
 Route::put('/dashboard/practicum/{practicum}', [PracticumController::class, 'update'])
     ->middleware(['auth', 'verified'])->name('practicum.update');
+
+Route::get('/dashboard/shift', [ShiftController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('shift.index');
+Route::post('/dashboard/shift', [ShiftController::class, 'store'])
+    ->middleware(['auth', 'verified'])->name('shift.store');
+Route::put('/dashboard/shift/{shift}', [ShiftController::class, 'update'])
+    ->middleware(['auth', 'verified'])->name('shift.update');
+Route::delete('/dashboard/shift/{shift}', [ShiftController::class, 'destroy'])
+    ->middleware(['auth', 'verified'])->name('shift.destroy');
 
 require __DIR__ . '/auth.php';
