@@ -39,8 +39,7 @@
                             </div>
                             <div>
                                 <dt class="font-medium text-gray-500">Jumlah Peserta</dt>
-                                {{-- Ganti dengan relasi yang sesuai, contoh: $practicum->enrollments->count() --}}
-                                <dd class="mt-1 text-gray-900">35 Mahasiswa</dd>
+                                <dd class="mt-1 text-gray-900">{{ $practicum->enrollments->count() }}</dd>
                             </div>
                         </div>
                         <div class="mt-6 border-t pt-6">
@@ -51,8 +50,6 @@
                         </div>
                     </div>
                 </div>
-
-                {{-- ... bagian atas file sama ... --}}
 
                 <div class="md:col-span-2">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" x-data="{ activeTab: 'peserta' }">
@@ -86,7 +83,7 @@
                             <div x-show="activeTab === 'peserta'">
                                 {{-- Di sini Anda akan @include partial untuk manajemen enrollment --}}
                                 {{-- Contoh: @include('practicum.partials.enrollments', ['practicum' => $practicum]) --}}
-                                <h3 class="text-lg">Manajemen Peserta Praktikum</h3>
+                                @include('practicum.partials.enrollments', ['practicum' => $practicum])
                             </div>
 
                             <div x-show="activeTab === 'jadwal'">
@@ -106,8 +103,6 @@
                         </div>
                     </div>
                 </div>
-
-                {{-- ... sisa file sama ... --}}
             </div>
         </div>
     </div>
