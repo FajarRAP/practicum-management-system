@@ -13,8 +13,8 @@ class Enrollment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function schedule()
+    public function practicum()
     {
-        return $this->belongsTo(Schedule::class);
+        return $this->belongsTo(Practicum::class);
     }
 }

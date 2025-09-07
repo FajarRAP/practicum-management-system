@@ -11,20 +11,49 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Schema::create('enrollments', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('user_id')
+        //         ->constrained()
+        //         ->onUpdate('cascade')
+        //         ->onDelete('cascade');
+        //     $table->foreignId('practicum_id')
+        //         ->constrained()
+        //         ->onUpdate('cascade')
+        //         ->onDelete('cascade');
+        //     $table->string('study_plan_path');
+        //     $table->string('transcript_path');
+        //     $table->string('photo_path');
+        //     $table->timestamps();
+        // });
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
                 ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->foreignId('schedule_id')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('practicum_id')
                 ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->string('study_plan_path');
             $table->string('transcript_path');
             $table->string('photo_path');
+
+            // For Next if Needed [BARU] Kolom status untuk alur kerja persetujuan
+            // $table->enum('status', ['PENDING', 'APPROVED', 'REJECTED'])->default('PENDING');
+
+            // For Next if Needed [BARU] Kolom untuk alasan penolakan (bisa null)
+            // $table->text('rejection_reason')->nullable();
+
+            // For Next if Needed [BARU] Kolom audit (bisa null)
+            // $table->foreignId('approved_by')->nullable()->constrained('users');
+            // $table->timestamp('approved_at')->nullable();
+
             $table->timestamps();
+
+            // [BARU] Pastikan mahasiswa tidak bisa mendaftar double
+            $table->unique(['user_id', 'practicum_id']);
         });
     }
 
