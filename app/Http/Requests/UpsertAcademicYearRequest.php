@@ -33,8 +33,8 @@ class UpsertAcademicYearRequest extends FormRequest
                 'max:9',
                 "unique:academic_years,year,{$academicYearId},id,semester," . $this->semester,
             ],
-            'semester' => ['required', 'in:Ganjil,Genap'],
-            'status' => ['required', 'in:DRAFT,ACTIVE,FINISHED'],
+            'semester' => ['required', 'in:ODD,EVEN'],
+            'status' => ['nullable', 'in:DRAFT,ACTIVE,FINISHED'],
         ];
     }
 
