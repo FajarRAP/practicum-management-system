@@ -12,18 +12,34 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('assignment_submissions', function (Blueprint $table) {
+            // $table->id();
+            // $table->foreignId('assignment_id')
+            //     ->constrained()
+            //     ->onUpdate('cascade')
+            //     ->onDelete('cascade');
+            // $table->foreignId('user_id')
+            //     ->constrained()
+            //     ->onUpdate('cascade')
+            //     ->onDelete('cascade');
+            // $table->string('file_path');
+            // $table->dateTime('submitted_at');
+            // $table->timestamps();
+
             $table->id();
             $table->foreignId('assignment_id')
                 ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->foreignId('user_id')
                 ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->string('file_path');
-            $table->dateTime('submitted_at');
+            // $table->decimal('score', 5, 2)->nullable(); // Total 5 digit, 2 di antaranya di belakang koma (misal: 100.00)
+            // $table->text('feedback')->nullable();
+            $table->boolean('is_late')->default(false);
             $table->timestamps();
+            $table->unique(['assignment_id', 'user_id']);
         });
     }
 
