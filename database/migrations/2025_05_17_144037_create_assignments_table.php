@@ -13,13 +13,22 @@ return new class extends Migration
     {
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('announcement_id')
+            $table->foreignId('practicum_id')
                 ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
             $table->string('title');
-            $table->dateTime('due_date');
+            $table->text('description')->nullable();
+            $table->string('file_path')->nullable();
+            $table->dateTime('deadline');
             $table->timestamps();
+            // $table->id();
+            // $table->foreignId('schedule_id')
+            //     ->constrained()
+            //     ->onUpdate('cascade')
+            //     ->onDelete('cascade');
+            // $table->string('title');
+            // $table->dateTime('due_date');
+            // $table->timestamps();
         });
     }
 
