@@ -59,10 +59,10 @@ Route::get('/dashboard/enrollment', [EnrollmentController::class, 'index'])
 Route::post('/dashboard/enrollment', [EnrollmentController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('enrollment.store');
 
-Route::get('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('assignment-submission.index')->whereNumber('assignment');
-Route::post('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('assignment-submission.store')->whereNumber('assignment');
+// Route::get('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'index'])
+//     ->middleware(['auth', 'verified'])->name('assignment-submission.index')->whereNumber('assignment');
+// Route::post('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'store'])
+//     ->middleware(['auth', 'verified'])->name('assignment-submission.store')->whereNumber('assignment');
 
 Route::get('/dashboard/archive', [ArchiveController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('archive.index');
@@ -111,5 +111,11 @@ Route::delete('/dashboard/schedule/{schedule}', [ScheduleController::class, 'des
 
 Route::get('/dashboard/student-practicum', [StudentPracticumController::class, 'index'])
     ->middleware(['auth', 'verified', 'hasRole:student'])->name('my-practicum.index');
+Route::put('/dashboard/practicum/{practicum}/assignment/{assignment}', [AssignmentController::class, 'update'])
+    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('assignment.update');
+Route::delete('/dashboard/practicum/{practicum}/assignment/{assignment}', [AssignmentController::class, 'destroy'])
+    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('assignment.destroy');
+Route::post('/dashboard/practicum/{practicum}/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'store'])
+    ->middleware(['auth', 'verified', 'hasRole:student'])->name('assignment-submission.store');
 
 require __DIR__ . '/auth.php';
