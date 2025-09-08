@@ -1,101 +1,98 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Detail Praktikum: ') . $practicum->course->name }}
+            {{ __('Practicum Detail: ') . $practicum->course->name }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" x-data="{ editSchedule: {}, action: '' }">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" x-data="{ editSchedule: {}, editAssignment: {}, action: '' }">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="md:col-span-1">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">
-                            Informasi Praktikum
+                            {{ __('Practicum Information') }}
                         </h3>
                         <div class="space-y-4 text-sm">
                             <div>
-                                <dt class="font-medium text-gray-500">Mata Kuliah</dt>
+                                <dt class="font-medium text-gray-500">{{ __('Course') }}</dt>
                                 <dd class="mt-1 text-gray-900">{{ $practicum->course->name }}</dd>
                             </div>
                             <div>
-                                <dt class="font-medium text-gray-500">Tahun Ajaran</dt>
+                                <dt class="font-medium text-gray-500">{{ __('Academic Year') }}</dt>
                                 <dd class="mt-1 text-gray-900">{{ $practicum->academicYear->year }} -
                                     {{ $practicum->academicYear->semester }}</dd>
                             </div>
                             <div>
-                                <dt class="font-medium text-gray-500">Status</dt>
+                                <dt class="font-medium text-gray-500">{{ __('Status') }}</dt>
                                 <dd class="mt-1">
                                     @if ($practicum->academicYear->status == 'ACTIVE')
                                         <span
-                                            class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full text-xs">Aktif</span>
+                                            class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full text-xs">{{ __('Active') }}</span>
                                     @else
                                         <span
-                                            class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full text-xs">Tidak
-                                            Aktif</span>
+                                            class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full text-xs">{{ __('Inactive') }}</span>
                                     @endif
                                 </dd>
                             </div>
                             <div>
-                                <dt class="font-medium text-gray-500">Jumlah Peserta</dt>
+                                <dt class="font-medium text-gray-500">{{ __('Number of Participants') }}</dt>
                                 <dd class="mt-1 text-gray-900">{{ $practicum->enrollments->count() }}</dd>
                             </div>
                         </div>
                         <div class="mt-6 border-t pt-6">
                             <a href="{{ route('practicum.index') }}"
                                 class="w-full text-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                                Kembali
+                                {{ __('Back') }}
                             </a>
                         </div>
                     </div>
                 </div>
 
                 <div class="md:col-span-2">
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" x-data="{ activeTab: 'peserta' }">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" x-data="{ activeTab: 'participant' }">
                         <div class="border-b border-gray-200">
                             <nav class="-mb-px flex space-x-6 overflow-x-auto px-6" aria-label="Tabs">
                                 {{-- Tombol Tab --}}
-                                <button @click="activeTab = 'peserta'"
-                                    :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'peserta' }"
+                                <button @click="activeTab = 'participant'"
+                                    :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'participant' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
-                                    Peserta
+                                    {{ __('Participants') }}
                                 </button>
-                                <button @click="activeTab = 'jadwal'"
-                                    :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'jadwal' }"
+                                <button @click="activeTab = 'schedule'"
+                                    :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'schedule' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
-                                    Jadwal & Absensi
+                                    {{ __('Schedule & Attendance') }}
                                 </button>
-                                <button @click="activeTab = 'pengumuman'"
-                                    :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'pengumuman' }"
+                                <button @click="activeTab = 'announcement'"
+                                    :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'announcement' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
-                                    Pengumuman
+                                    {{ __('Announcements') }}
                                 </button>
-                                <button @click="activeTab = 'tugas'"
-                                    :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'tugas' }"
+                                <button @click="activeTab = 'assignment'"
+                                    :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'assignment' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
-                                    Tugas & Penilaian
+                                    {{ __('Assignments & Assessments') }}
                                 </button>
                             </nav>
                         </div>
 
                         <div class="p-6">
-                            <div x-show="activeTab === 'peserta'">
+                            <div x-show="activeTab === 'participant'">
                                 @include('practicum.partials.enrollments', ['practicum' => $practicum])
                             </div>
 
-                            <div x-show="activeTab === 'jadwal'">
-                                {{-- Di sini Anda akan @include partial untuk manajemen schedule dan attendance --}}
+                            <div x-show="activeTab === 'schedule'">
                                 @include('practicum.partials.schedule', ['practicum' => $practicum])
                             </div>
 
-                            <div x-show="activeTab === 'pengumuman'">
+                            <div x-show="activeTab === 'announcement'">
                                 {{-- Di sini Anda akan @include partial untuk manajemen announcement --}}
                                 <h3 class="text-lg">Manajemen Pengumuman</h3>
                             </div>
 
-                            <div x-show="activeTab === 'tugas'">
-                                {{-- Di sini Anda akan @include partial untuk manajemen assignment dan assessment --}}
-                                <h3 class="text-lg">Manajemen Tugas & Penilaian</h3>
+                            <div x-show="activeTab === 'assignment'">
+                                @include('practicum.partials.assignments', ['practicum' => $practicum])
                             </div>
                         </div>
                     </div>
@@ -225,6 +222,82 @@
                     </div>
                     <div class="mt-6 flex justify-end">
                         <x-secondary-button x-on:click="console.log(action)">{{ __('Cancel') }}</x-secondary-button>
+                        <x-primary-button class="ms-3">{{ __('Save Changes') }}</x-primary-button>
+                    </div>
+                </form>
+            </x-modal>
+
+            {{-- [BARU] Modal Tambah Tugas --}}
+            <x-modal name="add-assignment-modal" :show="$errors->addAssignment->isNotEmpty()" focusable>
+                <form method="POST" action="{{ route('assignment.store') }}" class="p-6"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="practicum_id" value="{{ $practicum->id }}">
+
+                    <h2 class="text-lg font-medium text-gray-900">{{ __('Create New Assignment') }}</h2>
+                    <div class="mt-6 space-y-4">
+                        <div>
+                            <x-input-label for="title" value="{{ __('Title') }}" />
+                            <x-text-input id="title" name="title" type="text" class="mt-1 block w-full"
+                                :value="old('title')" required />
+                            <x-input-error :messages="$errors->addAssignment->get('title')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="description" value="{{ __('Description') }}" />
+                            <x-textarea id="description" name="description"
+                                class="mt-1 block w-full">{{ old('description') }}</x-textarea>
+                            <x-input-error :messages="$errors->addAssignment->get('description')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="deadline" value="{{ __('Deadline') }}" />
+                            <x-text-input id="deadline" name="deadline" type="datetime-local"
+                                class="mt-1 block w-full" :value="old('deadline')" required />
+                            <x-input-error :messages="$errors->addAssignment->get('deadline')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="file" value="{{ __('Attachment (Optional)') }}" />
+                            <x-file-input id="file" name="file" class="mt-1 block w-full" />
+                            <x-input-error :messages="$errors->addAssignment->get('file')" class="mt-2" />
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <x-secondary-button x-on:click="$dispatch('close')">{{ __('Cancel') }}</x-secondary-button>
+                        <x-primary-button class="ms-3">{{ __('Create Assignment') }}</x-primary-button>
+                    </div>
+                </form>
+            </x-modal>
+
+            {{-- [BARU] Modal Edit Tugas --}}
+            <x-modal name="edit-assignment-modal" :show="$errors->updateAssignment->isNotEmpty()" focusable>
+                <form method="POST" x-bind:action="action" class="p-6" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <h2 class="text-lg font-medium text-gray-900">{{ __('Edit Assignment') }}</h2>
+                    <div class="mt-6 space-y-4">
+                        <div>
+                            <x-input-label for="edit_title" value="{{ __('Title') }}" />
+                            <x-text-input id="edit_title" name="title" type="text" class="mt-1 block w-full"
+                                x-model="editAssignment.title" required />
+                        </div>
+                        <div>
+                            <x-input-label for="edit_description" value="{{ __('Description') }}" />
+                            <x-textarea id="edit_description" name="description" class="mt-1 block w-full"
+                                x-model="editAssignment.description"></x-textarea>
+                        </div>
+                        <div>
+                            <x-input-label for="edit_deadline" value="{{ __('Deadline') }}" />
+                            <x-text-input id="edit_deadline" name="deadline" type="datetime-local"
+                                class="mt-1 block w-full" x-model="editAssignment.deadline" required />
+                        </div>
+                        <div>
+                            <x-input-label for="edit_file" value="{{ __('New Attachment (Optional)') }}" />
+                            <x-file-input id="edit_file" name="file" class="mt-1 block w-full" />
+                            <p class="mt-1 text-xs text-gray-500">
+                                {{ __('Uploading a new file will replace the old one.') }}</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <x-secondary-button x-on:click="$dispatch('close')">{{ __('Cancel') }}</x-secondary-button>
                         <x-primary-button class="ms-3">{{ __('Save Changes') }}</x-primary-button>
                     </div>
                 </form>
