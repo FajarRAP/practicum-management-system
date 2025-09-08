@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\AcademicYear;
+use App\Models\AssignmentSubmission;
+use App\Models\Attendance;
 use App\Models\Course;
 use App\Models\Practicum;
 use App\Models\Shift;
@@ -36,14 +38,33 @@ class PracticumController extends Controller
     {
         Gate::authorize('view', $practicum);
 
-        $practicum->load(['course', 'academicYear', 'shift', 'enrollments']);
-
+        // Student
         if ($request->user()->hasRole('student')) {
+            $practicum->load(['course', 'academicYear', 'shift', 'schedules', 'assignments']);
+
+            $scheduleIds = $practicum->schedules->pluck('id');
+
+            $myAttendances = Attendance::where('user_id', $request->user()->id)
+                ->whereIn('schedule_id', $scheduleIds)
+                ->get()
+                ->keyBy('schedule_id');
+
+            $assignmentIds = $practicum->assignments->pluck('id');
+
+            $mySubmissions = AssignmentSubmission::where('user_id', $request->user()->id)
+                ->whereIn('assignment_id', $assignmentIds)
+                ->get()
+                ->keyBy('assignment_id');
+
             return view('students.practicum.show', [
                 'practicum' => $practicum,
+                'myAttendances' => $myAttendances,
+                'mySubmissions' => $mySubmissions,
             ]);
         }
 
+        // Assistant
+        $practicum->load(['course', 'academicYear', 'shift', 'enrollments', 'assignments', 'schedules']);
         return view('practicum-detail', [
             'practicum' => $practicum,
         ]);
