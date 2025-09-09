@@ -128,9 +128,6 @@
             <x-responsive-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
                 {{ __('Announcement') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('assignment.index')" :active="request()->routeIs('assignment.index') || request()->routeIs('assignment-submission.index')">
-                {{ __('Assignment') }}
-            </x-responsive-nav-link>
             @hasrole('student')
                 <x-responsive-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')">
                     {{ __('Enrollment') }}
@@ -139,14 +136,6 @@
                     {{ __('My Practicum') }}
                 </x-responsive-nav-link>
             @endhasrole
-            @hasanyrole('assistant|lecturer|lab_tech')
-                {{-- <x-responsive-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index') || request()->routeIs('schedule.show')">
-                    {{ __('Schedule') }}
-                </x-responsive-nav-link> --}}
-                <x-responsive-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index') || request()->routeIs('attendance.show')">
-                    {{ __('Attendance') }}
-                </x-responsive-nav-link>
-            @endhasanyrole
             @hasanyrole('student|assistant|lecturer')
                 <x-responsive-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') ||
                     request()->routeIs('assessment.show') ||
