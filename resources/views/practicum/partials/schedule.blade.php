@@ -37,7 +37,7 @@
                             <div class="flex justify-end items-center space-x-4">
                                 <a href="{{ route('attendance.index', [$practicum, $schedule]) }}"
                                     class="font-medium text-indigo-600 hover:underline text-xs">
-                                    {{ __('Manage Attendance') }}</a>
+                                    {{ __('Manage Attendance & Assessment') }}</a>
                                 <button
                                     x-on:click.prevent="editSchedule = {{ $schedule }}; action = '{{ route('schedule.update', $schedule) }}'; $dispatch('open-modal', 'edit-schedule-modal');"
                                     class="font-medium text-blue-600 hover:underline text-xs">{{ __('Edit') }}</button>
