@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('assessments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('announcement_id')
+            $table->foreignId('schedule_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->float('report_score')->nullable();
             $table->float('active_score')->nullable();
             $table->float('module_score')->nullable();
-            $table->unique(['announcement_id', 'user_id']);
+            $table->unique(['schedule_id', 'user_id']);
             $table->timestamps();
         });
     }
