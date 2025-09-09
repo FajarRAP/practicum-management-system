@@ -4,11 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
+use App\Models\Practicum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class AssignmentSubmissionController extends Controller
 {
+    public function index(Practicum $practicum, Assignment $assignment)
+    {
+        // Authorize here
+
+        $enrollments = $assignment->practicum->enrollments()
+            // ->where('status', 'APPROVED')
+            ->with('user')
+            ->get();
+
+        $submissions = $assignment->submissions->keyBy('user_id');
+
+        return view('assignment-submission.index', [
+            'assignment' => $assignment,
+            'enrollments' => $enrollments,
+            'submissions' => $submissions,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -45,27 +64,4 @@ class AssignmentSubmissionController extends Controller
 
         return back()->with('success', 'Assignment submitted successfully.');
     }
-
-    // public function index(Assignment $assignment)
-    // {
-    //     return view('assistants.assignment-submission', [
-    //         'assignment' => $assignment,
-    //         'submissions' => $assignment->submissions,
-    //     ]);
-    // }
-    // public function store(Request $request, Assignment $assignment)
-    // {
-    //     $request->validateWithBag('submitAssignment', [
-    //         'file' => ['required', 'file', 'mimes:pdf', 'max:2048'],
-    //     ]);
-
-    //     AssignmentSubmission::create([
-    //         'assignment_id' => $assignment->id,
-    //         'user_id' => $request->user()->id,
-    //         'file_path' => $request->file('file')->store('submissions', 'public'),
-    //         'submitted_at' => now(),
-    //     ]);
-
-    //     return back()->with('success', 'Assignment submitted successfully.');
-    // }
 }
