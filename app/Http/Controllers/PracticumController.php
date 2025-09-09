@@ -46,6 +46,7 @@ class PracticumController extends Controller
 
             $myAttendances = Attendance::where('user_id', $request->user()->id)
                 ->whereIn('schedule_id', $scheduleIds)
+                ->with('schedule:id,meeting_number')
                 ->get()
                 ->keyBy('schedule_id');
 
