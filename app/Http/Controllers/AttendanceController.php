@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Announcement;
 use App\Models\Attendance;
 use App\Models\Practicum;
 use App\Models\Schedule;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -14,7 +12,7 @@ class AttendanceController extends Controller
 {
     public function index(Request $request, Practicum $practicum, Schedule $schedule)
     {
-        // Do Gate Authorization here
+        // Authorize here
 
         $schedule->load([
             // If status column has added
@@ -28,7 +26,6 @@ class AttendanceController extends Controller
         ]);
 
         $attendances = $schedule->attendances->keyBy('user_id');
-        
 
         return view('attendance.manage', [
             'attendances' => $attendances,
@@ -39,18 +36,25 @@ class AttendanceController extends Controller
 
     public function store(Request $request)
     {
-        // Do Gate Authorization here
-
-        $request->validate([
+        $validated = $request->validate([
             'schedule_id' => ['required', 'exists:schedules,id'],
             'attendances' => ['required', 'array'],
             'attendances.*' => ['required', 'in:PRESENT,SICK,EXCUSED,ABSENT'],
+            'scores' => ['nullable', 'array'],
+            'scores.*.participation_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'scores.*.creativity_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'scores.*.report_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'scores.*.active_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'scores.*.module_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
         ]);
 
-        $scheduleId = $request->schedule_id;
-        $attendancesData = $request->attendances;
+        $scheduleId = $validated['schedule_id'];
+        $attendancesData = $validated['attendances'];
+        $scoresData = $validated['scores'] ?? [];
 
         foreach ($attendancesData as $userId => $status) {
+            $userScores = $scoresData[$userId] ?? [];
+
             Attendance::updateOrCreate(
                 [
                     'schedule_id' => $scheduleId,
@@ -58,50 +62,15 @@ class AttendanceController extends Controller
                 ],
                 [
                     'status' => $status,
+                    'participation_score' => $userScores['participation_score'] ?? 0,
+                    'creativity_score'    => $userScores['creativity_score'] ?? 0,
+                    'report_score'        => $userScores['report_score'] ?? 0,
+                    'active_score'        => $userScores['active_score'] ?? 0,
+                    'module_score'        => $userScores['module_score'] ?? 0,
                 ]
             );
         }
 
-        return back()->with('success', 'Attendance has been successfully saved.');
+        return back()->with('success', 'Meeting journal has been successfully saved.');
     }
-    // public function index(Request $request)
-    // {
-    //     $perPage = $request->query('per_page', 10);
-
-    //     return  view('assistants.attendance', [
-    //         'announcements' => Announcement::where('is_approved', true)
-    //             ->paginate($perPage)
-    //             ->appends(['per_page' => $perPage]),
-    //     ]);
-    // }
-
-    // public function show(Announcement $announcement)
-    // {
-    //     return view('assistants.attendance-show', [
-    //         'assistants' => User::role('assistant')->get(),
-    //         'announcement' => $announcement,
-    //     ]);
-    // }
-
-    // public function store(Request $request, Announcement $announcement)
-    // {
-    //     $users = $request->input('users', []);
-
-    //     $mappedUsers = [];
-    //     foreach ($users as $userId => $status) {
-    //         $mappedUsers[] = [
-    //             'announcement_id' => $announcement->id,
-    //             'user_id' => $userId,
-    //             'status' => $status,
-    //         ];
-    //     }
-
-    //     Attendance::upsert(
-    //         $mappedUsers,
-    //         ['announcement_id', 'user_id'],
-    //         ['status']
-    //     );
-
-    //     return back()->with('success', 'Attendance marked successfully.');
-    // }
 }
