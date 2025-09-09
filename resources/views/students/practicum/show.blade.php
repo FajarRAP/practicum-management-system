@@ -1,4 +1,4 @@
-<x-app-layout x-data="{ assignment: {}, action: '' }">
+<x-app-layout x-data="{ assignment: {}, myJournal: {}, action: '' }">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Practicum Details: ') . $practicum->course->name }}
@@ -83,7 +83,8 @@
                         <div class="p-6">
                             {{-- Tab Jadwal --}}
                             <div x-show="activeTab === 'jadwal'">
-                                <h3 class="text-lg font-medium text-gray-900 mb-4">{{ __('Practicum Schedule') }}</h3>
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">
+                                    {{ __('Practicum Schedule & Journal') }}</h3>
                                 <div class="overflow-x-auto relative">
                                     <table class="w-full text-sm text-left text-gray-500">
                                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -91,7 +92,7 @@
                                                 <th class="py-3 px-6">{{ __('Meeting') }}</th>
                                                 <th class="py-3 px-6">{{ __('Topic') }}</th>
                                                 <th class="py-3 px-6">{{ __('Date & Time') }}</th>
-                                                <th class="py-3 px-6">{{ __('My Attendance') }}</th>
+                                                <th class="py-3 px-6 text-center">{{ __('My Journal') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -104,24 +105,22 @@
                                                         {{ \Carbon\Carbon::parse($schedule->date)->isoFormat('D MMM Y') }},
                                                         {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}
                                                     </td>
-                                                    <td class="py-4 px-6">
+                                                    <td class="py-4 px-6 text-center">
+
                                                         @php
-                                                            $status = $myAttendances[$schedule->id]->status ?? null;
+                                                            $attendance = $myAttendances->get($schedule->id);
                                                         @endphp
 
-                                                        @if ($status == 'PRESENT')
-                                                            <span
-                                                                class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full text-xs">{{ __('Present') }}</span>
-                                                        @elseif ($status == 'SICK' || $status == 'EXCUSED')
-                                                            <span
-                                                                class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full text-xs">{{ __('Excused') }}</span>
-                                                        @elseif ($status == 'ABSENT')
-                                                            <span
-                                                                class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full text-xs">{{ __('Absent') }}</span>
+                                                        @if ($attendance)
+                                                            <button
+                                                                class="font-medium text-indigo-600 hover:underline text-sm"
+                                                                x-on:click.prevent="myJournal = {{ json_encode($attendance) }};
+                                                                $dispatch('open-modal', 'view-journal-modal');">
+                                                                {{ __('View Details') }}
+                                                            </button>
                                                         @else
                                                             <span
-                                                                class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full text-xs">
-                                                                {{ __('No Data') }}</span>
+                                                                class="text-xs text-gray-400 italic">{{ __('No record') }}</span>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -138,8 +137,9 @@
 
                             {{-- Tab Pengumuman --}}
                             <div x-show="activeTab === 'pengumuman'">
-                                <h3 class="text-lg">Announcements Content</h3>
+                                <h3 class="text-lg">{{ __('Announcements') }}</h3>
                             </div>
+
                             {{-- Tab Tugas --}}
                             <div x-show="activeTab === 'tugas'">
                                 <div class="flex justify-between items-center mb-4">
@@ -192,6 +192,7 @@
                                     @endforelse
                                 </div>
                             </div>
+
                             {{-- Tab Materi --}}
                             <div x-show="activeTab === 'materi'">
                                 <h3 class="text-lg">{{ __('Modules & Resources Content') }}</h3>
@@ -203,5 +204,7 @@
         </div>
     </div>
 
-    @include('students.practicum.submit-assignment-modal')
+    @include('students.practicum.partials.submit-assignment-modal')
+
+    @include('students.practicum.partials.view-journal-modal')
 </x-app-layout>
