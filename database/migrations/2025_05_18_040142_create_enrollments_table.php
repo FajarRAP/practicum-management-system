@@ -11,21 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::create('enrollments', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->foreignId('user_id')
-        //         ->constrained()
-        //         ->onUpdate('cascade')
-        //         ->onDelete('cascade');
-        //     $table->foreignId('practicum_id')
-        //         ->constrained()
-        //         ->onUpdate('cascade')
-        //         ->onDelete('cascade');
-        //     $table->string('study_plan_path');
-        //     $table->string('transcript_path');
-        //     $table->string('photo_path');
-        //     $table->timestamps();
-        // });
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
@@ -50,9 +35,9 @@ return new class extends Migration
             // $table->foreignId('approved_by')->nullable()->constrained('users');
             // $table->timestamp('approved_at')->nullable();
 
+            $table->float('final_score')->nullable();
+            $table->string('final_grade')->nullable();
             $table->timestamps();
-
-            // [BARU] Pastikan mahasiswa tidak bisa mendaftar double
             $table->unique(['user_id', 'practicum_id']);
         });
     }
