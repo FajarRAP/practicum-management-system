@@ -21,22 +21,16 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+            $table->float('participation_score')->default(0);
+            $table->float('creativity_score')->default(0);
+            $table->float('report_score')->default(0);
+            $table->float('active_score')->default(0);
+            $table->float('module_score')->default(0);
+
             $table->enum('status', ['PRESENT', 'SICK', 'EXCUSED', 'ABSENT']);
             $table->unique(['schedule_id', 'user_id']);
             $table->timestamps();
-
-            // $table->id();
-            // $table->foreignId('announcement_id')
-            //     ->constrained()
-            //     ->onUpdate('cascade')
-            //     ->onDelete('cascade');
-            // $table->foreignId('user_id')
-            //     ->constrained()
-            //     ->onUpdate('cascade')
-            //     ->onDelete('cascade');
-            // $table->enum('status', ['PRESENT', 'SICK', 'EXCUSED', 'ABSENT']);
-            // $table->unique(['announcement_id', 'user_id']);
-            // $table->timestamps();
         });
     }
 
