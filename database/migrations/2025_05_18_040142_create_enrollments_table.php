@@ -35,6 +35,8 @@ return new class extends Migration
             // $table->foreignId('approved_by')->nullable()->constrained('users');
             // $table->timestamp('approved_at')->nullable();
 
+            $table->float('final_active_score')->nullable();
+            $table->float('final_report_score')->nullable();
             $table->float('final_score')->nullable();
             $table->string('final_grade')->nullable();
             $table->timestamps();
