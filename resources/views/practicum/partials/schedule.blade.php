@@ -85,7 +85,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="py-4 px-6 text-center text-gray-500">
+                        <td colspan="6" class="py-4 px-6 text-center text-gray-500">
                             {{ __('No schedule has been created for this practicum yet.') }}
                         </td>
                     </tr>
