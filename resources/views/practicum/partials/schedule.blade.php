@@ -3,9 +3,11 @@
         <h3 class="text-lg font-medium text-gray-900">
             {{ __('Schedule Management') }}
         </h3>
-        <x-primary-button x-data @click="$dispatch('open-modal', 'add-schedule-modal')">
-            {{ __('Add Schedule') }}
-        </x-primary-button>
+        @hasrole('assistant')
+            <x-primary-button x-data @click="$dispatch('open-modal', 'add-schedule-modal')">
+                {{ __('Add Schedule') }}
+            </x-primary-button>
+        @endhasrole
     </div>
 
     <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
@@ -16,6 +18,7 @@
                     <th scope="col" class="py-3 px-6">{{ __('Topic') }}</th>
                     <th scope="col" class="py-3 px-6">{{ __('Date & Time') }}</th>
                     <th scope="col" class="py-3 px-6">{{ __('Location') }}</th>
+                    <th scope="col" class="py-3 px-6">{{ __('Status') }}</th>
                     <th scope="col" class="py-3 px-6 text-right">{{ __('Action') }}</th>
                 </tr>
             </thead>
@@ -33,11 +36,26 @@
                                 {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }}</div>
                         </td>
                         <td class="py-4 px-6">{{ $schedule->location }}</td>
+                        <td class="py-4 px-6">
+                            @if ($schedule->status == 'APPROVED')
+                                <span
+                                    class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full text-xs">{{ __('Approved') }}</span>
+                            @elseif ($schedule->status == 'PENDING')
+                                <span
+                                    class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full text-xs">{{ __('Pending') }}</span>
+                            @else
+                                <span
+                                    class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full text-xs"
+                                    title="{{ $schedule->rejection_reason }}">{{ __('Rejected') }}</span>
+                            @endif
+                        </td>
                         <td class="py-4 px-6 text-right">
-                            <div class="flex justify-end items-center space-x-4">
-                                <a href="{{ route('attendance.index', [$practicum, $schedule]) }}"
-                                    class="font-medium text-indigo-600 hover:underline text-xs">
-                                    {{ __('Manage Attendance & Assessment') }}</a>
+                            @hasrole('assistant')
+                                @if ($schedule->status == 'APPROVED')
+                                    <a href="{{ route('attendance.index', [$practicum, $schedule]) }}"
+                                        class="font-medium text-indigo-600 hover:underline text-xs">
+                                        {{ __('Manage Journal') }}</a>
+                                @endif
                                 <button
                                     x-on:click.prevent="editSchedule = {{ $schedule }}; action = '{{ route('schedule.update', $schedule) }}'; $dispatch('open-modal', 'edit-schedule-modal');"
                                     class="font-medium text-blue-600 hover:underline text-xs">{{ __('Edit') }}</button>
@@ -48,7 +66,21 @@
                                     <button type="submit"
                                         class="font-medium text-red-600 hover:underline text-xs">{{ __('Delete') }}</button>
                                 </form>
-                            </div>
+                            @endhasrole
+                            @hasrole('lab_tech')
+                                <form action="{{ route('schedule.approve', $schedule) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit"
+                                        class="font-medium text-green-600 hover:underline text-xs">{{ __('Approve') }}</button>
+                                </form>
+                                <button
+                                    x-on:click.prevent="action = '{{ route('schedule.reject', $schedule) }}';
+                                        $dispatch('open-modal', 'reject-schedule-modal');"
+                                    class="font-medium text-red-600 hover:underline text-xs">
+                                    {{ __('Reject') }}
+                                </button>
+                            @endhasrole
                         </td>
                     </tr>
                 @empty
