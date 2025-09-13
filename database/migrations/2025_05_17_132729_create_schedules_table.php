@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('schedules', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('practicum_id')
                 ->constrained()
                 ->onUpdate('cascade')
