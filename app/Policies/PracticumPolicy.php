@@ -18,7 +18,7 @@ class PracticumPolicy
     public function viewAny(User $user)
     {
         // Only assistants and lecturers can view any practicum
-        return $user->hasAnyRole(['assistant', 'lecturer']);
+        return $user->hasAnyRole(['assistant', 'lecturer', 'lab_tech']);
     }
 
     public function create(User $user)
@@ -42,7 +42,7 @@ class PracticumPolicy
     public function view(User $user, Practicum $practicum)
     {
         // Assistants, and lecturers can view any practicum
-        if ($user->hasAnyRole(['assistant', 'lecturer'])) {
+        if ($user->hasAnyRole(['assistant', 'lecturer', 'lab_tech'])) {
             return true;
         }
 
