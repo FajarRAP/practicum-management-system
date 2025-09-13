@@ -7,9 +7,11 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-4">
-            <x-primary-button class="self-end" x-data @click="$dispatch('open-modal', 'add-practicum')">
-                {{ __('Add Practicum') }}
-            </x-primary-button>
+            @hasrole('assistant')
+                <x-primary-button class="self-end" x-data @click="$dispatch('open-modal', 'add-practicum')">
+                    {{ __('Add Practicum') }}
+                </x-primary-button>
+            @endhasrole
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-96 flex flex-col justify-between">
@@ -65,18 +67,26 @@
                                         @endif
                                     </td>
                                     <td class="py-4 px-6 flex items-center justify-start space-x-4">
-                                        <a href="{{ route('practicum.show', $practicum) }}"
-                                            class="font-medium text-indigo-600 hover:underline">
-                                            {{ __('Manage') }}
-                                        </a>
-                                        <form action="{{ route('practicum.destroy', $practicum) }}" method="POST"
-                                            onsubmit="return confirm('Are you sure you want to delete this practicum?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="font-medium text-red-600 hover:underline">
-                                                {{ __('Delete') }}
-                                            </button>
-                                        </form>
+                                        @hasrole('assistant')
+                                            <a href="{{ route('practicum.show', $practicum) }}"
+                                                class="font-medium text-indigo-600 hover:underline">
+                                                {{ __('Manage') }}
+                                            </a>
+                                            <form action="{{ route('practicum.destroy', $practicum) }}" method="POST"
+                                                onsubmit="return confirm('Are you sure you want to delete this practicum?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="font-medium text-red-600 hover:underline">
+                                                    {{ __('Delete') }}
+                                                </button>
+                                            </form>
+                                        @endhasrole
+                                        @hasrole('lab_tech')
+                                            <a href="{{ route('practicum.show', $practicum) }}"
+                                                class="font-medium text-indigo-600 hover:underline">
+                                                {{ __('View') }}
+                                            </a>
+                                        @endhasrole
                                     </td>
                                 </tr>
                             @empty
@@ -95,74 +105,5 @@
         </div>
     </div>
 
-    {{-- Modal "Add Practicum" --}}
-    <x-modal name="add-practicum" :show="$errors->default->isNotEmpty()" focusable>
-        <form method="POST" action="{{ route('practicum.store') }}" class="p-6 flex flex-col gap-4">
-            @csrf
-            @method('POST')
-
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Open New Practicum') }}
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('Select the course, academic year, and shift to open a new practicum. Existing combinations will not be available.') }}
-            </p>
-
-            <div class="mt-4">
-                <x-input-label for="course_id" value="{{ __('Course') }}" />
-                <x-select-input id="course_id" name="course_id" class="mt-1 block w-full">
-                    <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Select Course') }}</option>
-                        @foreach ($courses as $course)
-                            <option value="{{ $course->id }}" @if (old('course_id') == $course->id) selected @endif>
-                                {{ $course->name }}
-                            </option>
-                        @endforeach
-                    </x-slot>
-                </x-select-input>
-                <x-input-error :messages="$errors->default->get('course_id')" class="mt-2" />
-            </div>
-
-            <div>
-                <x-input-label for="academic_year_id" value="{{ __('Academic Year') }}" />
-                <x-select-input id="academic_year_id" name="academic_year_id" class="mt-1 block w-full">
-                    <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Select Academic Year') }}</option>
-                        @foreach ($academicYears as $academicYear)
-                            <option value="{{ $academicYear->id }}" @if (old('academic_year_id') == $academicYear->id) selected @endif>
-                                {{ $academicYear->year }} - {{ $academicYear->semester }}
-                            </option>
-                        @endforeach
-                    </x-slot>
-                </x-select-input>
-                <x-input-error :messages="$errors->default->get('academic_year_id')" class="mt-2" />
-            </div>
-
-            <div>
-                <x-input-label for="shift_id" value="{{ __('Shift') }}" />
-                <x-select-input id="shift_id" name="shift_id" class="mt-1 block w-full">
-                    <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Select Shift') }}</option>
-                        @foreach ($shifts as $shift)
-                            <option value="{{ $shift->id }}" @if (old('shift_id') == $shift->id) selected @endif>
-                                {{ $shift->name }}
-                            </option>
-                        @endforeach
-                    </x-slot>
-                </x-select-input>
-                <x-input-error :messages="$errors->default->get('shift_id')" class="mt-2" />
-            </div>
-
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-
-                <x-primary-button class="ms-3">
-                    {{ __('Open Practicum') }}
-                </x-primary-button>
-            </div>
-        </form>
-    </x-modal>
+    @include('practicum.partials.add-practicum-modal')
 </x-app-layout>
