@@ -39,12 +39,12 @@
                                     <div class="flex justify-between">
                                         <dt class="text-gray-500">{{ __('Final Active Score') }}</dt>
                                         <dd class="text-gray-900 font-medium">
-                                            {{ number_format($myEnrollment->active_score, 2) }}</dd>
+                                            {{ number_format($myEnrollment->final_active_score, 2) }}</dd>
                                     </div>
                                     <div class="flex justify-between">
                                         <dt class="text-gray-500">{{ __('Final Report Score') }}</dt>
                                         <dd class="text-gray-900 font-medium">
-                                            {{ number_format($myEnrollment->report_score, 2) }}</dd>
+                                            {{ number_format($myEnrollment->final_report_score, 2) }}</dd>
                                     </div>
                                     <div class="flex justify-between text-base mt-3 pt-3 border-t">
                                         <dt class="font-semibold text-gray-800">{{ __('TOTAL FINAL SCORE') }}</dt>
@@ -91,26 +91,25 @@
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Schedule') }}
                                 </button>
-                                <button @click="activeTab = 'announcement'"
+                                {{-- <button @click="activeTab = 'announcement'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'announcement' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Announcements') }}
-                                </button>
+                                </button> --}}
                                 <button @click="activeTab = 'assignment'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'assignment' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Assignments') }}
                                 </button>
-                                <button @click="activeTab = 'module'"
+                                {{-- <button @click="activeTab = 'module'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'module' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Modules') }}
-                                </button>
+                                </button> --}}
                             </nav>
                         </div>
 
                         <div class="p-6">
-                            {{-- Tab Jadwal --}}
                             <div x-show="activeTab === 'schedule'">
                                 @include('students.practicum.partials.schedule', [
                                     'practicum' => $practicum,
@@ -118,12 +117,10 @@
                                 ])
                             </div>
 
-                            {{-- Tab Pengumuman --}}
-                            <div x-show="activeTab === 'announcement'">
+                            {{-- <div x-show="activeTab === 'announcement'">
                                 <h3 class="text-lg">{{ __('Announcements') }}</h3>
-                            </div>
+                            </div> --}}
 
-                            {{-- Tab Tugas --}}
                             <div x-show="activeTab === 'assignment'">
                                 @include('students.practicum.partials.assignments', [
                                     'practicum' => $practicum,
@@ -131,10 +128,9 @@
                                 ])
                             </div>
 
-                            {{-- Tab Materi --}}
-                            <div x-show="activeTab === 'module'">
+                            {{-- <div x-show="activeTab === 'module'">
                                 <h3 class="text-lg">{{ __('Modules & Resources Content') }}</h3>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

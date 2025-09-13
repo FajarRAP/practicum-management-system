@@ -53,7 +53,6 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" x-data="{ activeTab: 'participant' }">
                         <div class="border-b border-gray-200">
                             <nav class="-mb-px flex space-x-6 overflow-x-auto px-6" aria-label="Tabs">
-                                {{-- Tombol Tab --}}
                                 <button @click="activeTab = 'participant'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'participant' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
@@ -64,11 +63,11 @@
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Schedule & Attendance') }}
                                 </button>
-                                <button @click="activeTab = 'announcement'"
+                                {{-- <button @click="activeTab = 'announcement'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'announcement' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Announcements') }}
-                                </button>
+                                </button> --}}
                                 <button @click="activeTab = 'assignment'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'assignment' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
@@ -86,10 +85,9 @@
                                 @include('practicum.partials.schedule', ['practicum' => $practicum])
                             </div>
 
-                            <div x-show="activeTab === 'announcement'">
-                                {{-- Di sini Anda akan @include partial untuk manajemen announcement --}}
+                            {{-- <div x-show="activeTab === 'announcement'">
                                 <h3 class="text-lg">Manajemen Pengumuman</h3>
-                            </div>
+                            </div> --}}
 
                             <div x-show="activeTab === 'assignment'">
                                 @include('practicum.partials.assignments', ['practicum' => $practicum])
