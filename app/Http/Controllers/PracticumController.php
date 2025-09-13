@@ -6,6 +6,7 @@ use App\Models\AcademicYear;
 use App\Models\AssignmentSubmission;
 use App\Models\Attendance;
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\Practicum;
 use App\Models\Shift;
 use Illuminate\Database\Query\Builder;
@@ -26,7 +27,7 @@ class PracticumController extends Controller
         $shifts = Shift::orderBy('name')->get();
         $practicums = Practicum::with(['course', 'academicYear', 'shift'])->latest()->paginate($perPage);
 
-        return view('practicum', [
+        return view('practicum.index', [
             'academicYears' => $academicYears,
             'courses' => $courses,
             'shifts' => $shifts,
@@ -57,16 +58,22 @@ class PracticumController extends Controller
                 ->get()
                 ->keyBy('assignment_id');
 
+            $myEnrollment = Enrollment::where('user_id', $request->user()->id)
+                ->where('practicum_id', $practicum->id)
+                ->first();
+
             return view('students.practicum.show', [
                 'practicum' => $practicum,
                 'myAttendances' => $myAttendances,
                 'mySubmissions' => $mySubmissions,
+                'myEnrollment' => $myEnrollment,
             ]);
         }
 
         // Assistant
         $practicum->load(['course', 'academicYear', 'shift', 'enrollments', 'assignments', 'schedules']);
-        return view('practicum-detail', [
+
+        return view('practicum.show', [
             'practicum' => $practicum,
         ]);
     }
@@ -107,5 +114,56 @@ class PracticumController extends Controller
         } catch (\Throwable $th) {
             return back()->with('error', 'Failed to close practicum. It may have related data that prevents deletion.');
         }
+    }
+
+    public function calculateScores(Practicum $practicum)
+    {
+        // Authorize here
+
+        // Pemrograman -> 1 Briefing + 8 Praktikum
+        // APSI -> 1 Briefing + 5 Praktikum + 1 Presentasi
+        $meetingNumbers = $practicum->course->id === 1 ? 9 : 7;
+        $enrollments = $practicum->enrollments()
+            // ->where('status', 'APPROVED')
+            ->with('user.attendances') // Ambil semua data kehadiran milik user
+            ->get();
+
+        $scheduleIds = $practicum->schedules()->pluck('id');
+
+        foreach ($enrollments as $enrollment) {
+            $attendancesForThisPracticum = $enrollment->user->attendances->whereIn('schedule_id', $scheduleIds);
+
+            $totalActiveScore = 0;
+            $totalReportScore = 0;
+            foreach ($attendancesForThisPracticum as $attendance) {
+                $totalActiveScore += $attendance->active_score ?? 0;
+                $totalReportScore += $attendance->report_score ?? 0;
+            }
+
+            $totalActiveScore = $this->calculateActiveScore($meetingNumbers, $totalActiveScore);
+            $totalReportScore = ($totalReportScore / 8) * .65; // 8 Praktikum
+
+            $finalScore = $totalActiveScore + $totalReportScore;
+
+            $finalGrade = 'E';
+            if ($finalScore >= 85) $finalGrade = 'A';
+            elseif ($finalScore >= 75) $finalGrade = 'B';
+            elseif ($finalScore >= 65) $finalGrade = 'C';
+            elseif ($finalScore >= 50) $finalGrade = 'D';
+
+            $enrollment->update([
+                'final_active_score' => $totalActiveScore,
+                'final_report_score' => $totalReportScore,
+                'final_score'  => $finalScore,
+                'final_grade'  => $finalGrade,
+            ]);
+        }
+
+        return back()->with('success', 'Final scores have been successfully calculated and saved.');
+    }
+
+    private function calculateActiveScore(int $meetingNumbers, float $totalActiveScore): float
+    {
+        return ($totalActiveScore / $meetingNumbers) * .35;
     }
 }
