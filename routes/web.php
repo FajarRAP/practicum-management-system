@@ -1,9 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcademicYearController;
-use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\ArchiveController;
-use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AssignmentSubmissionController;
 use App\Http\Controllers\AttendanceController;
@@ -14,6 +12,8 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\StudentPracticumController;
 use Illuminate\Support\Facades\Route;
+
+Route::fallback(fn() => redirect(route('dashboard')));
 
 Route::get('/', fn() => redirect(route('login')));
 
@@ -26,96 +26,52 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Route::get('/dashboard/schedule', [ScheduleController::class, 'index'])
-//     ->middleware(['auth', 'verified'])->name('schedule.index');
-// Route::get('/dashboard/schedule/{schedule}', [ScheduleController::class, 'show'])
-//     ->middleware(['auth', 'verified'])->name('schedule.show')->whereNumber('schedule');
-// Route::post('/dashboard/schedule', [ScheduleController::class, 'store'])
-//     ->middleware(['auth', 'verified'])->name('schedule.store');
+Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () {
+    Route::get('practicum/{practicum}', [PracticumController::class, 'show'])->name('practicum.show');
+    Route::middleware(['hasRole:lecturer,assistant,lab_tech'])->group(function () {
+        Route::resource('academic-year', AcademicYearController::class)->except(['create', 'edit']);
+        Route::resource('practicum', PracticumController::class)->except(['create', 'edit', 'show']);
+        Route::resource('shift', ShiftController::class)->except(['create', 'edit']);
 
-Route::get('/dashboard/announcement', [AnnouncementController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('announcement.index');
-Route::post('/dashboard/announcement', [AnnouncementController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('announcement.store');
-Route::patch('/dashboard/announcement/{announcement}/confirm', [AnnouncementController::class, 'confirmAnnouncement'])
-    ->middleware(['auth', 'verified'])->name('announcement.confirm');
+        Route::resource('practicum.assignment', AssignmentController::class)->shallow()->only(['store', 'update', 'destroy']);
+        Route::resource('schedule', ScheduleController::class)->only(['store', 'update', 'destroy']);
 
-Route::get('/dashboard/assignment', [AssignmentController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('assignment.index');
-Route::post('/dashboard/assignment', [AssignmentController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('assignment.store');
+        Route::get('practicum/{practicum}/assignment/{assignment}/submissions', [AssignmentSubmissionController::class, 'index'])
+            ->name('assignment-submission.index');
+        Route::patch('/assignment/{assignment}/scores', [AssignmentSubmissionController::class, 'store'])
+            ->name('assignment-submission.store');
 
-Route::get('/dashboard/assessment', [AssessmentController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('assessment.index');
-Route::get('/dashboard/assessment/{announcement}', [AssessmentController::class, 'show'])
-    ->middleware(['auth', 'verified'])->name('assessment.show')->whereNumber('announcement');
-Route::get('/dashboard/assessment/final-score', [AssessmentController::class, 'finalScore'])
-    ->middleware(['auth', 'verified'])->name('assessment.final-score');
-Route::post('/dashboard/assessment/{announcement}', [AssessmentController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('assessment.store')->whereNumber('announcement');
+        Route::get('/assignment', [AssignmentController::class, 'index'])
+            ->name('assignment.index');
+        Route::post('/assignment', [AssignmentController::class, 'store'])
+            ->name('assignment.store');
+        Route::put('/practicum/{practicum}/assignment/{assignment}', [AssignmentController::class, 'update'])
+            ->name('assignment.update');
+        Route::delete('/practicum/{practicum}/assignment/{assignment}', [AssignmentController::class, 'destroy'])
+            ->name('assignment.destroy');
 
-Route::get('/dashboard/enrollment', [EnrollmentController::class, 'index'])
-    ->middleware(['auth', 'verified', 'hasRole:student'])->name('enrollment.index');
-Route::post('/dashboard/enrollment', [EnrollmentController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('enrollment.store');
+        Route::get('/practicum/{practicum}/schedule/{schedule}', [AttendanceController::class, 'index'])->name('attendance.index');
+        Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+        Route::post('/practicum/{practicum}/calculate-scores', [PracticumController::class, 'calculateScores'])->name('practicum.calculate-scores');
+    });
 
-// Route::get('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'index'])
-//     ->middleware(['auth', 'verified'])->name('assignment-submission.index')->whereNumber('assignment');
-// Route::post('/dashboard/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'store'])
-//     ->middleware(['auth', 'verified'])->name('assignment-submission.store')->whereNumber('assignment');
+    Route::middleware(['hasRole:student'])->group(function () {
+        Route::get('/enrollment', [EnrollmentController::class, 'index'])->name('enrollment.index');
+        Route::post('/enrollment', [EnrollmentController::class, 'store'])->name('enrollment.store');
+        Route::delete('/enrollment/{enrollment}', [EnrollmentController::class, 'destroy'])->name('enrollment.destroy');
 
-Route::get('/dashboard/archive', [ArchiveController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('archive.index');
-Route::post('/dashboard/archive', [ArchiveController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('archive.store');
+        Route::get('/my-practicum', [StudentPracticumController::class, 'index'])->name('my-practicum.index');
 
-Route::get('/dashboard/academic-year', [AcademicYearController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('academic-year.index');
-Route::post('/dashboard/academic-year', [AcademicYearController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('academic-year.store');
-Route::delete('/dashboard/academic-year/{academicYear}', [AcademicYearController::class, 'destroy'])
-    ->middleware(['auth', 'verified'])->name('academic-year.destroy');
-Route::put('/dashboard/academic-year/{academicYear}', [AcademicYearController::class, 'update'])
-    ->middleware(['auth', 'verified'])->name('academic-year.update');
+        Route::post('/assignment-submission', [AssignmentSubmissionController::class, 'store'])->name('assignment-submission.store');
+    });
 
-Route::get('/dashboard/practicum', [PracticumController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('practicum.index');
-Route::get('/dashboard/practicum/{practicum}', [PracticumController::class, 'show'])
-    ->middleware(['auth', 'verified'])->name('practicum.show');
-Route::post('/dashboard/practicum', [PracticumController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('practicum.store');
-Route::delete('/dashboard/practicum/{practicum}', [PracticumController::class, 'destroy'])
-    ->middleware(['auth', 'verified'])->name('practicum.destroy');
-Route::put('/dashboard/practicum/{practicum}', [PracticumController::class, 'update'])
-    ->middleware(['auth', 'verified'])->name('practicum.update');
-Route::get('/dashboard/practicum/{practicum}/schedule/{schedule}/attendance', [AttendanceController::class, 'index'])
-    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('attendance.index');
-Route::post('/dashboard/practicum/{practicum}/schedule/{schedule}/attendance', [AttendanceController::class, 'store'])
-    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('attendance.store');
+    Route::middleware(['hasRole:lab_tech'])->group(function () {
+        Route::patch('/schedule/{schedule}/approve', [ScheduleController::class, 'approve'])->name('schedule.approve');
+        Route::patch('/schedule/{schedule}/reject', [ScheduleController::class, 'reject'])->name('schedule.reject');
+    });
 
-Route::get('/dashboard/shift', [ShiftController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('shift.index');
-Route::post('/dashboard/shift', [ShiftController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('shift.store');
-Route::put('/dashboard/shift/{shift}', [ShiftController::class, 'update'])
-    ->middleware(['auth', 'verified'])->name('shift.update');
-Route::delete('/dashboard/shift/{shift}', [ShiftController::class, 'destroy'])
-    ->middleware(['auth', 'verified'])->name('shift.destroy');
-
-Route::post('/dashboard/schedule', [ScheduleController::class, 'store'])
-    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('schedule.store');
-Route::put('/dashboard/schedule/{schedule}', [ScheduleController::class, 'update'])
-    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('schedule.update');
-Route::delete('/dashboard/schedule/{schedule}', [ScheduleController::class, 'destroy'])
-    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('schedule.destroy');
-
-Route::get('/dashboard/student-practicum', [StudentPracticumController::class, 'index'])
-    ->middleware(['auth', 'verified', 'hasRole:student'])->name('my-practicum.index');
-Route::put('/dashboard/practicum/{practicum}/assignment/{assignment}', [AssignmentController::class, 'update'])
-    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('assignment.update');
-Route::delete('/dashboard/practicum/{practicum}/assignment/{assignment}', [AssignmentController::class, 'destroy'])
-    ->middleware(['auth', 'verified', 'hasRole:assistant'])->name('assignment.destroy');
-Route::post('/dashboard/practicum/{practicum}/assignment/{assignment}/submission', [AssignmentSubmissionController::class, 'store'])
-    ->middleware(['auth', 'verified', 'hasRole:student'])->name('assignment-submission.store');
+    Route::get('/archive', [ArchiveController::class, 'index'])->name('archive.index');
+    Route::post('/archive', [ArchiveController::class, 'store'])->name('archive.store');
+});
 
 require __DIR__ . '/auth.php';
