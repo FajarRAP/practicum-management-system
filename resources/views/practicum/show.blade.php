@@ -137,6 +137,8 @@
             @include('practicum.partials.add-assignment-modal', ['practicum' => $practicum])
 
             @include('practicum.partials.edit-assignment-modal', ['practicum' => $practicum])
+
+            @include('practicum.partials.reject-schedule-modal')
         </div>
     </div>
 </x-app-layout>
