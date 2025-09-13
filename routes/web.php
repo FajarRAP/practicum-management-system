@@ -38,8 +38,6 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
 
         Route::get('practicum/{practicum}/assignment/{assignment}/submissions', [AssignmentSubmissionController::class, 'index'])
             ->name('assignment-submission.index');
-        Route::patch('/assignment/{assignment}/scores', [AssignmentSubmissionController::class, 'store'])
-            ->name('assignment-submission.store');
 
         Route::get('/assignment', [AssignmentController::class, 'index'])
             ->name('assignment.index');
@@ -62,7 +60,7 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
 
         Route::get('/my-practicum', [StudentPracticumController::class, 'index'])->name('my-practicum.index');
 
-        Route::post('/assignment-submission', [AssignmentSubmissionController::class, 'store'])->name('assignment-submission.store');
+        Route::post('/assignment-submission/{assignment}', [AssignmentSubmissionController::class, 'store'])->name('assignment-submission.store');
     });
 
     Route::middleware(['hasRole:lab_tech'])->group(function () {
