@@ -28,19 +28,15 @@ class AssignmentSubmissionController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Assignment $assignment)
     {
-        $validated = $request->validate([
+        $validated = $request->validateWithBag('addSubmission', [
             'assignment_id' => ['required', 'exists:assignments,id'],
             'submission_file' => ['required', 'file', 'mimes:pdf,zip,rar', 'max:10240'],
             'comments' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $assignment = Assignment::find($validated['assignment_id']);
         $user = $request->user();
-
-
-        Gate::authorize('view', $assignment->practicum);
 
         $existingSubmission = AssignmentSubmission::where('assignment_id', $assignment->id)
             ->where('user_id', $user->id)
