@@ -19,7 +19,7 @@
                     <th scope="col" class="py-3 px-6">{{ __('Date & Time') }}</th>
                     <th scope="col" class="py-3 px-6">{{ __('Location') }}</th>
                     <th scope="col" class="py-3 px-6">{{ __('Status') }}</th>
-                    <th scope="col" class="py-3 px-6 text-right">{{ __('Action') }}</th>
+                    <th scope="col" class="py-3 px-6">{{ __('Action') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,7 +49,7 @@
                                     title="{{ $schedule->rejection_reason }}">{{ __('Rejected') }}</span>
                             @endif
                         </td>
-                        <td class="py-4 px-6 text-right">
+                        <td class="py-4 px-6 flex flex-col items-center text-center gap-1">
                             @hasrole('assistant')
                                 @if ($schedule->status == 'APPROVED')
                                     <a href="{{ route('attendance.index', [$practicum, $schedule]) }}"
