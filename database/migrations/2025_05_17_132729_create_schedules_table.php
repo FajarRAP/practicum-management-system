@@ -12,20 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('schedules', function (Blueprint $table) {
-            // $table->id();
-            // $table->foreignId('course_id')
-            //     ->constrained()
-            //     ->onUpdate('cascade')
-            //     ->onDelete('cascade');
-            // $table->foreignId('day_id')
-            //     ->constrained()
-            //     ->onUpdate('cascade')
-            //     ->onDelete('cascade');
-            // $table->string('shift')->nullable();
-            // $table->time('time');
-            // $table->string('academic_year');
-            // $table->timestamps();
-            $table->id();
             $table->foreignId('practicum_id')
                 ->constrained()
                 ->onUpdate('cascade')
@@ -36,6 +22,10 @@ return new class extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->string('location')->nullable();
+            $table->enum('status', ['PENDING', 'APPROVED', 'REJECTED'])->default('PENDING');
+            $table->text('rejection_reason')->nullable();
+            $table->foreignId('processed_by')->nullable()->constrained('users');
+            $table->timestamp('processed_at')->nullable();
             $table->timestamps();
         });
     }
