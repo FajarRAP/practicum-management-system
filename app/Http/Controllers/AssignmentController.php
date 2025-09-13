@@ -15,6 +15,7 @@ class AssignmentController extends Controller
 
         $validated = $request->validateWithBag('addAssignment', [
             'practicum_id' => ['required', 'exists:practicums,id'],
+            'schedule_id' => ['required', 'exists:schedules,id', 'unique:assignments,schedule_id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'deadline' => ['required', 'date'],
