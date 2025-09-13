@@ -36,7 +36,7 @@
                     @else
                         <x-primary-button
                             x-on:click.prevent="assignment = {{ json_encode($assignment) }};
-                            action = '{{ route('assignment-submission.store', [$practicum, $assignment]) }}';
+                            action = '{{ route('assignment-submission.store', $assignment) }}';
                             $dispatch('open-modal', 'submit-assignment-modal');">
                             {{ __('Submit Assignment') }}</x-primary-button>
                     @endif
