@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Models\AcademicYear;
 use App\Models\Practicum;
+use App\Models\Schedule;
 use App\Policies\PracticumPolicy;
+use App\Policies\SchedulePolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View as FacadeView;
 use Illuminate\Support\ServiceProvider;
@@ -31,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::policy(Practicum::class, PracticumPolicy::class);
+        Gate::policy(Schedule::class, SchedulePolicy::class);
     }
 }
