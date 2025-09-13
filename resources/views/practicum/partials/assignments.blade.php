@@ -5,9 +5,11 @@
             <h3 class="text-lg font-medium text-gray-900">
                 {{ __('Assignment Management') }}
             </h3>
-            <x-primary-button x-data @click="$dispatch('open-modal', 'add-assignment-modal')">
-                {{ __('Create New Assignment') }}
-            </x-primary-button>
+            @hasrole('assistant')
+                <x-primary-button x-data @click="$dispatch('open-modal', 'add-assignment-modal')">
+                    {{ __('Create New Assignment') }}
+                </x-primary-button>
+            @endhasrole
         </div>
 
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
@@ -36,20 +38,26 @@
                                 {{ $practicum->enrollments->count() }}
                             </td>
                             <td class="py-4 px-6 text-right">
-                                <div class="flex justify-end items-center space-x-4">
+                                @hasrole('assistant')
+                                    <div class="flex justify-end items-center space-x-4">
+                                        <a href="{{ route('assignment-submission.index', [$practicum, $assignment]) }}"
+                                            class="font-medium text-indigo-600 hover:underline text-xs">{{ __('View Submissions') }}</a>
+                                        <button
+                                            x-on:click.prevent="editAssignment = {{ $assignment }}; action = '{{ route('assignment.update', [$practicum, $assignment]) }}'; $dispatch('open-modal', 'edit-assignment-modal');"
+                                            class="font-medium text-blue-600 hover:underline text-xs">{{ __('Edit') }}</button>
+                                        <form action="{{ route('assignment.destroy', [$practicum, $assignment]) }}"
+                                            method="POST" onsubmit="return confirm('Are you sure?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="font-medium text-red-600 hover:underline text-xs">{{ __('Delete') }}</button>
+                                        </form>
+                                    </div>
+                                @endhasrole
+                                @hasrole('lab_tech')
                                     <a href="{{ route('assignment-submission.index', [$practicum, $assignment]) }}"
                                         class="font-medium text-indigo-600 hover:underline text-xs">{{ __('View Submissions') }}</a>
-                                    <button
-                                        x-on:click.prevent="editAssignment = {{ $assignment }}; action = '{{ route('assignment.update', [$practicum, $assignment]) }}'; $dispatch('open-modal', 'edit-assignment-modal');"
-                                        class="font-medium text-blue-600 hover:underline text-xs">{{ __('Edit') }}</button>
-                                    <form action="{{ route('assignment.destroy', [$practicum, $assignment]) }}"
-                                        method="POST" onsubmit="return confirm('Are you sure?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="font-medium text-red-600 hover:underline text-xs">{{ __('Delete') }}</button>
-                                    </form>
-                                </div>
+                                @endhasrole
                             </td>
                         </tr>
                     @empty
@@ -69,18 +77,20 @@
             <h3 class="text-lg font-medium text-gray-900">
                 {{ __('Final Score Recapitulation') }}
             </h3>
-            <div class="flex space-x-2">
+            @hasrole('assistant')
+                <div class="flex space-x-2">
 
-                <form method="POST" action="{{ route('practicum.calculate-scores', $practicum) }}">
-                    @csrf
-                    <x-secondary-button type="submit">
-                        {{ __('Calculate Scores') }}
-                    </x-secondary-button>
-                </form>
-                {{-- <x-secondary-button>
+                    <form method="POST" action="{{ route('practicum.calculate-scores', $practicum) }}">
+                        @csrf
+                        <x-secondary-button type="submit">
+                            {{ __('Calculate Scores') }}
+                        </x-secondary-button>
+                    </form>
+                    {{-- <x-secondary-button>
                     {{ __('Export to Excel') }}
                 </x-secondary-button> --}}
-            </div>
+                </div>
+            @endhasrole
         </div>
 
         <div class="overflow-x-auto relative bg-white shadow-md sm:rounded-lg">
@@ -105,8 +115,10 @@
                                 {{ $enrollment->user->name }}
                             </th>
                             <td class="py-4 px-6">{{ $enrollment->user->identity_number }}</td>
-                            <td class="py-4 px-6 text-center">{{ number_format($enrollment->active_score, 2) }}</td>
-                            <td class="py-4 px-6 text-center">{{ number_format($enrollment->report_score, 2) }}</td>
+                            <td class="py-4 px-6 text-center">{{ number_format($enrollment->final_active_score, 2) }}
+                            </td>
+                            <td class="py-4 px-6 text-center">{{ number_format($enrollment->final_report_score, 2) }}
+                            </td>
                             <td class="py-4 px-6 text-center font-bold">
                                 {{ number_format($enrollment->final_score, 2) }}</td>
                             <td class="py-4 px-6 text-center">
