@@ -63,7 +63,7 @@
                                     <td class="py-4 px-6">
                                         @can('academic_year.edit')
                                             <button class="font-medium text-blue-600 hover:underline"
-                                                x-on:click.prevent="
+                                                x-on:click.prGENAPt="
                                                 academicYear = {{ json_encode($academicYear->only(['id', 'year', 'semester', 'status'])) }};
                                                 action = '{{ route('academic-year.update', $academicYear) }}';
                                                 $dispatch('open-modal', 'edit-academic-year');">
@@ -120,9 +120,9 @@
                 <x-select-input id="semester" name="semester" class="mt-1 block w-full">
                     <x-slot name="options">
                         <option value="" disabled selected>{{ __('Select Semester') }}</option>
-                        <option value="ODD" @if (old('semester') == 'ODD') selected @endif>{{ __('ODD') }}
+                        <option value="GANJIL" @if (old('semester') == 'GANJIL') selected @endif>{{ __('GANJIL') }}
                         </option>
-                        <option value="EVEN" @if (old('semester') == 'EVEN') selected @endif>{{ __('EVEN') }}
+                        <option value="GENAP" @if (old('semester') == 'GENAP') selected @endif>{{ __('GENAP') }}
                         </option>
                     </x-slot>
                 </x-select-input>
@@ -178,9 +178,9 @@
                 <x-select-input id="edit_semester" name="semester" x-model="academicYear.semester"
                     class="mt-1 block w-full">
                     <x-slot name="options">
-                        <option value="ODD" @if (old('semester') == 'ODD') selected @endif>{{ __('ODD') }}
+                        <option value="GANJIL" @if (old('semester') == 'GANJIL') selected @endif>{{ __('GANJIL') }}
                         </option>
-                        <option value="EVEN" @if (old('semester') == 'EVEN') selected @endif>{{ __('EVEN') }}
+                        <option value="GENAP" @if (old('semester') == 'GENAP') selected @endif>{{ __('GENAP') }}
                         </option>
                     </x-slot>
                 </x-select-input>
