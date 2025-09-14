@@ -24,7 +24,7 @@ class PracticumPolicy
     public function create(User $user)
     {
         // Only assistants and lecturers can create practicum
-        return $user->can('practicum.create');
+        return $user->can('practicum.add');
     }
 
     public function delete(User $user): bool
