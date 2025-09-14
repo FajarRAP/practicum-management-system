@@ -25,13 +25,21 @@ class PracticumController extends Controller
         $academicYears = AcademicYear::where('status', '!=', 'FINISHED')->orderBy('year', 'desc')->get();
         $courses = Course::orderBy('name')->get();
         $shifts = Shift::orderBy('name')->get();
-        $practicums = Practicum::with(['course', 'academicYear', 'shift'])->latest()->paginate($perPage);
+        $practicums = Practicum::with(['course', 'academicYear', 'shift']);
+        $user = $request->user();
+
+        // Lecturers
+        if ($user->can('teach_programming')) {
+            $practicums->where('course_id', 1);
+        } else if ($user->can('teach_isad')) {
+            $practicums->where('course_id', 2);
+        }
 
         return view('practicum.index', [
             'academicYears' => $academicYears,
             'courses' => $courses,
             'shifts' => $shifts,
-            'practicums' => $practicums,
+            'practicums' => $practicums->latest()->paginate($perPage),
         ]);
     }
 
