@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEnrollmentRequest;
 use App\Models\Enrollment;
 use App\Models\Practicum;
-use App\Models\Schedule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -42,37 +41,5 @@ class EnrollmentController extends Controller
         ]);
 
         return back()->with('success', 'Successfully enrolled in practicum.');
-        // $validated = $request->validateWithBag('addEnrollment', [
-        //     'schedule' => ['required'],
-        //     'study_plan' => ['required', 'file', 'mimes:pdf', 'max:2048'],
-        //     'transcript' => ['required', 'file', 'mimes:pdf', 'max:2048'],
-        //     'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:2048'],
-        // ]);
-
-        // $user = $request->user();
-
-        // if (!$user->identity_number) {
-        //     return back()->with('error', 'You must complete your student identity before enrolling.');
-        // }
-
-        // $schedule = Schedule::find($validated['schedule']);
-
-        // if ($user->enrollments->where(fn($enrollment) => $enrollment->schedule->course->id == $schedule->course->id)->isNotEmpty()) {
-        //     return back()->with('error', 'You are already enrolled in a practicum for this course.');
-        // }
-
-        // if ($user->enrollments()->where('schedule_id', $validated['schedule'])->exists()) {
-        //     return back()->with('error', 'You are already enrolled in this schedule.');
-        // }
-
-        // Enrollment::create([
-        //     'user_id' => $user->id,
-        //     'schedule_id' => $validated['schedule'],
-        //     'study_plan_path' => $request->file('study_plan')->store('enrollments', 'public'),
-        //     'transcript_path' => $request->file('transcript')->store('enrollments', 'public'),
-        //     'photo_path' => $request->file('photo')->store('enrollments', 'public'),
-        // ]);
-
-        // return back()->with('success', 'Successfully enrolled in practicum.');
     }
 }
