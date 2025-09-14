@@ -14,7 +14,9 @@
                 <tr>
                     <th scope="col" class="py-3 px-6">{{ __('Student') }}</th>
                     <th scope="col" class="py-3 px-6">{{ __('Enrollment Date') }}</th>
-                    <th scope="col" class="py-3 px-6">{{ __('Files') }}</th>
+                    @can('student_datas.view')
+                        <th scope="col" class="py-3 px-6">{{ __('Files') }}</th>
+                    @endcan
                     {{-- <th scope="col" class="py-3 px-6">Status</th> --}}
                     {{-- <th scope="col" class="py-3 px-6 text-right">Action</th> --}}
                 </tr>
@@ -31,16 +33,16 @@
                         <td class="py-4 px-6">
                             {{ $enrollment->created_at->isoFormat('D MMMM YYYY') }}
                         </td>
-                        <td class="py-4 px-6">
-                            <div class="flex space-x-3 text-xs">
+                        @can('student_datas.view')
+                            <td class="py-4 px-6 flex gap-3">
                                 <a href="{{ Storage::url($enrollment->study_plan_path) }}" target="_blank"
                                     class="font-medium text-blue-600 hover:underline">{{ __('Study Plan') }}</a>
                                 <a href="{{ Storage::url($enrollment->transcript_path) }}" target="_blank"
                                     class="font-medium text-blue-600 hover:underline">{{ __('Transcript') }}</a>
                                 <a href="{{ Storage::url($enrollment->photo_path) }}" target="_blank"
                                     class="font-medium text-blue-600 hover:underline">{{ __('Photo') }}</a>
-                            </div>
-                        </td>
+                            </td>
+                        @endcan
                         {{-- <td class="py-4 px-6">
                             @if ($enrollment->status == 'APPROVED')
                                 <span
