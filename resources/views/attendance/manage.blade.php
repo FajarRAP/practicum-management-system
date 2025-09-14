@@ -119,7 +119,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="py-4 px-6 text-center">{{ __('No students data.') }}
+                                        <td colspan="8" class="py-4 px-6 text-center">{{ __('No students data.') }}
                                         </td>
                                     </tr>
                                 @endforelse
