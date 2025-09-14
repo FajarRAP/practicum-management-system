@@ -1,15 +1,15 @@
 @extends('layouts.archive')
 
 @section('add-data-button')
-    @hasrole('assistant')
-        <x-primary-button class="self-end" x-data @click.prevent="$dispatch('open-modal', 'add-archive')">
+    @can('archive.add')
+        <x-primary-button class="self-end" x-data x-on:click.prevent="$dispatch('open-modal', 'add-archive')">
             {{ __('Add Archive') }}
         </x-primary-button>
-    @endhasrole
+    @endcan
 @endsection
 
 @section('add-data-modal')
-    @hasrole('assistant')
+    @can('archive.add')
         <x-modal name="add-archive" :show="$errors->addArchive->isNotEmpty()" focusable>
             <form method="POST" action="{{ route('archive.store') }}" class="p-6 flex flex-col gap-4"
                 enctype="multipart/form-data">
@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="flex justify-end">
-                    <x-secondary-button @click="$dispatch('close')">
+                    <x-secondary-button x-on:click="$dispatch('close')">
                         {{ __('Cancel') }}
                     </x-secondary-button>
 
@@ -42,5 +42,5 @@
                 </div>
             </form>
         </x-modal>
-    @endhasrole
+    @endcan
 @endsection
