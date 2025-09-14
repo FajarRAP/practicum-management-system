@@ -15,7 +15,7 @@ class StoreEnrollmentRequest extends FormRequest
     public function authorize(): bool
     {
         // Student must be fill identity number first
-        return request()->user()->identity_number !== null;
+        return request()->user()->can('practicum.enroll');
     }
 
     /**
