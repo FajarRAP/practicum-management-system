@@ -7,11 +7,13 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-4">
-            <div class="flex justify-end">
-                <x-primary-button x-data @click="$dispatch('open-modal', 'add-enrollment')">
-                    {{ __('Enroll New Practicum') }}
-                </x-primary-button>
-            </div>
+            @can('practicum.enroll')
+                <div class="flex justify-end">
+                    <x-primary-button x-data x-on:click="$dispatch('open-modal', 'add-enrollment')">
+                        {{ __('Enroll New Practicum') }}
+                    </x-primary-button>
+                </div>
+            @endcan
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 font-semibold">
@@ -30,9 +32,9 @@
                                 {{-- <th scope="col" class="px-6 py-3">
                                     {{ __('Status') }}
                                 </th> --}}
-                                <th scope="col" class="px-6 py-3">
+                                {{-- <th scope="col" class="px-6 py-3">
                                     {{ __('Action') }}
-                                </th>
+                                </th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -60,7 +62,7 @@
                                                 class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full text-xs">Rejected</span>
                                         @endif
                                     </td> --}}
-                                    <td class="px-6 py-4">
+                                    {{-- <td class="px-6 py-4">
                                         @if ($enrollment->status == 'PENDING')
                                             <form action="{{ route('enrollment.destroy', $enrollment) }}"
                                                 method="POST"
@@ -78,7 +80,7 @@
                                         @else
                                             <span class="text-xs text-gray-400">-</span>
                                         @endif
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @empty
                                 <tr>
@@ -94,57 +96,59 @@
         </div>
     </div>
 
-    <x-modal name="add-enrollment" :show="$errors->addEnrollment->isNotEmpty()" focusable>
-        <form method="POST" action="{{ route('enrollment.store') }}" class="p-6 flex flex-col gap-4"
-            enctype="multipart/form-data">
-            @csrf
-            @method('POST')
+    @can('practicum.enroll')
+        <x-modal name="add-enrollment" :show="$errors->addEnrollment->isNotEmpty()" focusable>
+            <form method="POST" action="{{ route('enrollment.store') }}" class="p-6 flex flex-col gap-4"
+                enctype="multipart/form-data">
+                @csrf
+                @method('POST')
 
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Enroll to a New Practicum') }}
-            </h2>
+                <h2 class="text-lg font-medium text-gray-900">
+                    {{ __('Enroll to a New Practicum') }}
+                </h2>
 
-            <div>
-                <x-input-label for="practicum_id" value="{{ __('Practicum') }}" />
-                <x-select-input id="practicum_id" name="practicum_id" class="mt-1 block w-full">
-                    <x-slot name="options">
-                        <option value="" disabled selected>{{ __('Select Practicum') }}</option>
-                        @foreach ($practicums as $practicum)
-                            <option value="{{ $practicum->id }}" @if (old('practicum_id') == $practicum->id) selected @endif>
-                                {{ $practicum->course->name . ' - ' . $practicum->shift->name . ' (' . $practicum->academicYear->year . ' ' . $practicum->academicYear->semester . ')' }}
-                            </option>
-                        @endforeach
-                    </x-slot>
-                </x-select-input>
-                <x-input-error :messages="$errors->addEnrollment->get('practicum_id')" />
-            </div>
+                <div>
+                    <x-input-label for="practicum_id" value="{{ __('Practicum') }}" />
+                    <x-select-input id="practicum_id" name="practicum_id" class="mt-1 block w-full">
+                        <x-slot name="options">
+                            <option value="" disabled selected>{{ __('Select Practicum') }}</option>
+                            @foreach ($practicums as $practicum)
+                                <option value="{{ $practicum->id }}" @if (old('practicum_id') == $practicum->id) selected @endif>
+                                    {{ $practicum->course->name . ' - ' . $practicum->shift->name . ' (' . $practicum->academicYear->year . ' ' . $practicum->academicYear->semester . ')' }}
+                                </option>
+                            @endforeach
+                        </x-slot>
+                    </x-select-input>
+                    <x-input-error :messages="$errors->addEnrollment->get('practicum_id')" />
+                </div>
 
-            <div>
-                <x-input-label for="study_plan" :value="__('Study Plan (*.pdf)')" />
-                <x-file-input id="study_plan" name="study_plan" class="mt-1 block w-full" />
-                <x-input-error :messages="$errors->addEnrollment->get('study_plan')" />
-            </div>
+                <div>
+                    <x-input-label for="study_plan" :value="__('Study Plan (*.pdf)')" />
+                    <x-file-input id="study_plan" name="study_plan" class="mt-1 block w-full" />
+                    <x-input-error :messages="$errors->addEnrollment->get('study_plan')" />
+                </div>
 
-            <div>
-                <x-input-label for="transcript" :value="__('Transcript (*.pdf)')" />
-                <x-file-input id="transcript" name="transcript" class="mt-1 block w-full" />
-                <x-input-error :messages="$errors->addEnrollment->get('transcript')" />
-            </div>
+                <div>
+                    <x-input-label for="transcript" :value="__('Transcript (*.pdf)')" />
+                    <x-file-input id="transcript" name="transcript" class="mt-1 block w-full" />
+                    <x-input-error :messages="$errors->addEnrollment->get('transcript')" />
+                </div>
 
-            <div>
-                <x-input-label for="photo" :value="__('Photo (*.jpg, *.jpeg, *.png)')" />
-                <x-file-input id="photo" name="photo" class="mt-1 block w-full" />
-                <x-input-error :messages="$errors->addEnrollment->get('photo')" />
-            </div>
+                <div>
+                    <x-input-label for="photo" :value="__('Photo (*.jpg, *.jpeg, *.png)')" />
+                    <x-file-input id="photo" name="photo" class="mt-1 block w-full" />
+                    <x-input-error :messages="$errors->addEnrollment->get('photo')" />
+                </div>
 
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button @click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-                <x-primary-button class="ms-3">
-                    {{ __('Submit Enrollment') }}
-                </x-primary-button>
-            </div>
-        </form>
-    </x-modal>
+                <div class="mt-6 flex justify-end">
+                    <x-secondary-button x-on:click="$dispatch('close')">
+                        {{ __('Cancel') }}
+                    </x-secondary-button>
+                    <x-primary-button class="ms-3">
+                        {{ __('Submit Enrollment') }}
+                    </x-primary-button>
+                </div>
+            </form>
+        </x-modal>
+    @endcan
 </x-app-layout>
