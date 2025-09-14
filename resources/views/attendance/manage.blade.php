@@ -99,18 +99,21 @@
                                                         target="_blank"
                                                         class="block font-medium text-blue-600 hover:underline">
                                                         @if ($submission->is_late)
-                                                            <span class="text-yellow-600">Submitted Late</span>
+                                                            <span
+                                                                class="text-yellow-600">{{ __('Submitted Late') }}</span>
                                                         @else
-                                                            <span class="text-green-600">Submitted</span>
+                                                            <span class="text-green-600">{{ __('Submitted') }}</span>
                                                         @endif
                                                     </a>
                                                     <span
                                                         class="text-xs text-gray-500">{{ $submission->created_at->isoFormat('D MMM, HH:mm') }}</span>
                                                 @else
-                                                    <span class="font-medium text-red-600">Not Submitted</span>
+                                                    <span
+                                                        class="font-medium text-red-600">{{ __('Not Submitted') }}</span>
                                                 @endif
                                             @else
-                                                <span class="text-xs text-gray-400 italic">No assignment</span>
+                                                <span
+                                                    class="text-xs text-gray-400 italic">{{ __('No Assignment') }}</span>
                                             @endif
                                         </td>
                                     </tr>
