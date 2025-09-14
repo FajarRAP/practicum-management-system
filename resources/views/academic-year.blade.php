@@ -63,9 +63,10 @@
                                     <td class="py-4 px-6">
                                         @can('academic_year.edit')
                                             <button class="font-medium text-blue-600 hover:underline"
-                                                x-on:click.prevent="academicYear = {{ json_encode($academicYear->only(['id', 'year', 'semester', 'status'])) }};
-                                            action = '{{ route('academic-year.update', $academicYear) }}';
-                                            $dispatch('open-modal', 'edit-academic-year');">
+                                                x-on:click.prevent="
+                                                academicYear = {{ json_encode($academicYear->only(['id', 'year', 'semester', 'status'])) }};
+                                                action = '{{ route('academic-year.update', $academicYear) }}';
+                                                $dispatch('open-modal', 'edit-academic-year');">
                                                 {{ __('Edit') }}
                                             </button>
                                         @endcan
@@ -98,7 +99,7 @@
         </div>
     </div>
 
-    <x-modal name="add-academic-year" :show="$errors->default->isNotEmpty()" focusable>
+    <x-modal name="add-academic-year" focusable>
         <form method="POST" action="{{ route('academic-year.store') }}" class="p-6 flex flex-col gap-4">
             @csrf
             @method('POST')
@@ -156,7 +157,7 @@
         </form>
     </x-modal>
 
-    <x-modal name="edit-academic-year" :show="$errors->default->isNotEmpty()" focusable>
+    <x-modal name="edit-academic-year" focusable>
         <form method="POST" x-bind:action="action" class="p-6 flex flex-col gap-4">
             @csrf
             @method('PUT')
