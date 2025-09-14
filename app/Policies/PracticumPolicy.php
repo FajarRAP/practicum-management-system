@@ -18,40 +18,35 @@ class PracticumPolicy
     public function viewAny(User $user)
     {
         // Only assistants and lecturers can view any practicum
-        return $user->hasAnyRole(['assistant', 'lecturer', 'lab_tech']);
+        return $user->can('practicum.view');
     }
 
     public function create(User $user)
     {
         // Only assistants and lecturers can create practicum
-        return $user->hasAnyRole(['assistant', 'lecturer']);
-    }
-
-    public function update(User $user): bool
-    {
-        // Only assistants and lecturers can update practicum
-        return $user->hasAnyRole(['assistant', 'lecturer']);
+        return $user->can('practicum.create');
     }
 
     public function delete(User $user): bool
     {
         // Only assistants and lecturers can delete practicum
-        return $user->hasAnyRole(['assistant', 'lecturer']);
+        return $user->can('practicum.delete');
     }
 
     public function view(User $user, Practicum $practicum)
     {
         // Assistants, and lecturers can view any practicum
-        if ($user->hasAnyRole(['assistant', 'lecturer', 'lab_tech'])) {
+        if ($user->can('practicum.view')) {
             return true;
         }
 
         // Only Enrolled students can view the practicum
-        if ($user->hasRole('student')) {
-            return $user->enrollments()
-                ->where('practicum_id', $practicum->id)
-                // ->where('status', 'APPROVED')
-                ->exists();
+        if ($user->can('practicum.enter')) {
+            return true;
+            // return $user->enrollments()
+            //     ->where('practicum_id', $practicum->id)
+            //     // ->where('status', 'APPROVED')
+            //     ->exists();
         }
 
         return false;
