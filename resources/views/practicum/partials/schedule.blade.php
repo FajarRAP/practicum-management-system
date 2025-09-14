@@ -23,7 +23,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($practicum->schedules->sortBy('meeting_number') as $schedule)
+                @forelse ($practicum->schedules->sortByDesc('created_at') as $schedule)
                     <tr class="bg-white border-b hover:bg-gray-50">
                         <th scope="row" class="py-4 px-6 font-medium text-gray-900">
                             {{ $schedule->meeting_number }}
