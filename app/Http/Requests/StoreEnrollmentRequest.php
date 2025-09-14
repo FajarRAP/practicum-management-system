@@ -15,7 +15,7 @@ class StoreEnrollmentRequest extends FormRequest
     public function authorize(): bool
     {
         // Student must be fill identity number first
-        return !is_null(request()->user()->identity_number);
+        return request()->user()->identity_number !== null;
     }
 
     /**

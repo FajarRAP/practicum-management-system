@@ -2,58 +2,17 @@
 
 namespace App\Http\Controllers;
 
-// use App\Models\Course;
-// use App\Models\Day;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
-// class ScheduleController extends Controller
-// {
-//     public function index(Request $request)
-//     {
-//         $perPage = $request->query('per_page', 10);
-
-//         return view('assistants.schedule', [
-//             'schedules' => Schedule::paginate($perPage)
-//                 ->appends(['per_page' => $perPage]),
-//             'courses' => Course::all(),
-//             'days' => Day::all(),
-//         ]);
-//     }
-
-//     public function show(Request $request, Schedule $schedule)
-//     {
-//         return view('assistants.schedule-show', [
-//             'schedule' => $schedule,
-//         ]);
-//     }
-
-//     public function store(Request $request)
-//     {
-//         $validated = $request->validateWithBag('addSchedule', [
-//             'course' => ['required', 'exists:courses,id'],
-//             'day' => ['required', 'exists:days,id'],
-//             'shift' => ['nullable'],
-//             'time' => ['required', 'date_format:H:i'],
-//             'academic_year' => ['required', 'string', 'max:255'],
-//         ]);
-
-//         Schedule::create([
-//             'course_id' => $validated['course'],
-//             'day_id' => $validated['day'],
-//             'shift' => $validated['shift'],
-//             'time' => $validated['time'],
-//             'academic_year' => $validated['academic_year'],
-//         ]);
-
-//         return back()->with('success', 'Schedule created successfully.');
-//     }
-// }
 class ScheduleController extends Controller
 {
     public function store(Request $request)
     {
+        Gate::authorize('create', Schedule::class);
+
         $validated = $request->validateWithBag('addSchedule', [
             'practicum_id' => ['required', 'exists:practicums,id'],
             'meeting_number' => [
@@ -76,6 +35,8 @@ class ScheduleController extends Controller
 
     public function update(Request $request, Schedule $schedule)
     {
+        Gate::authorize('update', Schedule::class);
+
         $validated = $request->validateWithBag('updateSchedule', [
             'meeting_number' => [
                 'required',
@@ -97,11 +58,45 @@ class ScheduleController extends Controller
 
     public function destroy(Schedule $schedule)
     {
+        Gate::authorize('delete', Schedule::class);
+
         try {
             $schedule->delete();
             return back()->with('success', 'Schedule deleted successfully.');
         } catch (\Throwable $th) {
             return back()->with('error', 'Failed to delete schedule. It may have related data that prevents deletion.');
         }
+    }
+
+    public function approve(Request $request, Schedule $schedule)
+    {
+        Gate::authorize('approve', Schedule::class);
+
+        $schedule->update([
+            'status' => 'APPROVED',
+            'processed_by' => $request->user()->id,
+            'processed_at' => now(),
+            'rejection_reason' => null
+        ]);
+
+        return back()->with('success', 'Schedule has been approved.');
+    }
+
+    public function reject(Request $request, Schedule $schedule)
+    {
+        Gate::authorize('reject', Schedule::class);
+
+        $request->validateWithBag('rejectSchedule', [
+            'rejection_reason' => ['nullable', 'string', 'max:500']
+        ]);
+
+        $schedule->update([
+            'status' => 'REJECTED',
+            'processed_by' => $request->user()->id,
+            'processed_at' => now(),
+            'rejection_reason' => $request->rejection_reason
+        ]);
+
+        return back()->with('success', 'Schedule has been rejected.');
     }
 }

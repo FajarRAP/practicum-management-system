@@ -12,6 +12,11 @@ class Assignment extends Model
     {
         return $this->belongsTo(Practicum::class);
     }
+    
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
 
     public function submissions()
     {

@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout x-data="{ editSchedule: {}, editAssignment: {}, action: '' }">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Practicum Detail: ') . $practicum->course->name }}
@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" x-data="{ editSchedule: {}, editAssignment: {}, action: '' }">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="md:col-span-1">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
@@ -53,23 +53,22 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" x-data="{ activeTab: 'participant' }">
                         <div class="border-b border-gray-200">
                             <nav class="-mb-px flex space-x-6 overflow-x-auto px-6" aria-label="Tabs">
-                                {{-- Tombol Tab --}}
-                                <button @click="activeTab = 'participant'"
+                                <button x-on:click="activeTab = 'participant'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'participant' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Participants') }}
                                 </button>
-                                <button @click="activeTab = 'schedule'"
+                                <button x-on:click="activeTab = 'schedule'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'schedule' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Schedule & Attendance') }}
                                 </button>
-                                <button @click="activeTab = 'announcement'"
+                                {{-- <button x-on:click="activeTab = 'announcement'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'announcement' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Announcements') }}
-                                </button>
-                                <button @click="activeTab = 'assignment'"
+                                </button> --}}
+                                <button x-on:click="activeTab = 'assignment'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'assignment' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Assignments') }}
@@ -86,10 +85,9 @@
                                 @include('practicum.partials.schedule', ['practicum' => $practicum])
                             </div>
 
-                            <div x-show="activeTab === 'announcement'">
-                                {{-- Di sini Anda akan @include partial untuk manajemen announcement --}}
+                            {{-- <div x-show="activeTab === 'announcement'">
                                 <h3 class="text-lg">Manajemen Pengumuman</h3>
-                            </div>
+                            </div> --}}
 
                             <div x-show="activeTab === 'assignment'">
                                 @include('practicum.partials.assignments', ['practicum' => $practicum])
@@ -130,13 +128,21 @@
                 </form>
             </x-modal> --}}
 
-            @include('practicum.partials.add-schedule-modal', ['practicum' => $practicum])
-
-            @include('practicum.partials.edit-schedule-modal', ['practicum' => $practicum])
-
-            @include('practicum.partials.add-assignment-modal', ['practicum' => $practicum])
-
-            @include('practicum.partials.edit-assignment-modal', ['practicum' => $practicum])
         </div>
     </div>
+    @can('schedule.add')
+        @include('practicum.partials.add-schedule-modal', ['practicum' => $practicum])
+    @endcan
+    @can('schdeule.edit')
+        @include('practicum.partials.edit-schedule-modal', ['practicum' => $practicum])
+    @endcan
+    @can('assignment.add')
+        @include('practicum.partials.add-assignment-modal', ['practicum' => $practicum])
+    @endcan
+    @can('assignment.edit')
+        @include('practicum.partials.edit-assignment-modal', ['practicum' => $practicum])
+    @endcan
+    @can('schedule.approve')
+        @include('practicum.partials.reject-schedule-modal')
+    @endcan
 </x-app-layout>

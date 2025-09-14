@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="mt-6 flex justify-end">
-            <x-secondary-button x-on:click="console.log(action)">{{ __('Cancel') }}</x-secondary-button>
+            <x-secondary-button x-on:click="$dispatch('close')">{{ __('Cancel') }}</x-secondary-button>
             <x-primary-button class="ms-3">{{ __('Save Changes') }}</x-primary-button>
         </div>
     </form>

@@ -7,9 +7,11 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-4">
-            <x-primary-button class="self-end" x-data @click="$dispatch('open-modal', 'add-academic-year')">
-                {{ __('Add Academic Year') }}
-            </x-primary-button>
+            @can('academic_year.add')
+                <x-primary-button class="self-end" x-data x-on:click="$dispatch('open-modal', 'add-academic-year')">
+                    {{ __('Add Academic Year') }}
+                </x-primary-button>
+            @endcan
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-96 flex flex-col justify-between">
@@ -58,22 +60,26 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="py-4 px-6 flex items-center space-x-3">
-                                        <button class="font-medium text-blue-600 hover:underline"
-                                            x-on:click.prevent="academicYear = {{ json_encode($academicYear->only(['id', 'year', 'semester', 'status'])) }};
+                                    <td class="py-4 px-6">
+                                        @can('academic_year.edit')
+                                            <button class="font-medium text-blue-600 hover:underline"
+                                                x-on:click.prevent="academicYear = {{ json_encode($academicYear->only(['id', 'year', 'semester', 'status'])) }};
                                             action = '{{ route('academic-year.update', $academicYear) }}';
                                             $dispatch('open-modal', 'edit-academic-year');">
-                                            {{ __('Edit') }}
-                                        </button>
+                                                {{ __('Edit') }}
+                                            </button>
+                                        @endcan
 
-                                        <form action="{{ route('academic-year.destroy', $academicYear) }}"
-                                            method="POST"
-                                            onsubmit="return confirm('{{ __('Are you sure you want to delete this data?') }}');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="font-medium text-red-600 hover:underline">{{ __('Delete') }}</button>
-                                        </form>
+                                        @can('academic_year.delete')
+                                            <form action="{{ route('academic-year.destroy', $academicYear) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('{{ __('Are you sure you want to delete this data?') }}');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="font-medium text-red-600 hover:underline">{{ __('Delete') }}</button>
+                                            </form>
+                                        @endcan
                                     </td>
                                 </tr>
                             @empty

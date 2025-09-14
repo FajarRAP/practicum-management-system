@@ -34,6 +34,7 @@
                                     <th class="py-3 px-2 text-center">{{ __('Report') }}</th>
                                     <th class="py-3 px-2 text-center">{{ __('Active') }}</th>
                                     <th class="py-3 px-2 text-center">{{ __('Module') }}</th>
+                                    <th class="py-3 px-4 text-center">{{ __('Assignment Submission') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -86,6 +87,34 @@
                                                 name="scores[{{ $enrollment->user_id }}][module_score]"
                                                 class="w-20 text-sm" min="0" max="100"
                                                 value="{{ $attendance->module_score ?? '' }}" />
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            @if ($schedule->assignment)
+                                                @php
+                                                    $submission = $submissions->get($enrollment->user_id);
+                                                @endphp
+
+                                                @if ($submission)
+                                                    <a href="{{ Storage::url($submission->file_path) }}"
+                                                        target="_blank"
+                                                        class="block font-medium text-blue-600 hover:underline">
+                                                        @if ($submission->is_late)
+                                                            <span
+                                                                class="text-yellow-600">{{ __('Submitted Late') }}</span>
+                                                        @else
+                                                            <span class="text-green-600">{{ __('Submitted') }}</span>
+                                                        @endif
+                                                    </a>
+                                                    <span
+                                                        class="text-xs text-gray-500">{{ $submission->created_at->isoFormat('D MMM, HH:mm') }}</span>
+                                                @else
+                                                    <span
+                                                        class="font-medium text-red-600">{{ __('Not Submitted') }}</span>
+                                                @endif
+                                            @else
+                                                <span
+                                                    class="text-xs text-gray-400 italic">{{ __('No Assignment') }}</span>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty

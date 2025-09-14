@@ -16,52 +16,45 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    @hasrole('assistant')
+                    @can('academic_year.view')
                         <x-nav-link :href="route('academic-year.index')" :active="request()->routeIs('academic-year.index')">
                             {{ __('Academic Year') }}
                         </x-nav-link>
+                    @endcan
+                    @can('shift.view')
                         <x-nav-link :href="route('shift.index')" :active="Str::of(request()->path())->contains('shift')">
                             {{ __('Shift') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('practicum.index')" :active="Str::of(request()->path())->contains('/practicum')">
-                            {{ __('Practicum') }}
-                        </x-nav-link>
-                    @endhasrole
-                    @hasrole('student')
+                    @endcan
+                    @can('practicum.enroll')
                         <x-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')">
                             {{ __('Enrollment') }}
                         </x-nav-link>
+                    @endcan
+                    @unlessrole('super_admin')
                         <x-nav-link :href="route('my-practicum.index')" :active="request()->routeIs('my-practicum.index') ||
                             Str::of(request()->path())->contains('/practicum')">
                             {{ __('My Practicum') }}
                         </x-nav-link>
-                    @endhasrole
-                    {{-- <x-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
-                        {{ __('Announcement') }}
-                    </x-nav-link> --}}
-                    {{-- <x-nav-link :href="route('assignment.index')" :active="request()->routeIs('assignment.index') ||
-                        request()->routeIs('assignment-submission.index')">
-                        {{ __('Assignment') }}
-                    </x-nav-link> --}}
-                    @hasanyrole('assistant|lecturer|lab_tech')
-                        {{-- <x-nav-link :href="route('schedule.index')" :active="request()->routeIs('schedule.index') || request()->routeIs('schedule.show')">
-                            {{ __('Schedule') }}
-                        </x-nav-link> --}}
-                        {{-- <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index') || request()->routeIs('attendance.show')">
-                            {{ __('Attendance') }}
-                        </x-nav-link> --}}
-                    @endhasanyrole
-                    {{-- @hasanyrole('student|assistant|lecturer')
-                        <x-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') ||
-                            request()->routeIs('assessment.show') ||
-                            request()->routeIs('assessment.final-score')">
-                            {{ __('Assessment') }}
+                    @endunlessrole
+                    @can('practicum.view')
+                        <x-nav-link :href="route('practicum.index')" :active="Str::of(request()->path())->contains('/practicum')">
+                            {{ __('Practicum') }}
                         </x-nav-link>
-                    @endhasanyrole --}}
-                    <x-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
-                        {{ __('Archive') }}
-                    </x-nav-link>
-
+                    @endcan
+                    @can('archive.view')
+                        <x-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
+                            {{ __('Archive') }}
+                        </x-nav-link>
+                    @endcan
+                    @can('manage_users')
+                        <x-nav-link :href="route('role-permission.index')" :active="request()->routeIs('role-permission.index')">
+                            {{ __('Role Management') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                            {{ __('User Management') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -105,7 +98,7 @@
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open"
+                <button x-on:click="open = ! open"
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex"
@@ -125,27 +118,45 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('announcement.index')" :active="request()->routeIs('announcement.index')">
-                {{ __('Announcement') }}
-            </x-responsive-nav-link>
-            @hasrole('student')
+            @can('academic_year.view')
+                <x-responsive-nav-link :href="route('academic-year.index')" :active="request()->routeIs('academic-year.index')">
+                    {{ __('Academic Year') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('shift.view')
+                <x-responsive-nav-link :href="route('shift.index')" :active="Str::of(request()->path())->contains('shift')">
+                    {{ __('Shift') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('practicum.enroll')
                 <x-responsive-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')">
                     {{ __('Enrollment') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.index')">
+            @endcan
+            @can('practicum.enter')
+                <x-responsive-nav-link :href="route('my-practicum.index')" :active="request()->routeIs('my-practicum.index') ||
+                    Str::of(request()->path())->contains('/practicum')">
                     {{ __('My Practicum') }}
                 </x-responsive-nav-link>
-            @endhasrole
-            @hasanyrole('student|assistant|lecturer')
-                <x-responsive-nav-link :href="route('assessment.index')" :active="request()->routeIs('assessment.index') ||
-                    request()->routeIs('assessment.show') ||
-                    request()->routeIs('assessment.final-score')">
-                    {{ __('Assessment') }}
+            @endcan
+            @can('practicum.view')
+                <x-responsive-nav-link :href="route('practicum.index')" :active="Str::of(request()->path())->contains('/practicum')">
+                    {{ __('Practicum') }}
                 </x-responsive-nav-link>
-            @endhasanyrole
-            <x-responsive-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
-                {{ __('Archive') }}
-            </x-responsive-nav-link>
+            @endcan
+            @can('archive.view')
+                <x-responsive-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
+                    {{ __('Archive') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('manage_users')
+                <x-responsive-nav-link :href="route('role-permission.index')" :active="request()->routeIs('role-permission.index')">
+                    {{ __('Role Management') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                    {{ __('User Management') }}
+                </x-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->

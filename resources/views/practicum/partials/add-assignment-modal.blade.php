@@ -6,6 +6,20 @@
         <h2 class="text-lg font-medium text-gray-900">{{ __('Create New Assignment') }}</h2>
         <div class="mt-6 space-y-4">
             <div>
+                <x-input-label for="schedule_id" value="{{ __('Schedule') }}" />
+                <x-select-input id="schedule_id" name="schedule_id" class="mt-1 block w-full">
+                    <x-slot name="options">
+                        <option value="" disabled selected>{{ __('Select Schedule') }}</option>
+                        @foreach ($practicum->schedules as $schedule)
+                            <option value="{{ $schedule->id }}" @if (old('schedule_id') == $schedule->id) selected @endif>
+                                {{ __('Schedule ') }} {{ $schedule->meeting_number }} - {{ $schedule->topic }}
+                            </option>
+                        @endforeach
+                    </x-slot>
+                </x-select-input>
+                <x-input-error :messages="$errors->addAssignment->get('schedule_id')" />
+            </div>
+            <div>
                 <x-input-label for="title" value="{{ __('Title') }}" />
                 <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title')"
                     required />

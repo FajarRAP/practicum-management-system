@@ -23,14 +23,24 @@ class AttendanceController extends Controller
             'practicum.enrollments.user',
             'practicum.course',
             'attendances',
+            'assignment.submissions'
         ]);
 
         $attendances = $schedule->attendances->keyBy('user_id');
 
+        $submissions = collect();
+        if ($schedule->assignment) {
+            $submissions = $schedule->assignment->submissions->keyBy('user_id');
+        }
+
+        $enrollments = $schedule->practicum->enrollments;
+
         return view('attendance.manage', [
             'attendances' => $attendances,
+            'enrollments' => $enrollments,
             'practicum' => $practicum,
             'schedule' => $schedule,
+            'submissions' => $submissions,
         ]);
     }
 
