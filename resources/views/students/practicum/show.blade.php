@@ -31,7 +31,7 @@
                         </div>
                         <div class="mt-6 border-t pt-6">
                             <h4 class="text-base font-medium text-gray-900 mb-4">
-                                My Final Scores
+                                {{ __('My Final Scores') }}
                             </h4>
 
                             @if ($myEnrollment && $myEnrollment->final_score !== null)
@@ -86,22 +86,22 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" x-data="{ activeTab: 'schedule' }">
                         <div class="border-b border-gray-200">
                             <nav class="-mb-px flex space-x-6 overflow-x-auto px-6" aria-label="Tabs">
-                                <button @click="activeTab = 'schedule'"
+                                <button x-on:click="activeTab = 'schedule'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'schedule' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Schedule') }}
                                 </button>
-                                {{-- <button @click="activeTab = 'announcement'"
+                                {{-- <button x-on:click="activeTab = 'announcement'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'announcement' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Announcements') }}
                                 </button> --}}
-                                <button @click="activeTab = 'assignment'"
+                                <button x-on:click="activeTab = 'assignment'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'assignment' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Assignments') }}
                                 </button>
-                                {{-- <button @click="activeTab = 'module'"
+                                {{-- <button x-on:click="activeTab = 'module'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'module' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Modules') }}
