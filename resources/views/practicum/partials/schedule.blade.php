@@ -3,11 +3,11 @@
         <h3 class="text-lg font-medium text-gray-900">
             {{ __('Schedule Management') }}
         </h3>
-        @hasrole('assistant')
-            <x-primary-button x-data @click="$dispatch('open-modal', 'add-schedule-modal')">
+        @can('schedule.add')
+            <x-primary-button x-data x-on:click="$dispatch('open-modal', 'add-schedule-modal')">
                 {{ __('Add Schedule') }}
             </x-primary-button>
-        @endhasrole
+        @endcan
     </div>
 
     <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
@@ -49,16 +49,23 @@
                                     title="{{ $schedule->rejection_reason }}">{{ __('Rejected') }}</span>
                             @endif
                         </td>
-                        <td class="py-4 px-6 flex flex-col items-center text-center gap-1">
-                            @hasrole('assistant')
+                        <td class="py-4 px-6 flex flex-col items-end text-end gap-1">
+                            @can('manage_journal')
                                 @if ($schedule->status == 'APPROVED')
                                     <a href="{{ route('attendance.index', [$practicum, $schedule]) }}"
                                         class="font-medium text-indigo-600 hover:underline text-xs">
                                         {{ __('Manage Journal') }}</a>
                                 @endif
+                            @endcan
+                            @can('schedule.edit')
                                 <button
-                                    x-on:click.prevent="editSchedule = {{ $schedule }}; action = '{{ route('schedule.update', $schedule) }}'; $dispatch('open-modal', 'edit-schedule-modal');"
+                                    x-on:click.prevent="
+                                    editSchedule = {{ $schedule }}; 
+                                    action = '{{ route('schedule.update', $schedule) }}'; 
+                                    $dispatch('open-modal', 'edit-schedule-modal');"
                                     class="font-medium text-blue-600 hover:underline text-xs">{{ __('Edit') }}</button>
+                            @endcan
+                            @can('schedule.delete')
                                 <form action="{{ route('schedule.destroy', $schedule) }}" method="POST"
                                     onsubmit="return confirm('Are you sure you want to delete this schedule?');">
                                     @csrf
@@ -66,8 +73,8 @@
                                     <button type="submit"
                                         class="font-medium text-red-600 hover:underline text-xs">{{ __('Delete') }}</button>
                                 </form>
-                            @endhasrole
-                            @hasrole('lab_tech')
+                            @endcan
+                            @can('schedule.approve')
                                 <form action="{{ route('schedule.approve', $schedule) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
@@ -75,12 +82,13 @@
                                         class="font-medium text-green-600 hover:underline text-xs">{{ __('Approve') }}</button>
                                 </form>
                                 <button
-                                    x-on:click.prevent="action = '{{ route('schedule.reject', $schedule) }}';
-                                        $dispatch('open-modal', 'reject-schedule-modal');"
+                                    x-on:click.prevent="
+                                    action = '{{ route('schedule.reject', $schedule) }}';
+                                    $dispatch('open-modal', 'reject-schedule-modal');"
                                     class="font-medium text-red-600 hover:underline text-xs">
                                     {{ __('Reject') }}
                                 </button>
-                            @endhasrole
+                            @endcan
                         </td>
                     </tr>
                 @empty
