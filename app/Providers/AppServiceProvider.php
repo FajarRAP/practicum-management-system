@@ -5,12 +5,14 @@ namespace App\Providers;
 use App\Models\AcademicYear;
 use App\Models\Practicum;
 use App\Models\Schedule;
+use App\Models\User;
 use App\Policies\PracticumPolicy;
 use App\Policies\SchedulePolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View as FacadeView;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Permission;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +32,12 @@ class AppServiceProvider extends ServiceProvider
         FacadeView::composer('layouts.app', function (View $view) {
             $activeAcademicYear = AcademicYear::where('status', 'ACTIVE')->first();
             $view->with('activeAcademicYear', $activeAcademicYear);
+        });
+
+        Gate::before(function (User $user, string $ability) {
+            if ($user->hasRole('super_admin')) {
+                return true;
+            }
         });
 
         Gate::policy(Practicum::class, PracticumPolicy::class);
