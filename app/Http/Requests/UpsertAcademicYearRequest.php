@@ -23,7 +23,7 @@ class UpsertAcademicYearRequest extends FormRequest
      */
     public function rules(): array
     {
-        $academicYear = $this->route('academicYear');
+        $academicYear = $this->route('academic_year');
         $academicYearId = $academicYear?->id;
 
         return [
@@ -50,7 +50,7 @@ class UpsertAcademicYearRequest extends FormRequest
 
                 if ($status === 'ACTIVE') {
                     $query = AcademicYear::where('status', 'ACTIVE');
-                    $academicYear = $this->route('academicYear');
+                    $academicYear = $this->route('academic_year');
 
                     // Jika ini adalah proses update, kecualikan ID saat ini dari pengecekan
                     if ($academicYear) {
