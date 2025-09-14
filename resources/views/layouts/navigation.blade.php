@@ -31,12 +31,12 @@
                             {{ __('Enrollment') }}
                         </x-nav-link>
                     @endcan
-                    @unlessrole('super_admin')
+                    @can('practicum.enter')
                         <x-nav-link :href="route('my-practicum.index')" :active="request()->routeIs('my-practicum.index') ||
                             Str::of(request()->path())->contains('/practicum')">
                             {{ __('My Practicum') }}
                         </x-nav-link>
-                    @endunlessrole
+                    @endcan
                     @can('practicum.view')
                         <x-nav-link :href="route('practicum.index')" :active="Str::of(request()->path())->contains('/practicum')">
                             {{ __('Practicum') }}
