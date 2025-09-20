@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpsertAcademicYearRequest;
 use App\Models\AcademicYear;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AcademicYearController extends Controller
 {
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', AcademicYear::class);
+
         $perPage = $request->query('per_page', 10);
 
         return view('academic-year.index', [
@@ -33,6 +36,8 @@ class AcademicYearController extends Controller
 
     public function destroy(Request $request, AcademicYear $academicYear)
     {
+        Gate::authorize('delete', $academicYear);
+
         try {
             $academicYear->delete();
             return redirect()->route('academic-year.index')->with('success', 'Academic Year deleted successfully');
