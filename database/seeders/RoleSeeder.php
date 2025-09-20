@@ -14,7 +14,7 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ['student', 'assistant', 'lecturer', 'programming_lecturer', 'apsi_lecturer', 'lab_tech'];
+        $roles = ['student', 'assistant', 'lecturer', 'lab_tech'];
         $viewPermissions = [
             'academic_year.view',
             'archive.view',
@@ -60,9 +60,6 @@ class RoleSeeder extends Seeder
             // student
             'practicum.enroll',
             'practicum.enter',
-            // lecturer
-            'teach_isad',
-            'teach_programming',
         ];
 
         foreach ($permissions as $permission) {
@@ -104,21 +101,7 @@ class RoleSeeder extends Seeder
             'scores.calculate',
         ]);
 
-        Role::create(['name' => 'lecturer'])->givePermissionTo([
-            'teach_isad',
-            'teach_programming',
-            ...$viewPermissions,
-        ]);
-
-        Role::create(['name' => 'programming_lecturer'])->givePermissionTo([
-            'teach_programming',
-            ...$viewPermissions,
-        ]);
-
-        Role::create(['name' => 'apsi_lecturer'])->givePermissionTo([
-            'teach_isad',
-            ...$viewPermissions,
-        ]);
+        Role::create(['name' => 'lecturer'])->givePermissionTo($viewPermissions);
 
         Role::create(['name' => 'lab_tech']);
     }
