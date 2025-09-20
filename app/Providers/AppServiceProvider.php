@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Models\AcademicYear;
+use App\Models\Archive;
 use App\Models\Practicum;
 use App\Models\Schedule;
 use App\Models\User;
 use App\Policies\AcademicYearPolicy;
+use App\Policies\ArchivePolicy;
 use App\Policies\PracticumPolicy;
 use App\Policies\SchedulePolicy;
 use Illuminate\Support\Facades\Gate;
@@ -43,5 +45,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Practicum::class, PracticumPolicy::class);
         Gate::policy(Schedule::class, SchedulePolicy::class);
         Gate::policy(AcademicYear::class, AcademicYearPolicy::class);
+        Gate::policy(Archive::class, ArchivePolicy::class);
     }
 }
