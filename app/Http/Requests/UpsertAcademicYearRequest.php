@@ -13,7 +13,15 @@ class UpsertAcademicYearRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('academic_year.add');
+        }
+
+        if ($this->method() === 'PUT') {
+            return $this->user()->can('academic_year.edit');
+        }
+
+        return false;
     }
 
     /**
