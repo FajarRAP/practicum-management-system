@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Assignment;
 use App\Models\Practicum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class AssignmentController extends Controller
 {
     public function store(Request $request)
     {
-        // Authorize here
+        Gate::authorize('create', Assignment::class);
 
         $validated = $request->validateWithBag('addAssignment', [
             'practicum_id' => ['required', 'exists:practicums,id'],
@@ -33,7 +34,7 @@ class AssignmentController extends Controller
 
     public function update(Request $request, Practicum $practicum, Assignment $assignment)
     {
-        // Authorize here
+        Gate::authorize('update', $assignment);
 
         $validated = $request->validateWithBag('updateAssignment', [
             'title' => ['required', 'string', 'max:255'],
@@ -57,7 +58,7 @@ class AssignmentController extends Controller
 
     public function destroy(Practicum $practicum, Assignment $assignment)
     {
-        // Authorize here
+        Gate::authorize('delete', $assignment);
 
         try {
             if ($assignment->file_path) {
