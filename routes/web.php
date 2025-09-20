@@ -29,8 +29,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () {
-    Route::get('practicum/{practicum}', [PracticumController::class, 'show'])->name('practicum.show');
-    Route::middleware(['hasRole:lecturer,assistant,apsi_lecturer,programming_lecturer'])->group(function () {
+
+    Route::middleware(['hasRole:lecturer,assistant'])->group(function () {
+        Route::post('/archive', [ArchiveController::class, 'store'])->name('archive.store');
         Route::resource('academic-year', AcademicYearController::class)->except(['create', 'edit']);
         Route::resource('practicum', PracticumController::class)->except(['create', 'edit', 'show']);
         Route::resource('shift', ShiftController::class)->except(['create', 'edit']);
@@ -74,8 +75,9 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
         Route::post('/roles/{role}/permissions', [RolePermissionController::class, 'updatePermissions'])->name('role.permissions.update');
     });
 
+    Route::get('practicum/{practicum}', [PracticumController::class, 'show'])->name('practicum.show');
+
     Route::get('/archive', [ArchiveController::class, 'index'])->name('archive.index');
-    Route::post('/archive', [ArchiveController::class, 'store'])->name('archive.store');
 });
 
 require __DIR__ . '/auth.php';
