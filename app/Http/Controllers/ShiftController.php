@@ -14,7 +14,7 @@ class ShiftController extends Controller
             ->paginate($perPage)
             ->appends(['per_page' => $perPage]);
 
-        return view('shift', [
+        return view('shift.index', [
             'shifts' => $shifts,
         ]);
     }
