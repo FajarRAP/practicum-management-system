@@ -50,11 +50,11 @@
                             @endif
                         </td>
                         <td class="py-4 px-6 flex flex-col items-end text-end gap-1">
-                            @can('manage_journal')
+                            @can('manage_records')
                                 @if ($schedule->status == 'APPROVED')
                                     <a href="{{ route('attendance.index', [$practicum, $schedule]) }}"
                                         class="font-medium text-indigo-600 hover:underline text-xs">
-                                        {{ __('Manage Journal') }}</a>
+                                        {{ __('Manage Records') }}</a>
                                 @endif
                             @endcan
                             @can('schedule.edit')

@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Meeting Journal') }}
+                {{ __('Meeting Record') }}
             </h2>
             <p class="text-sm text-gray-500 mt-1">
                 {{ $schedule->practicum->course->name }} - {{ __('Meeting') }} {{ $schedule->meeting_number }}
@@ -129,7 +129,7 @@
                 </div>
 
                 <div class="mt-4 flex justify-end">
-                    <x-primary-button>{{ __('Save Journal') }}</x-primary-button>
+                    <x-primary-button>{{ __('Save Record') }}</x-primary-button>
                 </div>
             </form>
         </div>

@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-4">
     <h3 class="text-lg font-medium text-gray-900">
-        {{ __('Practicum Schedule & Journal') }}</h3>
+        {{ __('Practicum Schedule & Record') }}</h3>
     <div class="overflow-x-auto relative shadow-md sm:rounded-lg max-h-80">
         <table class="w-full text-sm text-left text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -8,7 +8,7 @@
                     <th class="py-3 px-6">{{ __('Meeting') }}</th>
                     <th class="py-3 px-6">{{ __('Topic') }}</th>
                     <th class="py-3 px-6">{{ __('Date & Time') }}</th>
-                    <th class="py-3 px-6 text-center">{{ __('My Journal') }}</th>
+                    <th class="py-3 px-6 text-center">{{ __('My Record') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,8 +30,10 @@
 
                             @if ($attendance)
                                 <button class="font-medium text-indigo-600 hover:underline text-sm"
-                                    x-on:click.prevent="myJournal = {{ json_encode($attendance) }};
-                                                                $dispatch('open-modal', 'view-journal-modal');">
+                                    x-on:click.prevent="
+                                    myRecord = {{ json_encode($attendance) }};
+                                    $dispatch('open-modal', 'view-record-modal');
+                                    ">
                                     {{ __('View Details') }}
                                 </button>
                             @else

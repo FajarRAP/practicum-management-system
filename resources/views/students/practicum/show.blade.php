@@ -1,4 +1,4 @@
-<x-app-layout x-data="{ assignment: {}, myJournal: {}, action: '' }">
+<x-app-layout x-data="{ assignment: {}, myRecord: {}, action: '' }">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Practicum Details: ') . $practicum->course->name }}
@@ -91,21 +91,11 @@
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Schedule') }}
                                 </button>
-                                {{-- <button x-on:click="activeTab = 'announcement'"
-                                    :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'announcement' }"
-                                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
-                                    {{ __('Announcements') }}
-                                </button> --}}
                                 <button x-on:click="activeTab = 'assignment'"
                                     :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'assignment' }"
                                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Assignments') }}
                                 </button>
-                                {{-- <button x-on:click="activeTab = 'module'"
-                                    :class="{ 'border-indigo-500 text-indigo-600': activeTab === 'module' }"
-                                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">
-                                    {{ __('Modules') }}
-                                </button> --}}
                             </nav>
                         </div>
 
@@ -117,20 +107,12 @@
                                 ])
                             </div>
 
-                            {{-- <div x-show="activeTab === 'announcement'">
-                                <h3 class="text-lg">{{ __('Announcements') }}</h3>
-                            </div> --}}
-
                             <div x-show="activeTab === 'assignment'">
                                 @include('students.practicum.partials.assignments', [
                                     'practicum' => $practicum,
                                     'myEnrollment' => $myEnrollment,
                                 ])
                             </div>
-
-                            {{-- <div x-show="activeTab === 'module'">
-                                <h3 class="text-lg">{{ __('Modules & Resources Content') }}</h3>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -140,5 +122,5 @@
 
     @include('students.practicum.partials.submit-assignment-modal')
 
-    @include('students.practicum.partials.view-journal-modal')
+    @include('students.practicum.partials.view-record-modal')
 </x-app-layout>

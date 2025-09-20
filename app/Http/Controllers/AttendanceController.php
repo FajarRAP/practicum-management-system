@@ -81,6 +81,6 @@ class AttendanceController extends Controller
             );
         }
 
-        return back()->with('success', 'Meeting journal has been successfully saved.');
+        return back()->with('success', 'Meeting records have been successfully saved.');
     }
 }
