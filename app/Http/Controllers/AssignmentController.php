@@ -39,15 +39,15 @@ class AssignmentController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'deadline' => ['required', 'date'],
-            'file' => ['nullable', 'file', 'mimes:pdf,zip,doc,docx', 'max:10240'],
+            'file_path' => ['nullable', 'file', 'mimes:pdf,zip,doc,docx', 'max:10240'],
         ]);
 
-        if ($request->hasFile('file')) {
+        if ($request->hasFile('file_path')) {
             if ($assignment->file_path) {
                 Storage::disk('public')->delete($assignment->file_path);
             }
 
-            $validated['file_path'] = $request->file('file')->store('assignments', 'public');
+            $validated['file_path'] = $request->file('file_path')->store('assignments', 'public');
         }
 
         $assignment->update($validated);

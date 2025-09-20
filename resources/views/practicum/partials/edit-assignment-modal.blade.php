@@ -21,7 +21,7 @@
             </div>
             <div>
                 <x-input-label for="edit_file" value="{{ __('New Attachment (Optional)') }}" />
-                <x-file-input id="edit_file" name="file" class="mt-1 block w-full" />
+                <x-file-input id="edit_file" name="file_path" class="mt-1 block w-full" />
                 <p class="mt-1 text-xs text-gray-500">
                     {{ __('Uploading a new file will replace the old one.') }}</p>
             </div>

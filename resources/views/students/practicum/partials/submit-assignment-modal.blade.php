@@ -10,7 +10,6 @@
             {{ __('Make sure your file is correct before submitting. You cannot change the file after submission.') }}
         </p>
 
-        {{-- Hidden input untuk mengirim assignment_id --}}
         <input type="hidden" name="assignment_id" x-bind:value="assignment.id">
 
         <div class="mt-6 space-y-4">
@@ -19,12 +18,12 @@
                 <x-file-input id="submission_file" name="submission_file" class="mt-1 block w-full" required />
                 <x-input-error :messages="$errors->addSubmission->get('submission_file')" class="mt-2" />
             </div>
-            <div>
+            {{-- <div>
                 <x-input-label for="comments" value="{{ __('Comments (Optional)') }}" />
                 <x-textarea id="comments" name="comments" rows="3" class="mt-1 block w-full"
                     placeholder="Add any comments for the assistant...">{{ old('comments') }}</x-textarea>
                 <x-input-error :messages="$errors->addSubmission->get('comments')" class="mt-2" />
-            </div>
+            </div> --}}
         </div>
 
         <div class="mt-6 flex justify-end">

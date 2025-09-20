@@ -39,7 +39,7 @@
             </div>
             <div>
                 <x-input-label for="file" value="{{ __('Attachment (Optional)') }}" />
-                <x-file-input id="file" name="file" class="mt-1 block w-full" />
+                <x-file-input id="file" name="file_path" class="mt-1 block w-full" />
                 <x-input-error :messages="$errors->addAssignment->get('file')" class="mt-2" />
             </div>
         </div>
