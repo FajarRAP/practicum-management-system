@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () {
     Route::get('practicum/{practicum}', [PracticumController::class, 'show'])->name('practicum.show');
-    Route::middleware(['hasRole:lecturer,assistant,lab_tech,isad_lecturer,programming_lecturer'])->group(function () {
+    Route::middleware(['hasRole:lecturer,assistant,apsi_lecturer,programming_lecturer'])->group(function () {
         Route::resource('academic-year', AcademicYearController::class)->except(['create', 'edit']);
         Route::resource('practicum', PracticumController::class)->except(['create', 'edit', 'show']);
         Route::resource('shift', ShiftController::class)->except(['create', 'edit']);
@@ -68,9 +68,6 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
     Route::middleware(['hasRole:lab_tech'])->group(function () {
         Route::patch('/schedule/{schedule}/approve', [ScheduleController::class, 'approve'])->name('schedule.approve');
         Route::patch('/schedule/{schedule}/reject', [ScheduleController::class, 'reject'])->name('schedule.reject');
-    });
-
-    Route::middleware(['hasRole:super_admin'])->group(function () {
         Route::resource('users', UserController::class)->only(['index', 'update']);
         Route::get('/role-management', [RolePermissionController::class, 'index'])->name('role-permission.index');
         Route::post('/roles/{role}/permissions', [RolePermissionController::class, 'updatePermissions'])->name('role.permissions.update');

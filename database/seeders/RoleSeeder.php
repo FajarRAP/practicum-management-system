@@ -14,7 +14,7 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ['student', 'assistant', 'lecturer', 'programming_lecturer', 'isad_lecturer', 'lab_tech', 'super_admin'];
+        $roles = ['student', 'assistant', 'lecturer', 'programming_lecturer', 'apsi_lecturer', 'lab_tech'];
         $viewPermissions = [
             'academic_year.view',
             'archive.view',
@@ -48,13 +48,14 @@ class RoleSeeder extends Seeder
             'schedule.add',
             'schedule.edit',
             'schedule.delete',
-            'manage_journal',
+            'manage_records',
             'assignment.add',
             'assignment.edit',
             'assignment.delete',
             'scores.calculate',
             // lab tech
             'schedule.approve',
+            'manage_assistant_attendance',
             // student
             'practicum.enroll',
             'practicum.enter',
@@ -70,6 +71,7 @@ class RoleSeeder extends Seeder
         Role::create(['name' => 'student'])->givePermissionTo([
             'practicum.enroll',
             'practicum.enter',
+            'archive.view',
         ]);
 
         Role::create(['name' => 'assistant'])->givePermissionTo([
@@ -92,7 +94,7 @@ class RoleSeeder extends Seeder
             'schedule.add',
             'schedule.edit',
             'schedule.delete',
-            'manage_journal',
+            'manage_records',
             'assignment.add',
             'assignment.edit',
             'assignment.delete',
@@ -112,16 +114,11 @@ class RoleSeeder extends Seeder
             ...$viewPermissions,
         ]);
 
-        Role::create(['name' => 'isad_lecturer'])->givePermissionTo([
+        Role::create(['name' => 'apsi_lecturer'])->givePermissionTo([
             'teach_isad',
             ...$viewPermissions,
         ]);
 
-        Role::create(['name' => 'lab_tech'])->givePermissionTo([
-            'schedule.approve',
-            ...$viewPermissions,
-        ]);
-
-        Role::create(['name' => 'super_admin']);
+        Role::create(['name' => 'lab_tech']);
     }
 }
