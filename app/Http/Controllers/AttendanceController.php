@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssistantAttendance;
 use App\Models\Attendance;
 use App\Models\Practicum;
 use App\Models\Schedule;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
@@ -19,23 +19,34 @@ class AttendanceController extends Controller
             // 'practicum.enrollments' => function (Builder $query) {
             //     return $query->where('status', 'APPROVED');
             // },
+            'practicum.staff' => function ($query) {
+                $query->whereHas('roles', function ($q) {
+                    $q->where('name', 'assistant');
+                });
+            },
             'practicum.enrollments',
             'practicum.enrollments.user',
             'practicum.course',
             'attendances',
-            'assignment.submissions'
+            'assignment.submissions',
+            'assistantAttendances'
         ]);
 
+        $practicum = $schedule->practicum;
+        $enrollments = $practicum->enrollments;
+        $assistants = $practicum->staff;
+
         $attendances = $schedule->attendances->keyBy('user_id');
+        $assistantAttendances = $schedule->assistantAttendances->keyBy('user_id');
 
         $submissions = collect();
         if ($schedule->assignment) {
             $submissions = $schedule->assignment->submissions->keyBy('user_id');
         }
 
-        $enrollments = $schedule->practicum->enrollments;
-
         return view('attendance.manage', [
+            'assistants' => $assistants,
+            'assistantAttendances' => $assistantAttendances,
             'attendances' => $attendances,
             'enrollments' => $enrollments,
             'practicum' => $practicum,
@@ -48,21 +59,19 @@ class AttendanceController extends Controller
     {
         $validated = $request->validate([
             'schedule_id' => ['required', 'exists:schedules,id'],
+            // student attendance
             'attendances' => ['required', 'array'],
-            'attendances.*' => ['required', 'in:PRESENT,SICK,EXCUSED,ABSENT'],
+            'attendances.*' => ['required', 'in:PRESENT,EXCUSED,SICK,ABSENT'],
             'scores' => ['nullable', 'array'],
-            'scores.*.participation_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'scores.*.creativity_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'scores.*.report_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'scores.*.active_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'scores.*.module_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'scores.*.*' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            // assistant attendance
+            'assistant_attendances' => ['nullable', 'array'],
+            'assistant_attendances.*' => ['required', 'in:PRESENT,EXCUSED,SICK,ABSENT'],
         ]);
 
         $scheduleId = $validated['schedule_id'];
-        $attendancesData = $validated['attendances'];
-        $scoresData = $validated['scores'] ?? [];
 
-        foreach ($attendancesData as $userId => $status) {
+        foreach ($validated['attendances'] as $userId => $status) {
             $userScores = $scoresData[$userId] ?? [];
 
             Attendance::updateOrCreate(
@@ -81,6 +90,15 @@ class AttendanceController extends Controller
             );
         }
 
-        return back()->with('success', 'Meeting records have been successfully saved.');
+        if (isset($validated['assistant_attendances'])) {
+            foreach ($validated['assistant_attendances'] as $assistantId => $status) {
+                AssistantAttendance::updateOrCreate(
+                    ['schedule_id' => $scheduleId, 'user_id' => $assistantId],
+                    ['status' => $status]
+                );
+            }
+        }
+
+        return back()->with('success', 'All records have been successfully saved.');
     }
 }
