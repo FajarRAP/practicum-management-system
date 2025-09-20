@@ -28,18 +28,17 @@ class PracticumController extends Controller
         $practicums = Practicum::with(['course', 'academicYear', 'shift']);
         $user = $request->user();
 
-        // Lecturers
-        if ($user->can('teach_programming')) {
-            $practicums->where('course_id', 1);
-        } else if ($user->can('teach_isad')) {
-            $practicums->where('course_id', 2);
+        if (!$user->hasRole('admin')) {
+            $practicums->whereHas('staff', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            });
         }
 
         return view('practicum.index', [
             'academicYears' => $academicYears,
             'courses' => $courses,
             'shifts' => $shifts,
-            'practicums' => $practicums->latest()->paginate($perPage),
+            'practicums' => $practicums->latest()->paginate($perPage)->appends($request->query()),
         ]);
     }
 
@@ -133,7 +132,7 @@ class PracticumController extends Controller
         $meetingNumbers = $practicum->course->id === 1 ? 9 : 7;
         $enrollments = $practicum->enrollments()
             // ->where('status', 'APPROVED')
-            ->with('user.attendances') // Ambil semua data kehadiran milik user
+            ->with('user.attendances')
             ->get();
 
         $scheduleIds = $practicum->schedules()->pluck('id');
@@ -154,10 +153,14 @@ class PracticumController extends Controller
             $finalScore = $totalActiveScore + $totalReportScore;
 
             $finalGrade = 'E';
-            if ($finalScore >= 85) $finalGrade = 'A';
-            elseif ($finalScore >= 75) $finalGrade = 'B';
-            elseif ($finalScore >= 65) $finalGrade = 'C';
-            elseif ($finalScore >= 50) $finalGrade = 'D';
+            if ($finalScore >= 80) $finalGrade = 'A';
+            elseif ($finalScore >= 77) $finalGrade = 'A-';
+            elseif ($finalScore >= 74) $finalGrade = 'B+';
+            elseif ($finalScore >= 68) $finalGrade = 'B';
+            elseif ($finalScore >= 65) $finalGrade = 'B-';
+            elseif ($finalScore >= 62) $finalGrade = 'C+';
+            elseif ($finalScore >= 56) $finalGrade = 'C';
+            elseif ($finalScore >= 45) $finalGrade = 'D';
 
             $enrollment->update([
                 'final_active_score' => $totalActiveScore,

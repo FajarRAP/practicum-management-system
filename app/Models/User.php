@@ -65,13 +65,13 @@ class User extends Authenticatable
         return $this->hasMany(AssignmentSubmission::class);
     }
 
-    public function assessments()
-    {
-        return $this->hasMany(Assessment::class);
-    }
-
     public function securityQuestion()
     {
         return $this->hasOne(UserSecurityQuestion::class);
+    }
+
+    public function practicums()
+    {
+        return $this->belongsToMany(Practicum::class, 'practicum_user');
     }
 }

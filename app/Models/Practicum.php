@@ -37,4 +37,9 @@ class Practicum extends Model
     {
         return $this->hasMany(Assignment::class);
     }
+
+    public function staff()
+    {
+        return $this->belongsToMany(User::class, 'practicum_user');
+    }
 }
