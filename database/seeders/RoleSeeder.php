@@ -56,6 +56,7 @@ class RoleSeeder extends Seeder
             // lab tech
             'schedule.approve',
             'manage_assistant_attendance',
+            'assign_practicum',
             // student
             'practicum.enroll',
             'practicum.enter',
