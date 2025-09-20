@@ -12,7 +12,7 @@ class AcademicYearController extends Controller
     {
         $perPage = $request->query('per_page', 10);
 
-        return view('academic-year', [
+        return view('academic-year.index', [
             'academicYears' => AcademicYear::latest()->paginate($perPage)->appends(['per_page' => $perPage]),
         ]);
     }
