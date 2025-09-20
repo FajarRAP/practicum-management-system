@@ -22,4 +22,9 @@ class Schedule extends Model
     {
         return $this->belongsTo(Practicum::class);
     }
+
+    public function assistantAttendances()
+    {
+        return $this->hasMany(AssistantAttendance::class);
+    }
 }
