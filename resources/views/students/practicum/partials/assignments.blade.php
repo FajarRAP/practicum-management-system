@@ -9,6 +9,20 @@
                     <p class="text-sm text-gray-600 mt-1">
                         {{ $assignment->description }}
                     </p>
+
+                    @if ($assignment->file_path)
+                        <a href="{{ Storage::url($assignment->file_path) }}" target="_blank" download
+                            class="mt-3 inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                </path>
+                            </svg>
+                            {{ __('Download Attachment') }}
+                        </a>
+                    @endif
+
                     <p class="text-xs text-red-600 mt-2 font-medium">
                         {{ __('Deadline:') }}
                         {{ \Carbon\Carbon::parse($assignment->deadline)->isoFormat('dddd, D MMMM Y, HH:mm') }}
