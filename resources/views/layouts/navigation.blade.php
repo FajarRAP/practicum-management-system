@@ -33,7 +33,8 @@
                     @endcan
                     @can('practicum.enter')
                         <x-nav-link :href="route('my-practicum.index')" :active="request()->routeIs('my-practicum.index') ||
-                            Str::of(request()->path())->contains('/practicum')">
+                            (Str::of(request()->path())->contains('/practicum') &&
+                                request()->user()->hasRole('student'))">
                             {{ __('My Practicum') }}
                         </x-nav-link>
                     @endcan
@@ -135,7 +136,7 @@
             @endcan
             @can('practicum.enter')
                 <x-responsive-nav-link :href="route('my-practicum.index')" :active="request()->routeIs('my-practicum.index') ||
-                    Str::of(request()->path())->contains('/practicum')">
+                    (Str::of(request()->path())->contains('/practicum') && request()->user()->hasRole('student'))">
                     {{ __('My Practicum') }}
                 </x-responsive-nav-link>
             @endcan
