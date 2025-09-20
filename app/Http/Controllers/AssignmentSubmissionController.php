@@ -12,7 +12,7 @@ class AssignmentSubmissionController extends Controller
 {
     public function index(Practicum $practicum, Assignment $assignment)
     {
-        // Authorize here
+        Gate::authorize('viewAny', AssignmentSubmission::class);
 
         $enrollments = $assignment->practicum->enrollments()
             // ->where('status', 'APPROVED')
@@ -30,6 +30,8 @@ class AssignmentSubmissionController extends Controller
 
     public function store(Request $request, Assignment $assignment)
     {
+        Gate::authorize('create', AssignmentSubmission::class);
+
         $validated = $request->validateWithBag('addSubmission', [
             'assignment_id' => ['required', 'exists:assignments,id'],
             'submission_file' => ['required', 'file', 'mimes:pdf,zip,rar', 'max:10240'],
@@ -46,7 +48,7 @@ class AssignmentSubmissionController extends Controller
             return back()->with('error', 'You have already submitted this assignment.');
         }
 
-        $isLate = now()->gt($assignment->deadline);
+        $isLate = now()->timezone('Asia/Jakarta')->gt($assignment->deadline);
 
         $filePath = $request->file('submission_file')->store("submissions/{$assignment->id}", 'public');
 
