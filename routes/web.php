@@ -69,6 +69,7 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
         Route::patch('/schedule/{schedule}/approve', [ScheduleController::class, 'approve'])->name('schedule.approve');
         Route::patch('/schedule/{schedule}/reject', [ScheduleController::class, 'reject'])->name('schedule.reject');
         Route::resource('users', UserController::class)->only(['index', 'update']);
+        Route::put('/users/{user}/assign-practicums', [UserController::class, 'updatePracticumAssignments'])->name('users.assign-practicums');
         Route::get('/role-management', [RolePermissionController::class, 'index'])->name('role-permission.index');
         Route::post('/roles/{role}/permissions', [RolePermissionController::class, 'updatePermissions'])->name('role.permissions.update');
     });
