@@ -15,7 +15,7 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if ($request->user()->hasRole('super_admin')) {
+        if ($request->user()->hasRole('lab_tech')) {
             return $next($request);
         }
 

@@ -121,11 +121,5 @@ class UserSeeder extends Seeder
                 'answer' => 'Jawaban',
             ]);
         }
-
-        User::create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@trisakti.ac.id',
-            'password' => bcrypt('password'),
-        ])->assignRole('super_admin');
     }
 }
