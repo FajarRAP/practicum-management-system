@@ -28,7 +28,7 @@ class PracticumController extends Controller
         $practicums = Practicum::with(['course', 'academicYear', 'shift']);
         $user = $request->user();
 
-        if (!$user->hasRole('admin')) {
+        if (!$user->hasRole('lab_tech')) {
             $practicums->whereHas('staff', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             });
@@ -112,7 +112,7 @@ class PracticumController extends Controller
 
     public function destroy(Practicum $practicum)
     {
-        Gate::authorize('delete', Practicum::class);
+        Gate::authorize('delete', $practicum);
 
         try {
             $practicum->delete();
@@ -125,7 +125,7 @@ class PracticumController extends Controller
 
     public function calculateScores(Practicum $practicum)
     {
-        // Authorize here
+        Gate::authorize('calculateScore', $practicum);
 
         // Pemrograman -> 1 Briefing + 8 Praktikum
         // APSI -> 1 Briefing + 5 Praktikum + 1 Presentasi
