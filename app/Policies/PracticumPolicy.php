@@ -40,7 +40,7 @@ class PracticumPolicy
         if ($user->hasRole('student')) {
             return $user->enrollments()
                 ->where('practicum_id', $practicum->id)
-                ->where('status', 'APPROVED')
+                // ->where('status', 'APPROVED')
                 ->exists();
         }
 
