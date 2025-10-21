@@ -60,6 +60,16 @@ class RoleSeeder extends Seeder
             // student
             'practicum.enroll',
             'practicum.enter',
+            'questionnaire.view',
+            'questionnaire.add',
+            'questionnaire.edit',
+            'questionnaire.delete',
+            'questionnaire.answer',
+            'questionnaire.view-results',
+            'question.view',
+            'question.add',
+            'question.edit',
+            'question.delete',
         ];
 
         foreach ($permissions as $permission) {
@@ -70,6 +80,8 @@ class RoleSeeder extends Seeder
             'practicum.enroll',
             'practicum.enter',
             'archive.view',
+            'questionnaire.view',
+            'questionnaire.answer',
         ]);
 
         Role::create(['name' => 'assistant'])->givePermissionTo([
@@ -99,6 +111,7 @@ class RoleSeeder extends Seeder
             'assignment.view',
             'submission.view',
             'scores.calculate',
+            'questionnaire.view',
         ]);
 
         Role::create(['name' => 'lecturer'])->givePermissionTo($viewPermissions);
