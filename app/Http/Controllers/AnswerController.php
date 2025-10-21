@@ -6,12 +6,13 @@ use App\Models\Answer;
 use App\Models\Questionnaire;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class AnswerController extends Controller
 {
     public function index(Request $request, Questionnaire $questionnaire)
     {
-        // Otorisasi: Pastikan hanya admin/dosen yang bisa melihat jawaban orang lain
+        Gate::authorize('view', Answer::class);
 
         $questionnaire->load('questions');
         $questionIds = $questionnaire->questions->pluck('id');
@@ -29,15 +30,14 @@ class AnswerController extends Controller
 
     public function create(Request $request, Questionnaire $questionnaire)
     {
-        // Otorisasi: pastikan hanya yang berhak yang bisa akses
-        // $this->authorize('view', $questionnaire);
+        Gate::authorize('view', Answer::class);
 
         return view('questionnaire.fill', compact('questionnaire'));
     }
 
     public function store(Request $request, Questionnaire $questionnaire)
     {
-        // Otorisasi: Pastikan hanya mahasiswa yang bisa submit
+        Gate::authorize('create', Answer::class);
 
         $validated = $request->validate([
             'questionnaire_id' => ['required', 'exists:questionnaires,id'],
