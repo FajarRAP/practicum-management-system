@@ -56,6 +56,11 @@
                             {{ __('User Management') }}
                         </x-nav-link>
                     @endcan
+                    @can('questionnaire.view')
+                        <x-nav-link :href="route('questionnaire.index')" :active="request()->routeIs('questionnaire.index')">
+                            {{ __('Questionnaire') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -157,6 +162,11 @@
                 <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
                     {{ __('User Management') }}
                 </x-responsive-nav-link>
+            @endcan
+            @can('questionnaire.view')
+                <x-nav-link :href="route('questionnaire.index')" :active="request()->routeIs('questionnaire.index')">
+                    {{ __('Questionnaire') }}
+                </x-nav-link>
             @endcan
         </div>
 
