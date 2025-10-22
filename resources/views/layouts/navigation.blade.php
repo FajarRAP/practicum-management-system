@@ -57,7 +57,7 @@
                         </x-nav-link>
                     @endcan
                     @can('questionnaire.view')
-                        <x-nav-link :href="route('questionnaire.index')" :active="request()->routeIs('questionnaire.index')">
+                        <x-nav-link :href="route('questionnaire.index')" :active="Str::of(request()->path())->contains('/questionnaire')">
                             {{ __('Questionnaire') }}
                         </x-nav-link>
                     @endcan
@@ -164,7 +164,7 @@
                 </x-responsive-nav-link>
             @endcan
             @can('questionnaire.view')
-                <x-nav-link :href="route('questionnaire.index')" :active="request()->routeIs('questionnaire.index')">
+                <x-nav-link :href="route('questionnaire.index')" :active="Str::of(request()->path())->contains('/questionnaire')">
                     {{ __('Questionnaire') }}
                 </x-nav-link>
             @endcan
