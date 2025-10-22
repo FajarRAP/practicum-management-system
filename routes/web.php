@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcademicYearController;
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\ArchiveController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AssignmentSubmissionController;
@@ -8,6 +9,8 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\PracticumController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\QuestionnaireController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ShiftController;
@@ -78,6 +81,21 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
     Route::get('practicum/{practicum}', [PracticumController::class, 'show'])->name('practicum.show');
 
     Route::get('/archive', [ArchiveController::class, 'index'])->name('archive.index');
+
+    Route::get('/questionnaire', [QuestionnaireController::class, 'index'])->name('questionnaire.index');
+    Route::get('/questionnaire/{questionnaire}', [QuestionnaireController::class, 'show'])->name('questionnaire.show');
+    Route::post('/questionnaire', [QuestionnaireController::class, 'store'])->name('questionnaire.store');
+    Route::put('/questionnaire/{questionnaire}', [QuestionnaireController::class, 'update'])->name('questionnaire.update');
+    Route::delete('/questionnaire/{questionnaire}', [QuestionnaireController::class, 'destroy'])->name('questionnaire.destroy');
+
+    Route::get('/questionnaire/answer/{questionnaire}', [AnswerController::class, 'index'])->name('answer.index');
+    Route::get('/questionnaire/answer/{questionnaire}/fill', [AnswerController::class, 'create'])->name('answer.create');
+    Route::post('/questionnaire/answer/{questionnaire}', [AnswerController::class, 'store'])->name('answer.store');
+
+    Route::get('/questionnaire/manage-questions/{questionnaire}', [QuestionController::class, 'index'])->name('question.index');
+    Route::post('/question/{questionnaire}', [QuestionController::class, 'store'])->name('question.store');
+    Route::put('/question/{question}', [QuestionController::class, 'update'])->name('question.update');
+    Route::delete('/question/{question}', [QuestionController::class, 'destroy'])->name('question.destroy');
 });
 
 require __DIR__ . '/auth.php';
