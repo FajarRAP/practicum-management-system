@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use App\Models\Questionnaire;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class QuestionController extends Controller
 {
     public function index(Questionnaire $questionnaire)
     {
+        Gate::authorize('viewAny', Question::class);
+
         $questionnaire->load('questions');
 
         return view('questionnaire.manage-questions', [
@@ -19,6 +22,8 @@ class QuestionController extends Controller
 
     public function store(Request $request, Questionnaire $questionnaire)
     {
+        Gate::authorize('create', Question::class);
+
         $validated = $request->validate([
             'content' => ['required', 'string'],
             'type' => ['required', 'in:radio,checkbox,text'],
@@ -38,8 +43,7 @@ class QuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
-        // Otorisasi
-        // $this->authorize('update', $question);
+        Gate::authorize('update', $question);
 
         $validated = $request->validate([
             'content' => ['required', 'string'],
@@ -58,6 +62,8 @@ class QuestionController extends Controller
 
     public function destroy(Question $question)
     {
+        Gate::authorize('delete', $question);
+
         try {
             $question->delete();
             return back()->with('success', 'Question deleted successfully.');
