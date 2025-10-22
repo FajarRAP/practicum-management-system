@@ -2,33 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Answer;
 use App\Models\Questionnaire;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class QuestionnaireController extends Controller
 {
     public function index()
     {
-        // Otorisasi: pastikan hanya admin/dosen yang bisa akses
-        // $this->authorize('viewAny', Questionnaire::class);
+        Gate::authorize('viewAny', Questionnaire::class);
 
         $questionnaires = Questionnaire::query()
-            // 1. Pilih semua kolom dari tabel questionnaires
             ->select('questionnaires.*')
-
-            // 2. Gabungkan dengan tabel questions
             ->leftJoin('questions', 'questionnaires.id', '=', 'questions.questionnaire_id')
-
-            // 3. Gabungkan dengan tabel answers
             ->leftJoin('answers', 'questions.id', '=', 'answers.question_id')
-
-            // 4. [KUNCI] Kelompokkan semua hasil berdasarkan ID kuesioner
             ->groupBy('questionnaires.id')
-
-            // 5. [KUNCI] Hitung user_id unik di dalam setiap grup
             ->selectRaw('COUNT(DISTINCT answers.user_id) as respondents_count')
-
             ->latest('questionnaires.created_at')
             ->paginate(15);
 
@@ -37,6 +26,8 @@ class QuestionnaireController extends Controller
 
     public function show(Questionnaire $questionnaire)
     {
+        Gate::authorize('view', $questionnaire);
+
         $questions = $questionnaire->questions()->with('answers')->get();
 
         $totalResponses = $questionnaire->answers()->count();
@@ -45,9 +36,7 @@ class QuestionnaireController extends Controller
             $answers = $question->answers->pluck('content');
 
             if ($question->type === 'radio' || $question->type === 'checkbox') {
-                // Untuk checkbox, kita perlu flat map array
                 $answers = $answers->flatMap(fn($json) => json_decode($json) ?? [$json]);
-                // Hitung jumlah kemunculan setiap opsi
                 $aggregated = $answers->countBy();
             } else {
                 $aggregated = $answers;
@@ -68,8 +57,7 @@ class QuestionnaireController extends Controller
 
     public function store(Request $request)
     {
-        // Otorisasi (pastikan hanya admin/dosen yang bisa membuat)
-        // $this->authorize('create', Questionnaire::class);
+        Gate::authorize('create', Questionnaire::class);
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -92,8 +80,7 @@ class QuestionnaireController extends Controller
 
     public function update(Request $request, Questionnaire $questionnaire)
     {
-        // Otorisasi
-        // $this->authorize('update', $questionnaire);
+        Gate::authorize('update', $questionnaire);
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -116,8 +103,7 @@ class QuestionnaireController extends Controller
 
     public function destroy(Questionnaire $questionnaire)
     {
-        // Otorisasi
-        // $this->authorize('delete', $questionnaire);
+        Gate::authorize('delete', $questionnaire);
 
         try {
             $questionnaire->delete();
