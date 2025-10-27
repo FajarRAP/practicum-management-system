@@ -58,6 +58,7 @@ class AttendanceController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'course_id' => ['required', 'exists:courses,id'],
             'schedule_id' => ['required', 'exists:schedules,id'],
             // student attendance
             'attendances' => ['required', 'array'],
@@ -72,7 +73,16 @@ class AttendanceController extends Controller
         $scheduleId = $validated['schedule_id'];
 
         foreach ($validated['attendances'] as $userId => $status) {
-            $userScores = $scoresData[$userId] ?? [];
+            $userScores = $validated['scores'][$userId] ?? [];
+            $attendanceScore = $userScores['attendance_score'] ?? 0;
+            $participationScore = $userScores['participation_score'] ?? 0;
+            $creativityScore = $userScores['creativity_score'] ?? 0;
+            $quizScore = $userScores['quiz_score'] ?? 0;
+            $reportScore = $userScores['report_score'] ?? 0;
+            $activeScore = $validated['course_id'] == 1 ? ($attendanceScore + $participationScore + $creativityScore) / 3 : 0;
+            $moduleScore = $validated['course_id'] == 1 ?
+                $activeScore * .35 + $reportScore * .65 // Pemrograman
+                : ($attendanceScore + $participationScore + $quizScore) / 3; // APSI
 
             Attendance::updateOrCreate(
                 [
@@ -81,11 +91,13 @@ class AttendanceController extends Controller
                 ],
                 [
                     'status' => $status,
-                    'participation_score' => $userScores['participation_score'] ?? 0,
-                    'creativity_score'    => $userScores['creativity_score'] ?? 0,
-                    'report_score'        => $userScores['report_score'] ?? 0,
-                    'active_score'        => $userScores['active_score'] ?? 0,
-                    'module_score'        => $userScores['module_score'] ?? 0,
+                    'attendance_score'    => $attendanceScore,
+                    'participation_score' => $participationScore,
+                    'creativity_score'    => $creativityScore,
+                    'quiz_score'          => $quizScore,
+                    'report_score'        => $reportScore,
+                    'active_score'        => $activeScore,
+                    'module_score'        => $moduleScore,
                 ]
             );
         }
