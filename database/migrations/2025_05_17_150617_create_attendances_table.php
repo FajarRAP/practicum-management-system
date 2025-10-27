@@ -22,9 +22,11 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+            $table->float('attendance_score')->default(0);
             $table->float('participation_score')->default(0);
             $table->float('creativity_score')->default(0);
             $table->float('report_score')->default(0);
+            $table->float('quiz_score')->default(0);
             $table->float('active_score')->default(0);
             $table->float('module_score')->default(0);
 
