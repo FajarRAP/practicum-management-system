@@ -45,7 +45,7 @@
                     @endcan
                     @can('archive.view')
                         <x-nav-link :href="route('archive.index')" :active="request()->routeIs('archive.index')">
-                            {{ __('Archive') }}
+                            {{ __('Reference') }}
                         </x-nav-link>
                     @endcan
                     @can('manage_users')
