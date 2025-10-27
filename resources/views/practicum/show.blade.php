@@ -133,7 +133,7 @@
     @can('schedule.add')
         @include('practicum.partials.add-schedule-modal', ['practicum' => $practicum])
     @endcan
-    @can('schdeule.edit')
+    @can('schedule.edit')
         @include('practicum.partials.edit-schedule-modal', ['practicum' => $practicum])
     @endcan
     @can('assignment.add')
