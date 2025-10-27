@@ -129,6 +129,7 @@ class PracticumController extends Controller
 
         // Pemrograman -> 1 Briefing + 8 Praktikum
         // APSI -> 1 Briefing + 5 Praktikum + 1 Presentasi
+        $courseId = $practicum->course->id;
         $meetingNumbers = $practicum->course->id === 1 ? 9 : 7;
         $enrollments = $practicum->enrollments()
             // ->where('status', 'APPROVED')
@@ -140,17 +141,21 @@ class PracticumController extends Controller
         foreach ($enrollments as $enrollment) {
             $attendancesForThisPracticum = $enrollment->user->attendances->whereIn('schedule_id', $scheduleIds);
 
-            $totalActiveScore = 0;
-            $totalReportScore = 0;
-            foreach ($attendancesForThisPracticum as $attendance) {
-                $totalActiveScore += $attendance->active_score ?? 0;
-                $totalReportScore += $attendance->report_score ?? 0;
-            }
+            // $totalActiveScore = 0;
+            // $totalReportScore = 0;
+            // foreach ($attendancesForThisPracticum as $attendance) {
+            //     $totalActiveScore += $attendance->active_score ?? 0;
+            //     $totalReportScore += $attendance->report_score ?? 0;
+            // }
 
-            $totalActiveScore = $this->calculateActiveScore($meetingNumbers, $totalActiveScore);
-            $totalReportScore = ($totalReportScore / 8) * .65; // 8 Praktikum
+            // $totalActiveScore = $this->calculateActiveScore($meetingNumbers, $totalActiveScore);
+            // $totalReportScore = ($totalReportScore / 8) * .65; // 8 Praktikum
 
-            $finalScore = $totalActiveScore + $totalReportScore;
+            // $finalScore = $totalActiveScore + $totalReportScore;
+
+            $finalScore = $courseId === 1
+                ? $this->calculateProgrammingScore($attendancesForThisPracticum)
+                : $this->calculateISADScore($attendancesForThisPracticum);
 
             $finalGrade = 'E';
             if ($finalScore >= 80) $finalGrade = 'A';
@@ -163,8 +168,8 @@ class PracticumController extends Controller
             elseif ($finalScore >= 45) $finalGrade = 'D';
 
             $enrollment->update([
-                'final_active_score' => $totalActiveScore,
-                'final_report_score' => $totalReportScore,
+                'final_active_score' => 0,
+                'final_report_score' => 0,
                 'final_score'  => $finalScore,
                 'final_grade'  => $finalGrade,
             ]);
@@ -176,5 +181,28 @@ class PracticumController extends Controller
     private function calculateActiveScore(int $meetingNumbers, float $totalActiveScore): float
     {
         return ($totalActiveScore / $meetingNumbers) * .35;
+    }
+
+    private function calculateProgrammingScore($attendances)
+    {
+        $totalScore = 0;
+
+        foreach ($attendances as $attendance) {
+            $totalScore += $attendance->module_score ?? 0;
+        }
+
+        return $totalScore / 8; // 8 Praktikum
+    }
+
+    private function calculateISADScore($attendances)
+    {
+        $totalScore = 0;
+        $finalReportScore = 0;
+        foreach ($attendances as $attendance) {
+            $totalScore += $attendance->module_score ?? 0;
+            $finalReportScore = $attendance->report_score ?? 0;
+        }
+
+        return $totalScore / 5 * .3 + $finalReportScore * .7; // 5 Praktikum
     }
 }
