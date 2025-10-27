@@ -19,7 +19,7 @@
 
         <div>
             @hasanyrole(['lecturer', 'lab_tech'])
-                <x-input-label for="identity_number" :value="__('Identity Number')" />
+                <x-input-label for="identity_number" :value="__('Identity Number (NIK/NIM)')" />
             @else
                 <x-input-label for="identity_number" :value="__('Student Number')" />
             @endhasanyrole

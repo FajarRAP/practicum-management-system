@@ -4,7 +4,7 @@
 
         <!-- Identity Number -->
         <div>
-            <x-input-label for="identity_number" :value="__('Identity Number')" />
+            <x-input-label for="identity_number" :value="__('Identity Number (NIK/NIM)')" />
             <x-text-input id="identity_number" class="block mt-1 w-full" type="text" name="identity_number"
                 :value="old('identity_number')" required autofocus autocomplete="identity_number" />
             <x-input-error :messages="$errors->get('identity_number')" />
