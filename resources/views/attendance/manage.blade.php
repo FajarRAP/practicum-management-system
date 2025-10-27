@@ -14,6 +14,7 @@
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <form method="POST" action="{{ route('attendance.store') }}">
                 @csrf
+                <input type="hidden" name="course_id" value="{{ $practicum->course->id }}">
                 <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
 
                 {{-- Assistant Attendance --}}
@@ -76,9 +77,11 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th class="py-3 px-4">{{ __('Student') }}</th>
+                                    <th class="py-3 px-4">{{ __('Attendance Status') }}</th>
                                     <th class="py-3 px-4">{{ __('Attendance') }}</th>
                                     <th class="py-3 px-2 text-center">{{ __('Participation') }}</th>
                                     <th class="py-3 px-2 text-center">{{ __('Creativity') }}</th>
+                                    <th class="py-3 px-2 text-center">{{ __('Quiz') }}</th>
                                     <th class="py-3 px-2 text-center">{{ __('Report') }}</th>
                                     <th class="py-3 px-2 text-center">{{ __('Active') }}</th>
                                     <th class="py-3 px-2 text-center">{{ __('Module') }}</th>
@@ -106,6 +109,12 @@
                                                 @endforeach
                                             </select>
                                         </td>
+                                        <td class="py-4 px-4">
+                                            <x-text-input type="number"
+                                                name="scores[{{ $enrollment->user_id }}][attendance_score]"
+                                                class="w-20 text-sm" min="0" max="100"
+                                                value="{{ $attendance->attendance_score ?? '' }}" />
+                                        </td>
                                         <td class="py-4 px-2 text-center">
                                             <x-text-input type="number"
                                                 name="scores[{{ $enrollment->user_id }}][participation_score]"
@@ -116,7 +125,13 @@
                                             <x-text-input type="number"
                                                 name="scores[{{ $enrollment->user_id }}][creativity_score]"
                                                 class="w-20 text-sm inline-flex" min="0" max="100"
-                                                value="{{ $attendance->creativity_score ?? '' }}" />
+                                                value="{{ $attendance->creativity_score ?? '' }}" :disabled="$practicum->course->id === 2" />
+                                        </td>
+                                        <td class="py-4 px-2 text-center">
+                                            <x-text-input type="number"
+                                                name="scores[{{ $enrollment->user_id }}][quiz_score]"
+                                                class="w-20 text-sm inline-flex" min="0" max="100"
+                                                value="{{ $attendance->quiz_score ?? '' }}" :disabled="$practicum->course->id === 1" />
                                         </td>
                                         <td class="py-4 px-2 text-center">
                                             <x-text-input type="number"
@@ -125,16 +140,21 @@
                                                 value="{{ $attendance->report_score ?? '' }}" />
                                         </td>
                                         <td class="py-4 px-2 text-center">
-                                            <x-text-input type="number"
-                                                name="scores[{{ $enrollment->user_id }}][active_score]"
-                                                class="w-20 text-sm" min="0" max="100"
-                                                value="{{ $attendance->active_score ?? '' }}" />
+                                            {{-- value="{{ $attendance->active_score ?? '' }}" --}}
+                                            {{-- name="scores[{{ $enrollment->user_id }}][active_score]" --}}
+                                            <x-text-input type="number" class="w-20 text-sm" min="0"
+                                                max="100" :value="$attendance->active_score ?? 0
+                                                    ? round($attendance->active_score, 2)
+                                                    : ''" :disabled="true" />
                                         </td>
                                         <td class="py-4 px-2 text-center">
-                                            <x-text-input type="number"
-                                                name="scores[{{ $enrollment->user_id }}][module_score]"
-                                                class="w-20 text-sm" min="0" max="100"
-                                                value="{{ $attendance->module_score ?? '' }}" />
+                                            {{-- value="{{ $attendance->module_score ?? '' }}" --}}
+                                            {{-- name="scores[{{ $enrollment->user_id }}][module_score]" --}}
+                                            <x-text-input type="number" class="w-20 text-sm" min="0"
+                                                max="100" :value="$attendance->module_score ?? 0
+                                                    ? round($attendance->module_score, 2)
+                                                    : ''" :disabled="true" />
+
                                         </td>
                                         <td class="py-4 px-4 text-center">
                                             @if ($schedule->assignment)
@@ -154,7 +174,7 @@
                                                         @endif
                                                     </a>
                                                     <span
-                                                        class="text-xs text-gray-500">{{ $submission->created_at->isoFormat('D MMM, HH:mm') }}</span>
+                                                        class="text-xs text-gray-500">{{ $submission->created_at->timezone('Asia/Jakarta')->isoFormat('D MMM, HH:mm') }}</span>
                                                 @else
                                                     <span
                                                         class="font-medium text-red-600">{{ __('Not Submitted') }}</span>
@@ -167,7 +187,8 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="py-4 px-6 text-center">{{ __('No students data.') }}
+                                        <td colspan="8" class="py-4 px-6 text-center">
+                                            {{ __('No students data.') }}
                                         </td>
                                     </tr>
                                 @endforelse
