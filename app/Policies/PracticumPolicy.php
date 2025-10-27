@@ -49,7 +49,7 @@ class PracticumPolicy
 
     public function calculateScore(User $user, Practicum $practicum)
     {
-        return $user->can('practicum.calculate_scores') &&
+        return $user->can('scores.calculate') &&
             $practicum->staff()->where('user_id', $user->id)->exists();
     }
 }
